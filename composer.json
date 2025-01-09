@@ -1,0 +1,16 @@
+{
+  "name": "peprodev/wcuitgbot",
+  "type": "wcuitgbot",
+  "psr-4": {
+    "PeproDev\\UltimateInvoice\\TgBot\\": "src/"
+  },
+  "require": {
+    "php": ">=7.3.0",
+    "longman/telegram-bot": "^0.79.0"
+  },
+  "config": {
+    "platform": {
+      "php": "7.3.0"
+    }
+  }
+}
