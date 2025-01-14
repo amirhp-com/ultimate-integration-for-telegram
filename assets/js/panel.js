@@ -1,7 +1,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/14 18:13:04
+ * @Last modified time: 2025/01/14 18:18:23
  */
 
 (function ($) {
@@ -268,6 +268,12 @@
       var me = $(this);
       copy_clipboard(me.text())
       show_toast(_panel.copied.replace("%s", me.text()), $success_color);
+    });
+    $(document).on("click tap", ".copy-code", function(e){
+      e.preventDefault();
+      var me = $(this);
+      copy_clipboard($(".data-textarea textarea#notifications").val());
+      show_toast(_panel.code_copied, $success_color);
     });
 
     $(document).on("keyup change", "tbody.workplace>tr[data-type] input, tbody.workplace>tr[data-type] textarea, tbody.workplace>tr[data-type] select", function(e) {

@@ -59,6 +59,7 @@ if (!class_exists("class_setting")) {
         "delete_confirm" => _x("Are you sure you want to delete this notifications? If you do and Save this page, YOU CANNOT UNDO WHAT YOU DID.", "front-js", $this->td),
         "delete_all" => _x("Are you sure you want to delete all notifications? If you do and Save this page, YOU CANNOT UNDO WHAT YOU DID.", "front-js", $this->td),
         "copied" => _x("Copied %s to clipboard.", "front-js", $this->td),
+        "code_copied" => _x("JSON Data Copied to clipboard.", "front-js", $this->td),
         "error_slug_empty" => _x("first select a notif type", "front-js", $this->td),
         "error_option_empty" => _x("no option found for selected notif", "front-js", $this->td),
         "unknown" => _x("An Unknown Error Occured. Check console for more information.", "front-js", $this->td),
@@ -150,8 +151,8 @@ if (!class_exists("class_setting")) {
                 <tfoot>
                   <tr class="type-textarea notifications toggle-export-import hide">
                     <th scope="row" colspan="2">
-                      <h3 style="margin-top: 0;"><label for="notifications"><?=__("Import/Export as JSON Data", $this->td);?></label></h3>
-                      <textarea name="blackswan-telegram__notifications" id="notifications" rows="4" style="width: 100%; direction: ltr; font-family: monospace; font-size: smaller;" class="regular-text"><?=$this->read("notifications");?></textarea>
+                      <h3 style="margin-top: 0;"><label for="notifications"><?=__("Import/Export as JSON Data", $this->td);?></label></h3><a href="#" class="button button-secondary copy-code"><?=__("Copy to Clipboard", $this->td);?></a><br>
+                      <p class="data-textarea"><textarea name="blackswan-telegram__notifications" id="notifications" rows="4" style="width: 100%; direction: ltr; font-family: monospace; font-size: smaller;" class="regular-text"><?=$this->read("notifications");?></textarea></p>
                       <p class="description"><?=__("you can use the json data to migrate settings across multiple sites. Enter JSON Data and Save page to reload Workspace.", $this->td);?></p>
                     </th>
                   </tr>
@@ -161,17 +162,52 @@ if (!class_exists("class_setting")) {
             <div class="tab-content" data-tab="tab_documentation">
               <br>
               <div class="desc">
-                <table class="wp-list-table widefat striped table-view-list posts">
+                <table class="fixed wp-list-table widefat striped table-view-list posts hooks-docs">
                   <thead>
                     <tr>
-                      <th><strong>Endpoint/Shortcode/Entry</strong></th>
-                      <td><strong>Description</strong></td>
+                      <th><strong><?=__("Hook Entry", $this->td);?></strong></th>
+                      <td><strong><?=__("Description", $this->td);?></strong></td>
                     </tr>
                   </thead>
+
+
                   <tr>
-                    <td style="direction: ltr;">Host Cron Job, Required for Scheduled Notification</td>
-                    <td style="direction: ltr;">define('DISABLE_WP_CRON', true);<br>* * * * * wget --delete-after <?= home_url("/wp-cron.php?doing_wp_cron"); ?> >/dev/null 2>&1<br>/usr/local/bin/php /home/public_html/wp-cron.php?doing_wp_cron >/dev/null 2>&1</td>
+                    <td><?=$this->highlight('apply_filters("blackswan-telegram/notif-panel/notif-types-array", $options)');?></td>
+                    <td>Add new Notification type, e.g. Support for Custom Plugin</td>
                   </tr>
+
+                  <tr>
+                    <td><?=$this->highlight('do_action("blackswan-telegram/notif-panel/after-notif-setting", $slug)');?></td>
+                    <td>Add Custom Setting a Notification type</td>
+                  </tr>
+
+                  <tr>
+                    <td><?=$this->highlight('do_action("blackswan-telegram/notif-panel/notif-macro-list", $slug)');?></td>
+                    <td>Add Custom Macro for a Notification type</td>
+                  </tr>
+
+                  <tr>
+                    <td><?=$this->highlight('apply_filters("blackswan-telegram/notif-panel/notif-default-message", "", $slug)');?></td>
+                    <td>Change Default Message for a Notification type</td>
+                  </tr>
+
+                  <tr>
+                    <td><?=$this->highlight('apply_filters("blackswan-telegram/notif-panel/notif-default-parser",false, $slug)');?></td>
+                    <td>Change Default Parser as HTML Checkbox state for a Notification type</td>
+                  </tr>
+
+                  <tr>
+                    <td><?=$this->highlight('apply_filters("blackswan-telegram/notif-panel/notif-default-buttons", "", $slug)');?></td>
+                    <td>Change Default Buttons list for a Notification type</td>
+                  </tr>
+
+                  <tr>
+                    <td>Host Cron Job</td>
+                    <td>wp-config: <?=$this->highlight("define('DISABLE_WP_CRON', true);");?>
+                    <br>cronjob: <?=$this->highlight("* * * * * wget --delete-after ".home_url("/wp-cron.php?doing_wp_cron")." >/dev/null 2>&1");?>
+                    <br>cronjob: <?=$this->highlight('/usr/local/bin/php /home/public_html/wp-cron.php?doing_wp_cron >/dev/null 2>&1');?></td>
+                  </tr>
+
                 </table>
                 <br>
                 <table class="wp-list-table widefat striped table-view-list posts">
@@ -292,6 +328,9 @@ if (!class_exists("class_setting")) {
       ob_end_clean();
       print $html;
     }
+    public function highlight($php){
+      return str_replace("&lt;?php", "", highlight_string('<?php'.$php, 1));
+    }
     public static function remove_status_prefix( string $status ): string {
       if ( strpos( $status, 'wc-' ) === 0 ) $status = substr( $status, 3 );
       return $status;
@@ -407,11 +446,14 @@ if (!class_exists("class_setting")) {
     public function print_notif_setting($slug){
       ob_start();
       $btn_placeholder = __("Button 1 label | Button 1 URL\nButton 2 label | Button 2 URL\nYou can use upto 6 button",$this->td);
-      do_action("blackswan-telegram/notif-panel/before-notif-{$slug}-setting", $slug);
+      do_action("blackswan-telegram/notif-panel/before-notif-setting", $slug);
+      $default_message = apply_filters("blackswan-telegram/notif-panel/notif-default-message", "", $slug);
+      $default_parser = apply_filters("blackswan-telegram/notif-panel/notif-default-parser", false, $slug);
+      $default_buttons = apply_filters("blackswan-telegram/notif-panel/notif-default-buttons", "", $slug);
       ?>
-      <tr><th><?=__("Message", $this->td);?></th><td><textarea rows="4" data-slug="message"></textarea></td></tr>
-      <tr><th><?=__("Parse HTML", $this->td);?></th><td><label><input type="checkbox" data-slug="html_parser" value="html">&nbsp;<?=__("Check to Parse Message as HTML or leave Unchecked to use Markdown", $this->td);?></label></td></tr>
-      <tr><th><?=__("Buttons", $this->td);?></th><td><textarea rows="4" data-slug="btn_row1" placeholder="<?=$btn_placeholder;?>"></textarea></td></tr>
+      <tr><th><?=__("Message", $this->td);?></th><td><textarea rows="4" data-slug="message"><?=$default_message;?></textarea></td></tr>
+      <tr><th><?=__("Parse HTML", $this->td);?></th><td><label><input type="checkbox" <?=checked($default_parser, true, false);?> data-slug="html_parser" value="html">&nbsp;<?=__("Check to Parse Message as HTML or leave Unchecked to use Markdown", $this->td);?></label></td></tr>
+      <tr><th><?=__("Buttons", $this->td);?></th><td><textarea rows="4" data-slug="btn_row1" placeholder="<?=$btn_placeholder;?>"><?=$default_buttons;?></textarea></td></tr>
       <tr class="description">
         <th><?=__("Available Macros for this Notif", $this->td);?></th>
         <td class="macro-list">
@@ -426,17 +468,14 @@ if (!class_exists("class_setting")) {
             <copy title="<?=esc_attr(_x("Site name","macro",$this->td));?>">{site_name}</copy>
             <copy title="<?=esc_attr(_x("Site URL","macro",$this->td));?>">{site_url}</copy>
             <copy title="<?=esc_attr(_x("Admin URL","macro",$this->td));?>">{admin_url}</copy>
-            <?php
-              do_action("blackswan-telegram/notif-panel/notif-types-macro-list", $slug);
-              do_action("blackswan-telegram/notif-panel/notif-{$slug}-macro-list", $slug);
-            ?>
+            <?php do_action("blackswan-telegram/notif-panel/notif-macro-list", $slug); ?>
         </td>
       </tr>
       <?php
-      do_action("blackswan-telegram/notif-panel/after-notif-{$slug}-setting", $slug);
+      do_action("blackswan-telegram/notif-panel/after-notif-setting", $slug);
       $htmloutput = ob_get_contents();
       ob_end_clean();
-      return apply_filters("blackswan-telegram/notif-panel/notif-{$slug}-setting", $htmloutput, $slug);
+      return apply_filters("blackswan-telegram/notif-panel/notif-setting-html", $htmloutput, $slug);
     }
     protected function update_footer_info() {
       add_filter("update_footer", function () {

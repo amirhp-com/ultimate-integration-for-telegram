@@ -1,7 +1,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/14 18:02:37
+ * @Last modified time: 2025/01/14 18:34:24
  */
 
 @font-face {
@@ -467,4 +467,7 @@ div#wpfooter {
 
 .sub-setting.form-table.wp-list-table {
   margin-top: 1rem;
+}
+.hooks-docs th, .hooks-docs td{
+  direction: ltr !important;
 }
