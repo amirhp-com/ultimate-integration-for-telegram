@@ -22,6 +22,7 @@ if (!class_exists("class_setting")) {
             "token" => "",
             "username" => "",
             "chat_ids" => "",
+            "notifications" => "",
           ),
         ),
       );
@@ -39,9 +40,30 @@ if (!class_exists("class_setting")) {
       $this->update_footer_info();
       wp_enqueue_script('wp-color-picker');
       wp_enqueue_style('wp-color-picker');
+      // Enqueue jQuery UI
+      wp_enqueue_script('jquery-ui');
+      wp_enqueue_script('jquery-ui-core');
+      wp_enqueue_script('jquery-ui-datepicker');
       wp_enqueue_style($this->db_slug . "-fas", "//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css", array(), current_time("timestamp"));
       wp_enqueue_style($this->db_slug . "-setting", "{$this->assets_url}css/backend.css");
       wp_enqueue_script($this->db_slug . "-setting", "{$this->assets_url}js/jquery.repeater.min.js", ["jquery"], "1.2.1");
+      wp_enqueue_script($this->db_slug . "-panel", "{$this->assets_url}js/panel.js", ["jquery"]);
+      $data = $this->read("notifications");
+      $localized = apply_filters("blackswan-telegram/notif-panel/localize-front-script", array(
+        "ajax" => admin_url("admin-ajax.php"),
+        "action" => $this->td,
+        "notif_json" => htmlentities($data),
+        "nonce" => wp_create_nonce($this->td),
+        "wait" => _x("Please wait ...", "front-js", $this->td),
+        "check_toggle" => _x("Check to Enable this Notif", "front-js", $this->td),
+        "delete_confirm" => _x("Are you sure you want to delete this notifications? If you do and Save this page, YOU CANNOT UNDO WHAT YOU DID.", "front-js", $this->td),
+        "delete_all" => _x("Are you sure you want to delete all notifications? If you do and Save this page, YOU CANNOT UNDO WHAT YOU DID.", "front-js", $this->td),
+        "copied" => _x("Copied %s to clipboard.", "front-js", $this->td),
+        "error_slug_empty" => _x("first select a notif type", "front-js", $this->td),
+        "error_option_empty" => _x("no option found for selected notif", "front-js", $this->td),
+        "unknown" => _x("An Unknown Error Occured. Check console for more information.", "front-js", $this->td),
+      ));
+      wp_localize_script($this->db_slug . "-panel", "_panel", $localized);
       is_rtl() and wp_add_inline_style($this->db_slug, "#wpbody-content { font-family: bodyfont, roboto, Tahoma; }");
       ?>
       <div class="wrap">
@@ -52,13 +74,13 @@ if (!class_exists("class_setting")) {
         </h1>
         <form method="post" action="options.php">
           <!-- region tab items -->
-          <nav class="nav-tab-wrapper woo-nav-tab-wrapper">
-            <a href="#" data-tab="tab_general" class="nav-tab nav-tab-active"><?= __("General", $this->td); ?></a>
-            <a href="#" data-tab="tab_customization" class="nav-tab"><?= __("Customization", $this->td); ?></a>
-            <a href="#" data-tab="tab_translate" class="nav-tab"><?= __("Translate", $this->td); ?></a>
-            <a href="#" data-tab="tab_str_replace" class="nav-tab"><?= __("String Replace", $this->td); ?></a>
-            <a href="#" data-tab="tab_documentation" class="nav-tab"><?= __("Documentation", $this->td); ?></a>
-          </nav>
+            <nav class="nav-tab-wrapper woo-nav-tab-wrapper">
+              <a href="#" data-tab="tab_general" class="nav-tab nav-tab-active"><?= __("General", $this->td); ?></a>
+              <a href="#" data-tab="tab_workspace" class="nav-tab"><?= __("Notifications", $this->td); ?></a>
+              <a href="#" data-tab="tab_translate" class="nav-tab"><?= __("Translate", $this->td); ?></a>
+              <a href="#" data-tab="tab_str_replace" class="nav-tab"><?= __("String Replace", $this->td); ?></a>
+              <a href="#" data-tab="tab_documentation" class="nav-tab"><?= __("Documentation", $this->td); ?></a>
+            </nav>
           <!-- region tab content -->
             <?php settings_fields("{$this->db_slug}__general"); ?>
             <div class="tab-content tab-active" data-tab="tab_general">
@@ -87,22 +109,18 @@ if (!class_exists("class_setting")) {
                     "slug" => "token",
                     "caption" => esc_html__("Your bot token", $this->td),
                     "desc" => sprintf(
-                      __('Message %1$s on Telegram to register your bot and get the token.%3$sEnter the token, click “%2$s” and save if successful.', $this->td),
+                      __('Message %1$s on Telegram to register your bot and get the token.%3$sEnter the token, save settings and click “%2$s”.', $this->td),
                       "<a href='https://t.me/botfather' target='_blank'>@BotFather</a>",
-                      "<a href='#' class='button button-link validate_token'>" . __("Validate", $this->td) . "</a>",
+                      "<a href='#' class='button button-link connect'>" . __("Connect Webhook", $this->td) . "</a>",
                       "<br>",
                     ),
                   ]);
                   /* translators: 1: validate token link, 2: line break <br> */
                   $this->print_setting_input([
                     "slug" => "username",
-                    "extra_html" => "readonly",
+                    // "extra_html" => "readonly",
                     "caption" => esc_html__("Your bot username", $this->td),
-                    "desc" => sprintf(
-                      __('Click %1$s to fetch bot details using the provided token;%2$sthe bot username will be auto-filled.', $this->td),
-                      "<a href='#' class='button button-link validate_token'>" . __("Validate Token", $this->td) . "</a>",
-                      "<br>",
-                    ),
+                    "desc" => __('Enter the username provided when you created the bot (without the "@" symbol).', $this->td),
                   ]);
                   $this->print_setting_textarea([
                     "slug" => "chat_ids",
@@ -116,21 +134,28 @@ if (!class_exists("class_setting")) {
                 </tbody>
               </table>
             </div>
-            <div class="tab-content" data-tab="tab_customization">
+            <div class="tab-content" data-tab="tab_workspace">
               <br>
-              <table class="form-table wp-list-table widefat striped table-view-list posts">
+              <table class="form-table wp-list-table widefat striped table-view-list posts workspace-wrapper-parent">
                 <thead>
                   <?php
                   echo "<tr class='sync_site_tr border-top'><th colspan=2>
-                    <h2 style='display: inline-block;'>" . __("Customization", $this->td) . "</h2></th></tr>";
+                    <h2 style='display: inline-block; margin: 0;'>" . __("Notifications Panel", $this->td) . "</h2></th></tr>";
                   ?>
+                  <tr>
+                    <th colspan="2"><?=$this->render_workspace_tools();?></th>
+                  </tr>
                 </thead>
-                <tbody>
-                  <?php
-                  $this->print_setting_checkbox(["slug" => "show_welcome", "caption" => __("Show Welcome CurrencySelect", $this->td),]);
-                  $this->print_setting_textarea(["slug" => "welcome_cc", "caption" => __("Welcome CurrencySelect Message", $this->td), "style" => "width: 100%; direction: ltr; min-height: 300px; font-family: monospace; font-size: 0.8rem;",]);
-                  ?>
-                </tbody>
+                <tbody class="workplace" data-empty="<?=esc_attr(__("No notif added to panel, you toolbar above to add your first notif.",$this->td));?>"></tbody>
+                <tfoot>
+                  <tr class="type-textarea notifications toggle-export-import hide">
+                    <th scope="row" colspan="2">
+                      <h3 style="margin-top: 0;"><label for="notifications"><?=__("Import/Export as JSON Data", $this->td);?></label></h3>
+                      <textarea name="blackswan-telegram__notifications" id="notifications" rows="4" style="width: 100%; direction: ltr; font-family: monospace; font-size: smaller;" class="regular-text"><?=$this->read("notifications");?></textarea>
+                      <p class="description"><?=__("you can use the json data to migrate settings across multiple sites. Enter JSON Data and Save page to reload Workspace.", $this->td);?></p>
+                    </th>
+                  </tr>
+                </tfoot>
               </table>
             </div>
             <div class="tab-content" data-tab="tab_documentation">
@@ -263,255 +288,155 @@ if (!class_exists("class_setting")) {
       </div>
       <!-- region tab switch script and js-repeater -->
       <?php
-      $this->add_js_inline();
       $html = ob_get_contents();
       ob_end_clean();
       print $html;
     }
-    private function add_js_inline(){
+    public static function remove_status_prefix( string $status ): string {
+      if ( strpos( $status, 'wc-' ) === 0 ) $status = substr( $status, 3 );
+      return $status;
+    }
+    public function sample_setting_row_wrapper(){
+      ob_start();
       ?>
-      <script>
-        (function($) {
-          $(document).ready(function() {
-
-            var _request = null;
-            var $success_color = "rgba(21, 139, 2, 0.8)";
-            var $error_color = "rgba(139, 2, 2, 0.8)";
-            var $info_color = "rgba(2, 133, 139, 0.8)";
-            if (!$("toast").length) {
-              $(document.body).append($("<toast>"));
-            }
-
-            $("input.wpColorPicker").wpColorPicker();
-
-            // initiate repeater
-            var $repeater = $(".repeater.translation-panel").repeater({
-              hide: function(deleteElement) {
-                $(this).remove();
-                build_translation_data(".repeater.translation-panel", "#gettext_replace");
-              },
-            });
-            var $str_replace = $(".repeater.str_replace-panel").repeater({
-              hide: function(deleteElement) {
-                $(this).remove();
-                build_translation_data(".repeater.str_replace-panel", "#str_replace");
-              },
-            });
-
-            // load repeater prev-data
-            var json = $("#gettext_replace").val();
-            try {
-              var obj = JSON.parse(json);
-              var list = new Array();
-              if (obj.gettext) {
-                $.each(obj.gettext, function(i, x) {
-                  list.push(x);
-                });
-                $repeater.setList(list);
-              }
-            } catch (e) {
-              console.info("could not load translations repeater data");
-            }
-
-            // load repeater prev-data
-            var json = $("#str_replace").val();
-            try {
-              var obj = JSON.parse(json);
-              var list = new Array();
-              if (obj.gettext) {
-                $.each(obj.gettext, function(i, x) {
-                  list.push(x);
-                });
-                $str_replace.setList(list);
-              }
-            } catch (e) {
-              console.info("could not load str_replace repeater data");
-            }
-
-            // update repeater data
-            $(document).on("change keyup", ".repeater.translation-panel input", function(e) {
-              e.preventDefault();
-              build_translation_data(".repeater.translation-panel", "#gettext_replace");
-            });
-            $(document).on("change keyup", ".repeater.str_replace-panel input", function(e) {
-              e.preventDefault();
-              build_translation_data(".repeater.str_replace-panel", "#str_replace");
-            });
-
-            // Sortable ui for translation panel
-            if ($('.repeater.translation-panel table.wp-list-table tbody tr').length > 2) {
-              $('.repeater.translation-panel table.wp-list-table').sortable({
-                items: 'tr',
-                cursor: 'move',
-                axis: 'y',
-                scrollSensitivity: 40,
-                update: function(event, ui) {
-                  build_translation_data(".repeater.translation-panel", "#gettext_replace");
-                },
-                /* handle: 'td.wc-shipping-zone-method-sort', */
-              });
-            }
-            if ($('.repeater.str_replace-panel table.wp-list-table tbody tr').length > 2) {
-              $('.repeater.str_replace-panel table.wp-list-table').sortable({
-                items: 'tr',
-                cursor: 'move',
-                axis: 'y',
-                scrollSensitivity: 40,
-                update: function(event, ui) {
-                  build_translation_data(".repeater.str_replace-panel", "#str_replace");
-                },
-                /* handle: 'td.wc-shipping-zone-method-sort', */
-              });
-            }
-
-            // make json data
-            function build_translation_data(container = ".repeater.translation-panel", data_inp = "#gettext_replace") {
-              // console.log(`build_translation_data ${container} ~> ${data_inp}`);
-              try {
-                var gettext = {
-                  "gettext": []
-                };
-                $(`${container} table tr[data-repeater-item]`).each(function(i, x) {
-                  var item = {};
-                  $(this).find("[data-slug]").each(function(indexInArray, valueOfElement) {
-                    let el = $(valueOfElement);
-                    slug = el.attr("data-slug");
-                    switch (el.attr("type")) {
-                      case "checkbox":
-                        val = el.prop("checked") ? "yes" : false;
-                        break;
-                      case "checkbox":
-                        val = el.prop("checked") ? "yes" : false;
-                        break;
-                      default:
-                        val = el.val();
-                    }
-                    item[slug] = val;
-                  });
-                  gettext["gettext"][i] = item;
-                });
-                var jsonData = JSON.stringify(gettext);
-                $(data_inp).val(jsonData).trigger("change");
-              } catch (e) {}
-            }
-
-            $(document).on("click tap", "a.nav-tab", function(e) {
-              e.preventDefault();
-              var me = $(this);
-              $(".nav-tab.nav-tab-active").removeClass("nav-tab-active");
-              me.addClass("nav-tab-active");
-              $(".tab-content.tab-active").removeClass("tab-active");
-              $(`.tab-content[data-tab=${me.data("tab")}]`).addClass("tab-active");
-              window.location.hash = me.data("tab");
-              localStorage.setItem("pigdev-lms", me.data("tab"));
-            });
-
-            $(document).on("click tap", ".validate_token", function(e) {
-              e.preventDefault();
-              if (_request != null) { _request.abort(); }
-              show_toast("<?=__("Please wait ...",$this->td);?>", $info_color);
-              _request = $.ajax({
-                type: "POST",
-                dataType: "json",
-                url: "<?= admin_url("admin-ajax.php"); ?>",
-                data: {
-                  action: "<?= $this->td; ?>",
-                  nonce: "<?= wp_create_nonce($this->td); ?>",
-                  wparam: "connect",
-                  lparam: $("#token").val(),
-                },
-                success: function(e) {
-                  if (e.success === true) {
-                    show_toast(e.data.msg, $success_color);
-                  } else {
-                    show_toast(e.data.msg, $error_color);
-                  }
-                },
-                error: function(e) {
-                  show_toast("<?=__("Unknown Error Occured!",$this->td);?>", $error_color);
-                  console.error(e);
-                },
-                complete: function(e) { },
-              });
-            });
-            $(document).on("click tap", ".send_test", function(e) {
-              e.preventDefault();
-              if (_request != null) { _request.abort(); }
-              show_toast("<?=__("Please wait ...",$this->td);?>", $info_color);
-              _request = $.ajax({
-                type: "POST",
-                dataType: "json",
-                url: "<?= admin_url("admin-ajax.php"); ?>",
-                data: { action: "<?= $this->td; ?>", nonce: "<?= wp_create_nonce($this->td); ?>", wparam: "send_test", },
-                success: function(e) { if (e.success === true) { show_toast(e.data.msg, $success_color); } else { show_toast(e.data.msg, $error_color); } },
-                error: function(e) { show_toast("<?=__("Unknown Error Occured!",$this->td);?>", $error_color); console.error(e); },
-                complete: function(e) { },
-              });
-            });
-            $(document).on("click tap", ".connect", function(e) {
-              e.preventDefault();
-              if (_request != null) { _request.abort(); }
-              show_toast("<?=__("Please wait ...",$this->td);?>", $info_color);
-              _request = $.ajax({
-                type: "POST",
-                dataType: "json",
-                url: "<?= admin_url("admin-ajax.php"); ?>",
-                data: { action: "<?= $this->td; ?>", nonce: "<?= wp_create_nonce($this->td); ?>", wparam: "connect", },
-                success: function(e) { if (e.success === true) { show_toast(e.data.msg, $success_color); } else { show_toast(e.data.msg, $error_color); } },
-                error: function(e) { show_toast("<?=__("Unknown Error Occured!",$this->td);?>", $error_color); console.error(e); },
-                complete: function(e) { },
-              });
-            });
-            $(document).on("click tap", ".disconnect", function(e) {
-              e.preventDefault();
-              if (_request != null) { _request.abort(); }
-              show_toast("<?=__("Please wait ...",$this->td);?>", $info_color);
-              _request = $.ajax({
-                type: "POST",
-                dataType: "json",
-                url: "<?= admin_url("admin-ajax.php"); ?>",
-                data: { action: "<?= $this->td; ?>", nonce: "<?= wp_create_nonce($this->td); ?>", wparam: "disconnect", },
-                success: function(e) { if (e.success === true) { show_toast(e.data.msg, $success_color); } else { show_toast(e.data.msg, $error_color); } },
-                error: function(e) { show_toast("<?=__("Unknown Error Occured!",$this->td);?>", $error_color); console.error(e); },
-                complete: function(e) { },
-              });
-            });
-
-            function reload_last_active_tab() {
-              if (window.location.hash && "" !== window.location.hash) {
-                $(".nav-tab[data-tab=" + window.location.hash.replace("#", "") + "]").trigger("click");
-              } else {
-                last = localStorage.getItem("pigdev-lms");
-                if (last && "" != last) {
-                  $(".nav-tab[data-tab=" + last.replace("#", "") + "]").trigger("click");
-                }
-              }
-            }
-
-            reload_last_active_tab();
-            setTimeout(reload_last_active_tab, 100);
-            setTimeout(reload_last_active_tab, 500);
-            setTimeout(reload_last_active_tab, 1000);
-
-            function show_toast(data = "Sample Toast!", bg = "", delay = 3000) {
-              if (!$("toast").length) {
-                $(document.body).append($("<toast>"));
-              } else {
-                $("toast").removeClass("active");
-              }
-              setTimeout(function() {
-                $("toast").css("--toast-bg", bg).html(data).stop().addClass("active").delay(delay).queue(function() {
-                  $(this).removeClass("active").dequeue().off("click tap");
-                }).on("click tap", function(e) {
-                  e.preventDefault();
-                  $(this).stop().removeClass("active");
-                });
-              }, 200);
-            }
-          });
-        })(jQuery);
-      </script>
+      <tr class="setting-row newly-added" data-type="{slug}">
+        <th colspan="2">
+          <h3 class="entry-name">{category} / {title}</h3>&nbsp;
+          <div class="fa-pull-right">
+            <input type="checkbox" class="enable--entry" data-slug="_enabled" title="<?=_x("Check to Enable this Notif", "front-js", $this->td);?>" />
+            <a href="#" class="edit--entry"><span class="fa-stack"><i class="fa-solid fa-circle fa-stack-2x"></i><i class="fas fa-stack-1x fa-inverse fa-cog"></i></span></a>
+            <a href="#" class="delete--entry"><span class="fa-stack"><i class="fa-solid fa-circle fa-stack-2x"></i><i class="fas fa-stack-1x fa-inverse fa-trash-alt"></i></span></a>
+          </div>
+          <table class="sub-setting form-table wp-list-table widefat striped table-view-list fixed hide"><tbody><tr><th colspan="2">{row_details}</th></tr></tbody></table>
+        </th>
+      </tr>
       <?php
+      $htmloutput = ob_get_contents();
+      ob_end_clean();
+      return apply_filters("blackswan-telegram/notif-panel/sample_setting_row_wrapper", $htmloutput);
+    }
+    public function render_workspace_tools(){
+      ?>
+      <div class="workspace-notifications-list">
+        <div class="workspace-tools">
+          <select id="notif_types">
+            <option value="" ><?=__("-- None --", $this->td);?></option>
+            <?php
+            do_action("blackswan-telegram/notif-panel/after-general-notif-dropdown");
+            $this->print_notif_types();
+            do_action("blackswan-telegram/notif-panel/after-notif-types-dropdown");
+            ?>
+          </select>
+          <a href="#" class="button button-secondary add-new-notif"><?=__("Add New Notif", $this->td);?></a>
+          <a href="#" class="button button-secondary clear-all-notif"><?=__("Clear All Notif", $this->td);?></a>
+          <a href="#" class="button button-secondary export-import-notif"><?=__("Export/Import Notif", $this->td);?></a>
+        </div>
+        <div class="template-wrapper">
+          <?php
+          foreach ($this->print_notif_types(true) as $category => $items) {
+            foreach ($items["options"] as $key => $value) {
+              echo "<!-- Notif Setting / ".esc_attr($items["title"])." / ".esc_attr($value)." -->";
+              echo "<template id='".esc_attr($key)."'>";
+              echo $this->print_notif_setting($key);
+              echo "</template>";
+            }
+          }
+          ?>
+          <template id="sample_setting_row_wrapper"><?=$this->sample_setting_row_wrapper();?></template>
+          <?php do_action("blackswan-telegram/notif-panel/notif-types-setting"); ?>
+        </div>
+      </div>
+      <?php
+    }
+    public function print_notif_types($return=false){
+      $options = array();
+      $options["wp_general"] = array(
+        "title" => __("WordPress General", $this->td),
+        "options" => array(
+          "wp_user_registered" => __("New User Registered", $this->td),
+          "wp_comment_submitted" => __("New Comment Submitted", $this->td),
+        ),
+      );
+      if (class_exists("WooCommerce")) {
+        $options["woocommerce_order"] = array(
+          "title" => __("WooCommerce / Order", $this->td),
+          "options" => array(
+            "wc_new_order_at_checkout_processed" => __("New Order at Checkout Processed", $this->td),
+            "wc_new_order_on_thank_you" => __("New Order on Thank You", $this->td),
+            "wc_new_order_payment_complete" => __("New Order Payment Complete", $this->td),
+          ),
+        );
+        $statuses = wc_get_order_statuses();
+        $emails = wp_list_pluck(WC()->mailer()->get_emails(), "title", "id");
+        $statuses_options = $mail_options = array();
+        foreach ($statuses as $slug => $name) {
+          $slug = $this->remove_status_prefix($slug);
+          $statuses_options["wc_order_status_to_{$slug}"] = sprintf(__("Changed to %s",$this->td), $name);
+        }
+        $options["woocommerce_order_status"] = array(
+          "title" => __("WooCommerce / Order / Status", $this->td),
+          "options" => $statuses_options,
+        );
+        $options["woocommerce_product"] = array(
+          "title" => __("WooCommerce / Product", $this->td),
+          "options" => array(
+            "wc_product_updated" => __("Product Status/Meta Updated",$this->td),
+            "wc_product_purchased" => __("Product Purchased on New Order",$this->td),
+            "wc_product_stock_increased" => __("Product Stock Quantity Increased",$this->td),
+            "wc_product_stock_decreased" => __("Product Stock Quantity Decreased",$this->td),
+          ),
+        );
+        foreach ($emails as $slug => $name) {
+          $slug = $this->remove_status_prefix($slug);
+          $mail_options["wc_mail_{$slug}"] = sprintf(__("Mail Sent: %s",$this->td), $name);
+        }
+        $options["woocommerce_mail"] = array(
+          "title" => __("WooCommerce / E-Mail", $this->td),
+          "options" => $mail_options,
+        );
+      }
+      $options = apply_filters("blackswan-telegram/notif-panel/notif-types-array", $options);
+      if ($return) return $options;
+      foreach ($options as $category => $items) {
+        echo "<optgroup data-id='".esc_attr($category)."' label='".esc_attr($items["title"])."'></optgroup>";
+        foreach ($items["options"] as $key => $value) {
+          echo "<option value='".esc_attr($key)."'>".esc_attr($value)."</option>";
+        }
+      }
+    }
+    public function print_notif_setting($slug){
+      ob_start();
+      $btn_placeholder = __("Button 1 label | Button 1 URL\nButton 2 label | Button 2 URL\nYou can use upto 6 button",$this->td);
+      do_action("blackswan-telegram/notif-panel/before-notif-{$slug}-setting", $slug);
+      ?>
+      <tr><th><?=__("Message", $this->td);?></th><td><textarea rows="4" data-slug="message"></textarea></td></tr>
+      <tr><th><?=__("Parse HTML", $this->td);?></th><td><label><input type="checkbox" data-slug="html_parser" value="html">&nbsp;<?=__("Check to Parse Message as HTML or leave Unchecked to use Markdown", $this->td);?></label></td></tr>
+      <tr><th><?=__("Buttons", $this->td);?></th><td><textarea rows="4" data-slug="btn_row1" placeholder="<?=$btn_placeholder;?>"></textarea></td></tr>
+      <tr class="description">
+        <th><?=__("Available Macros for this Notif", $this->td);?></th>
+        <td class="macro-list">
+            <strong><?=__("General", $this->td);?></strong>
+            <copy title="<?=esc_attr(_x("Current Time","macro",$this->td));?>">{current_time}</copy>
+            <copy title="<?=esc_attr(_x("Current Date","macro",$this->td));?>">{current_date}</copy>
+            <copy title="<?=esc_attr(_x("Current Date-time","macro",$this->td));?>">{current_date_time}</copy>
+            <copy title="<?=esc_attr(_x("Current Jalali Date","macro",$this->td));?>">{current_jdate}</copy>
+            <copy title="<?=esc_attr(_x("Current Jalali Date-time","macro",$this->td));?>">{current_jdate_time}</copy>
+            <copy title="<?=esc_attr(_x("Current User id","macro",$this->td));?>">{current_user_id}</copy>
+            <copy title="<?=esc_attr(_x("Current User name","macro",$this->td));?>">{current_user_name}</copy>
+            <copy title="<?=esc_attr(_x("Site name","macro",$this->td));?>">{site_name}</copy>
+            <copy title="<?=esc_attr(_x("Site URL","macro",$this->td));?>">{site_url}</copy>
+            <copy title="<?=esc_attr(_x("Admin URL","macro",$this->td));?>">{admin_url}</copy>
+            <?php
+              do_action("blackswan-telegram/notif-panel/notif-types-macro-list", $slug);
+              do_action("blackswan-telegram/notif-panel/notif-{$slug}-macro-list", $slug);
+            ?>
+        </td>
+      </tr>
+      <?php
+      do_action("blackswan-telegram/notif-panel/after-notif-{$slug}-setting", $slug);
+      $htmloutput = ob_get_contents();
+      ob_end_clean();
+      return apply_filters("blackswan-telegram/notif-panel/notif-{$slug}-setting", $htmloutput, $slug);
     }
     protected function update_footer_info() {
       add_filter("update_footer", function () {
@@ -587,11 +512,11 @@ if (!class_exists("class_setting")) {
     }
     protected function print_setting_textarea($data) {
       extract(wp_parse_args($data, array(
-        "slug"        => "",
-        "caption"     => "",
-        "style"     => "",
-        "desc"        => "",
-        "rows"        => "5",
+        "slug" => "",
+        "caption" => "",
+        "style" => "",
+        "desc" => "",
+        "rows" => "4",
         "extra_html"  => "",
         "extra_class" => "",
       )));
