@@ -44,8 +44,11 @@ if (!class_exists("class_setting")) {
       wp_enqueue_script('jquery-ui');
       wp_enqueue_script('jquery-ui-core');
       wp_enqueue_script('jquery-ui-datepicker');
+
       wp_enqueue_style($this->db_slug . "-fas", "//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css", array(), current_time("timestamp"));
-      wp_enqueue_style($this->db_slug . "-setting", "{$this->assets_url}css/backend.css");
+      wp_enqueue_style($this->db_slug . "-setting", "{$this->assets_url}css/backend.css", [], time());
+      wp_enqueue_script($this->db_slug . "-popper", "{$this->assets_url}js/popper.min.js", ["jquery"], "1.2.1");
+      wp_enqueue_script($this->db_slug . "-tippy", "{$this->assets_url}js/tippy-bundle.umd.js", ["jquery"], "1.2.1");
       wp_enqueue_script($this->db_slug . "-setting", "{$this->assets_url}js/jquery.repeater.min.js", ["jquery"], "1.2.1");
       wp_enqueue_script($this->db_slug . "-panel", "{$this->assets_url}js/panel.js", ["jquery"], time());
       $data = $this->read("notifications");
@@ -55,7 +58,7 @@ if (!class_exists("class_setting")) {
         "notif_json" => htmlentities($data),
         "nonce" => wp_create_nonce($this->td),
         "wait" => _x("Please wait ...", "front-js", $this->td),
-        "check_toggle" => _x("Check to Enable this Notif", "front-js", $this->td),
+        "check_toggle" => _x("Turn On (green) to Enable this Notif", "front-js", $this->td),
         "delete_confirm" => _x("Are you sure you want to delete this notifications? If you do and Save this page, YOU CANNOT UNDO WHAT YOU DID.", "front-js", $this->td),
         "delete_all" => _x("Are you sure you want to delete all notifications? If you do and Save this page, YOU CANNOT UNDO WHAT YOU DID.", "front-js", $this->td),
         "copied" => _x("Copied %s to clipboard.", "front-js", $this->td),
@@ -350,9 +353,9 @@ if (!class_exists("class_setting")) {
         <th colspan="2">
           <h3 class="entry-name">{category} / {title}</h3>&nbsp;
           <div class="fa-pull-right">
-            <input type="checkbox" class="enable--entry" data-slug="_enabled" title="<?=_x("Check to Enable this Notif", "front-js", $this->td);?>" />
-            <a href="#" class="edit--entry"><span class="fa-stack"><i class="fa-solid fa-circle fa-stack-2x"></i><i class="fas fa-stack-1x fa-inverse fa-cog"></i></span></a>
-            <a href="#" class="delete--entry"><span class="fa-stack"><i class="fa-solid fa-circle fa-stack-2x"></i><i class="fas fa-stack-1x fa-inverse fa-trash-alt"></i></span></a>
+            <input type="checkbox" class="enable--entry" data-slug="_enabled" data-tippy-content="<?=esc_attr_x("Turn On (green) to Enable this Notif", "front-js", $this->td);?>" />
+            <a href="#" data-tippy-content="<?=esc_attr_x("Change Notif Configurations", $this->td);?>" class="edit--entry"><span class="fa-stack"><i class="fa-solid fa-circle fa-stack-2x"></i><i class="fas fa-stack-1x fa-inverse fa-cog"></i></span></a>
+            <a href="#" data-tippy-content="<?=esc_attr_x("Delete this Notif", $this->td);?>" class="delete--entry"><span class="fa-stack"><i class="fa-solid fa-circle fa-stack-2x"></i><i class="fas fa-stack-1x fa-inverse fa-trash-alt"></i></span></a>
           </div>
           <table class="sub-setting form-table wp-list-table widefat striped table-view-list fixed hide"><tbody><tr><th colspan="2">{row_details}</th></tr></tbody></table>
         </th>
@@ -453,13 +456,13 @@ if (!class_exists("class_setting")) {
     }
     public function print_notif_setting($slug){
       ob_start();
-      $btn_placeholder = __("Button 1 label | Button 1 URL\nButton 2 label | Button 2 URL\nButton 3 label | Button 3 URL",$this->td);
+      $btn_placeholder = __("Button label | Button URL",$this->td);
       do_action("blackswan-telegram/notif-panel/before-notif-setting", $slug);
       $default_message = apply_filters("blackswan-telegram/notif-panel/notif-default-message", "", $slug);
       $default_parser = apply_filters("blackswan-telegram/notif-panel/notif-default-parser", false, $slug);
       $default_buttons = apply_filters("blackswan-telegram/notif-panel/notif-default-buttons", "", $slug);
       ?>
-      <tr>
+      <tr class="tg-message">
         <th><?=__("Message", $this->td);?></th>
         <td>
           <textarea rows="4" data-slug="message"><?=$default_message;?></textarea>
@@ -469,40 +472,40 @@ if (!class_exists("class_setting")) {
             "<a href='#' class='button button-link validate_markdown'>".__("Markdown Validator",$this->td)."</a>");?></p>
         </td>
       </tr>
-      <tr>
+      <tr class="tg-formatting">
         <th><?=__("Message Formatting Method", $this->td);?></th>
         <td>
           <label><input type="checkbox" <?=checked($default_parser, true, false);?> data-slug="html_parser" value="html">&nbsp;
           <?=__("Enable (green) to use HTML, or disable (red) to use Markdown", $this->td);?></label>
         </td>
       </tr>
-      <tr>
-        <th><?=__("Buttons", $this->td);?></th>
-        <td>
-          <textarea rows="4" data-slug="btn_row1" placeholder="<?=$btn_placeholder;?>"><?=$default_buttons;?></textarea>
-          <p class="description">
-            <?=__("You can add up to four buttons. Both labels and URLs can use plain text or macros, and labels can also include emojis.", $this->td);?>
-            <?=sprintf(
-              __("Sample Button: %s", $this->td),
-              '<copy title="'.esc_attr__("Sample Button", $this->td).'">🌏 Visit {site_name}|{site_url}</copy>');?>
-          </p>
-        </td>
-      </tr>
       <tr class="description">
         <th><?=__("Available Macros for this Notif", $this->td);?></th>
         <td class="macro-list">
             <strong><?=__("General", $this->td);?></strong>
-            <copy title="<?=esc_attr(_x("Current Time","macro",$this->td));?>">{current_time}</copy>
-            <copy title="<?=esc_attr(_x("Current Date","macro",$this->td));?>">{current_date}</copy>
-            <copy title="<?=esc_attr(_x("Current Date-time","macro",$this->td));?>">{current_date_time}</copy>
-            <copy title="<?=esc_attr(_x("Current Jalali Date","macro",$this->td));?>">{current_jdate}</copy>
-            <copy title="<?=esc_attr(_x("Current Jalali Date-time","macro",$this->td));?>">{current_jdate_time}</copy>
-            <copy title="<?=esc_attr(_x("Current User id","macro",$this->td));?>">{current_user_id}</copy>
-            <copy title="<?=esc_attr(_x("Current User name","macro",$this->td));?>">{current_user_name}</copy>
-            <copy title="<?=esc_attr(_x("Site name","macro",$this->td));?>">{site_name}</copy>
-            <copy title="<?=esc_attr(_x("Site URL","macro",$this->td));?>">{site_url}</copy>
-            <copy title="<?=esc_attr(_x("Admin URL","macro",$this->td));?>">{admin_url}</copy>
+            <copy data-tippy-content="<?=esc_attr(_x("Current Time","macro",$this->td));?>">{current_time}</copy>
+            <copy data-tippy-content="<?=esc_attr(_x("Current Date","macro",$this->td));?>">{current_date}</copy>
+            <copy data-tippy-content="<?=esc_attr(_x("Current Date-time","macro",$this->td));?>">{current_date_time}</copy>
+            <copy data-tippy-content="<?=esc_attr(_x("Current Jalali Date","macro",$this->td));?>">{current_jdate}</copy>
+            <copy data-tippy-content="<?=esc_attr(_x("Current Jalali Date-time","macro",$this->td));?>">{current_jdate_time}</copy>
+            <copy data-tippy-content="<?=esc_attr(_x("Current User id","macro",$this->td));?>">{current_user_id}</copy>
+            <copy data-tippy-content="<?=esc_attr(_x("Current User name","macro",$this->td));?>">{current_user_name}</copy>
+            <copy data-tippy-content="<?=esc_attr(_x("Site name","macro",$this->td));?>">{site_name}</copy>
+            <copy data-tippy-content="<?=esc_attr(_x("Site URL","macro",$this->td));?>">{site_url}</copy>
+            <copy data-tippy-content="<?=esc_attr(_x("Admin URL","macro",$this->td));?>">{admin_url}</copy>
             <?php do_action("blackswan-telegram/notif-panel/notif-macro-list", $slug); ?>
+        </td>
+      </tr>
+      <tr class="tg-buttons">
+        <th><?=__("Buttons", $this->td);?></th>
+        <td>
+          <textarea rows="4" data-slug="btn_row1" placeholder="<?=$btn_placeholder;?>"><?=$default_buttons;?></textarea>
+          <p class="description">
+            <?=__("You can add up to four buttons. Both labels and URLs can use plain text or macros, and labels can also include emojis. You can use @page_slug, #page_id or {special_pages} supported by PeproDev Ultimate Profile Solutions as button URL too.", $this->td);?>
+            <br><?=sprintf(
+              __("Sample Button: %s", $this->td),
+              '<copy data-tippy-content="'.esc_attr__("Sample Button", $this->td).'">🌏 Visit {site_name}|{site_url}</copy>');?>
+          </p>
         </td>
       </tr>
       <?php
@@ -533,7 +536,7 @@ if (!class_exists("class_setting")) {
                       id='" . esc_attr($slug) . "'
                       type='" . esc_attr($type) . "'
                       placeholder='" . esc_attr($caption) . "'
-                      title='" . esc_attr(sprintf(_x("Enter %s", "setting-page", $this->td), $caption)) . "'
+                      data-tippy-content='" . esc_attr(sprintf(_x("Enter %s", "setting-page", $this->td), $caption)) . "'
                       value='" . esc_attr((get_option("{$this->db_slug}__{$slug}", "") ?: "")) . "'
                       class='regular-text " . esc_attr($extra_class) . "' " . esc_attr($extra_html) . " />
               <p class='description'>" . ($desc) . "</p></td></tr>";
@@ -553,7 +556,7 @@ if (!class_exists("class_setting")) {
                       name='" . esc_attr("{$this->db_slug}__{$slug}") . "'
                       id='" . esc_attr($slug) . "'
                       type='checkbox'
-                      title='" . esc_attr(sprintf(_x("Enter %s", "setting-page", $this->td), $caption)) . "'
+                      data-tippy-content='" . esc_attr(sprintf(_x("Enter %s", "setting-page", $this->td), $caption)) . "'
                       value='" . esc_attr($value) . "'
                       " . checked($value, get_option("{$this->db_slug}__{$slug}", ""), false) . "
                       class='regular-text " . esc_attr($extra_class) . "' " . esc_attr($extra_html) . " />
@@ -573,7 +576,7 @@ if (!class_exists("class_setting")) {
               <td><select
                       name='" . esc_attr("{$this->db_slug}__{$slug}") . "'
                       id='" . esc_attr($slug) . "'
-                      title='" . esc_attr(sprintf(_x("Choose %s", "setting-page", $this->td), $caption)) . "'
+                      data-tippy-content='" . esc_attr(sprintf(_x("Choose %s", "setting-page", $this->td), $caption)) . "'
                       class='regular-text " . esc_attr($extra_class) . "' " . esc_attr($extra_html) . ">";
       foreach ($options as $key => $value) {
         if ($key == "EMPTY") {
@@ -599,7 +602,7 @@ if (!class_exists("class_setting")) {
                       name='" . esc_attr("{$this->db_slug}__{$slug}") . "'
                       id='" . esc_attr($slug) . "'
                       placeholder='" . esc_attr($caption) . "'
-                      title='" . esc_attr(sprintf(_x("Enter %s", "setting-page", $this->td), $caption)) . "'
+                      data-tippy-content='" . esc_attr(sprintf(_x("Enter %s", "setting-page", $this->td), $caption)) . "'
                       rows='" . esc_attr($rows) . "'
                       style='" . esc_attr($style) . "'
                       class='regular-text " . esc_attr($extra_class) . "' " . esc_attr($extra_html) . " >" . (get_option("{$this->db_slug}__{$slug}", "") ?: "") . "</textarea>

@@ -1,7 +1,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/17 04:07:11
+ * @Last modified time: 2025/01/17 04:49:37
  */
 
 (function ($) {
@@ -56,6 +56,11 @@
         console.error(e);
         show_toast(_panel.unknown,$error_color);
       }
+    }
+
+    if (!window.tippy_initialized && typeof tippy !== 'undefined') {
+      tippy('[data-tippy-content]:not([data-tippy-content=""])', { allowHTML: true, });
+      window.tippy_initialized = true;
     }
 
     // initiate repeater
@@ -125,6 +130,7 @@
       $(`.tab-content[data-tab=${me.data("tab")}]`).addClass("tab-active");
       window.location.hash = me.data("tab");
       localStorage.setItem("bsdev-tg", me.data("tab"));
+      tippy('[data-tippy-content]:not([data-tippy-content=""])', { allowHTML: true, });
     });
     $(document).on("click tap", ".validate_token", function(e) {
       e.preventDefault();
@@ -423,6 +429,7 @@
       } catch (e) {
         console.error("could not generate notif data");
       }
+      tippy('[data-tippy-content]:not([data-tippy-content=""])', { allowHTML: true, });
     }
     function reload_last_active_tab() {
       if (window.location.hash && "" !== window.location.hash) {

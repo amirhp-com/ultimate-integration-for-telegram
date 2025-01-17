@@ -20,7 +20,7 @@
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/17 04:21:03
+ * @Last modified time: 2025/01/17 05:07:09
 */
 
 namespace BlackSwan\Telegram;
@@ -173,7 +173,7 @@ if (!class_exists("Notifier")) {
           case 'send_test':
             global $wp_version;
             $site_host = parse_url(home_url(), PHP_URL_HOST);
-            $message = "✅ *BlackSwan - Telegram Notification*\n\nVersion.{$this->version} | WP: {$wp_version} | PHP: " . PHP_VERSION;
+            $message = "‌\n✅ *BlackSwan - Telegram Notification*\n\nVersion.{$this->version} | WP: {$wp_version} | PHP: " . PHP_VERSION;
             $message .= "\nTest Message Sent from [".get_bloginfo("name")."](" . home_url() . ")";
             $message .= "\nServer Date: " . date_i18n("Y/m/d H:i:s", current_time("timestamp"));
             $message .= "\nDeveloped by @amirhp\_com 🦖";

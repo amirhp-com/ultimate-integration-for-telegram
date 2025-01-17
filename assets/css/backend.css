@@ -1,7 +1,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/14 18:34:24
+ * @Last modified time: 2025/01/17 05:11:17
  */
 
 @font-face {
@@ -234,9 +234,26 @@ blue {
 }
 
 copy {
-  background: #00000012;
-  padding: 3px 5px;
+  padding: 1px;
   cursor: pointer;
+  position: relative;
+}
+
+copy:after {
+  content: "";
+  position: absolute;
+  display: block;
+  left: 0;
+  bottom: -2px;
+  height: 0;
+  transition: all 300ms ease-in-out;
+  width: 100%;
+}
+
+copy:hover:after {
+  background: #3d7ef94f;
+  height: 10px;
+  transform-origin: top;
 }
 
 .form-row {
@@ -468,6 +485,20 @@ div#wpfooter {
 .sub-setting.form-table.wp-list-table {
   margin-top: 1rem;
 }
-.hooks-docs th, .hooks-docs td{
+
+.hooks-docs th,
+.hooks-docs td {
   direction: ltr !important;
+}
+
+td.macro-list strong {
+  display: block;
+}
+
+.button.button-link {
+  text-decoration: none;
+  padding: 0 !important;
+  min-height: -webkit-fit-content !important;
+  min-height: -moz-fit-content !important;
+  min-height: fit-content !important;
 }
