@@ -47,7 +47,7 @@ if (!class_exists("class_setting")) {
       wp_enqueue_style($this->db_slug . "-fas", "//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css", array(), current_time("timestamp"));
       wp_enqueue_style($this->db_slug . "-setting", "{$this->assets_url}css/backend.css");
       wp_enqueue_script($this->db_slug . "-setting", "{$this->assets_url}js/jquery.repeater.min.js", ["jquery"], "1.2.1");
-      wp_enqueue_script($this->db_slug . "-panel", "{$this->assets_url}js/panel.js", ["jquery"]);
+      wp_enqueue_script($this->db_slug . "-panel", "{$this->assets_url}js/panel.js", ["jquery"], time());
       $data = $this->read("notifications");
       $localized = apply_filters("blackswan-telegram/notif-panel/localize-front-script", array(
         "ajax" => admin_url("admin-ajax.php"),
@@ -63,6 +63,14 @@ if (!class_exists("class_setting")) {
         "error_slug_empty" => _x("first select a notif type", "front-js", $this->td),
         "error_option_empty" => _x("no option found for selected notif", "front-js", $this->td),
         "unknown" => _x("An Unknown Error Occured. Check console for more information.", "front-js", $this->td),
+        "md" => array(
+          "asterisk" => _x('Unmatched asterisk (*) found.', "front-js", $this->td),
+          "underscore" => _x('Unmatched underscore (_) found.', "front-js", $this->td),
+          "backtick" => _x('Unmatched backtick (`) found.', "front-js", $this->td),
+          "triple_backticks" => _x('Unmatched triple backticks (```) found.', "front-js", $this->td),
+          "invalid" => _x('Invalid {entity} formatting. Example: {example}', "front-js", $this->td),
+          "valid" => _x('Success, Markdown is valid!', "front-js", $this->td),
+        ),
       ));
       wp_localize_script($this->db_slug . "-panel", "_panel", $localized);
       is_rtl() and wp_add_inline_style($this->db_slug, "#wpbody-content { font-family: bodyfont, roboto, Tahoma; }");
@@ -445,15 +453,41 @@ if (!class_exists("class_setting")) {
     }
     public function print_notif_setting($slug){
       ob_start();
-      $btn_placeholder = __("Button 1 label | Button 1 URL\nButton 2 label | Button 2 URL\nYou can use upto 6 button",$this->td);
+      $btn_placeholder = __("Button 1 label | Button 1 URL\nButton 2 label | Button 2 URL\nButton 3 label | Button 3 URL",$this->td);
       do_action("blackswan-telegram/notif-panel/before-notif-setting", $slug);
       $default_message = apply_filters("blackswan-telegram/notif-panel/notif-default-message", "", $slug);
       $default_parser = apply_filters("blackswan-telegram/notif-panel/notif-default-parser", false, $slug);
       $default_buttons = apply_filters("blackswan-telegram/notif-panel/notif-default-buttons", "", $slug);
       ?>
-      <tr><th><?=__("Message", $this->td);?></th><td><textarea rows="4" data-slug="message"><?=$default_message;?></textarea></td></tr>
-      <tr><th><?=__("Parse HTML", $this->td);?></th><td><label><input type="checkbox" <?=checked($default_parser, true, false);?> data-slug="html_parser" value="html">&nbsp;<?=__("Check to Parse Message as HTML or leave Unchecked to use Markdown", $this->td);?></label></td></tr>
-      <tr><th><?=__("Buttons", $this->td);?></th><td><textarea rows="4" data-slug="btn_row1" placeholder="<?=$btn_placeholder;?>"><?=$default_buttons;?></textarea></td></tr>
+      <tr>
+        <th><?=__("Message", $this->td);?></th>
+        <td>
+          <textarea rows="4" data-slug="message"><?=$default_message;?></textarea>
+          <p class="description"><?=sprintf(
+            __('You can use <b>HTML</b>, <b>Markdown</b>, and <b>Macros</b> in your message (See the %1$s). Ensure your Markdown is valid with the "%2$s".',$this->td),
+            '<a href="https://core.telegram.org/api/entities#allowed-entities" target="_blank">'.__("Telegram Formatting Guide",$this->td).'</a>',
+            "<a href='#' class='button button-link validate_markdown'>".__("Markdown Validator",$this->td)."</a>");?></p>
+        </td>
+      </tr>
+      <tr>
+        <th><?=__("Message Formatting Method", $this->td);?></th>
+        <td>
+          <label><input type="checkbox" <?=checked($default_parser, true, false);?> data-slug="html_parser" value="html">&nbsp;
+          <?=__("Enable (green) to use HTML, or disable (red) to use Markdown", $this->td);?></label>
+        </td>
+      </tr>
+      <tr>
+        <th><?=__("Buttons", $this->td);?></th>
+        <td>
+          <textarea rows="4" data-slug="btn_row1" placeholder="<?=$btn_placeholder;?>"><?=$default_buttons;?></textarea>
+          <p class="description">
+            <?=__("You can add up to four buttons. Both labels and URLs can use plain text or macros, and labels can also include emojis.", $this->td);?>
+            <?=sprintf(
+              __("Sample Button: %s", $this->td),
+              '<copy title="'.esc_attr__("Sample Button", $this->td).'">🌏 Visit {site_name}|{site_url}</copy>');?>
+          </p>
+        </td>
+      </tr>
       <tr class="description">
         <th><?=__("Available Macros for this Notif", $this->td);?></th>
         <td class="macro-list">

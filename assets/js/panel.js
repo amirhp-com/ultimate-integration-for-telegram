@@ -1,7 +1,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/14 18:18:23
+ * @Last modified time: 2025/01/17 04:07:11
  */
 
 (function ($) {
@@ -114,6 +114,7 @@
       e.preventDefault(); var me = $(this);
       me.parents("th").find(".sub-setting").toggleClass("hide");
       me.parents("tr").toggleClass("highlight active-editing");
+      me.parents("tr").find(".fa-cog").toggleClass("fa-spin");
     });
     $(document).on("click tap", "a.nav-tab", function(e) {
       e.preventDefault();
@@ -210,6 +211,12 @@
         complete: function(e) { },
       });
     });
+    $(document).on("click tap", ".validate_markdown", function(e){
+      e.preventDefault();
+      var me = $(this);
+      var md = me.parents(".sub-setting").find("textarea[data-slug='message']").length ? me.parents(".sub-setting").find("textarea[data-slug='message']") : false;
+      validateMarkdown(md)
+    });
     $(document).on("click tap", ".add-new-notif", function(e){
       e.preventDefault();
       var me = $(this), slug = $("select#notif_types").val();
@@ -233,8 +240,8 @@
       new_container = new_container.replace("{title}", title.text());
       var new_added = $(new_container).appendTo(workplace);
       new_added.find("[data-slug='_enabled']").prop("checked", true);
+      scroll_element(new_added, 100)
       $(new_added).addClass('highlight').delay(1000).queue(function(){$(this).removeClass('highlight').dequeue();});
-      scroll_element(new_added)
       build_notification_data();
     });
     $(document).on("click tap", ".export-import-notif", function(e){
@@ -280,6 +287,89 @@
       build_notification_data();
     });
 
+    function validateMarkdown(message) {
+      // Get the message input value
+      if (!message) { show_toast("Markdown is empty!"); return false; }
+      var message = message.val().trim();
+      // Remove content inside macros before validation
+      var message = message.replace(/{[^}]+}/g, "");
+
+      // Define validation rules for Markdown
+      var rules = [
+        {
+          entity: "Bold",
+          regex: /\*\*.*?\*\*|__.*?__/g,
+          example: "**bold**, __bold__"
+        },
+        {
+          entity: "Italic",
+          regex: /\*.*?\*|_.*?_/g,
+          example: "*italic*, _italic_"
+        },
+        {
+          entity: "Monospace",
+          regex: /`[^`]+`/g,
+          example: "`monospace`"
+        },
+        {
+          entity: "Preformatted Block",
+          regex: /```[\s\S]*?```/g,
+          example: "```\ncode\n```"
+        },
+        {
+          entity: "Underline",
+          regex: /<u>.*?<\/u>/g,
+          example: "<u>underline</u>"
+        },
+        {
+          entity: "Strikethrough",
+          regex: /~~.*?~~|<s>.*?<\/s>|<strike>.*?<\/strike>|<del>.*?<\/del>/g,
+          example: "~~strikethrough~~"
+        },
+        {
+          entity: "Spoiler",
+          regex: /\|\|.*?\|\|/g,
+          example: "||spoiler||"
+        },
+        {
+          entity: "Quote",
+          regex: /^> .*$/gm,
+          example: "> quote"
+        },
+        {
+          entity: "Link",
+          regex: /\[.*?\]\(https?:\/\/.*?\)/g,
+          example: "[link text](https://example.com)"
+        }
+      ];
+
+      if ((message.match(/\*/g) || []).length % 2 !== 0) {
+        show_toast(_panel.md.asterisk, $error_color);
+        return false;
+      }
+      if ((message.match(/_/g) || []).length % 2 !== 0) {
+        show_toast(_panel.md.underscore, $error_color);
+        return false;
+      }
+      if ((message.match(/`/g) || []).length % 2 !== 0) {
+        show_toast(_panel.md.backtick, $error_color);
+        return false;
+      }
+      if ((message.match(/```/g) || []).length % 2 !== 0) {
+        show_toast(_panel.md.triple_backticks, $error_color);
+        return false;
+      }
+
+      // Validate the message against each rule
+      rules.forEach(function (rule) {
+        if (!rule.regex.test(message)) {
+          show_toast(_panel.md.invalid.replace("{entity}", rule.entity).replace("{example}", rule.example), $error_color);
+          return false;
+        }
+      });
+
+      show_toast(_panel.md.valid, $success_color);
+    }
     // make json data
     function build_translation_data(container = ".repeater.translation-panel", data_inp = "#gettext_replace") {
       // console.log(`build_translation_data ${container} ~> ${data_inp}`);

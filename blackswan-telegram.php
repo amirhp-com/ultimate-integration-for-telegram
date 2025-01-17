@@ -20,7 +20,7 @@
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/14 16:04:20
+ * @Last modified time: 2025/01/17 04:21:03
 */
 
 namespace BlackSwan\Telegram;
@@ -55,12 +55,8 @@ if (!class_exists("Notifier")) {
       add_action("shutdown", array($this, "buffer_finish_replace_translate"));
       #endregion
     }
-    public function add_plugin_settings_link($links) {
-      $links[$this->td] = '<a href="' . esc_attr(admin_url("options-general.php?page={$this->td}#tab_general")) . '">' . _x("Settings", "action-row", $this->td) . '</a>';
-      return $links;
-    }
     private function handle_bot_webhook(){
-      if (isset($_REQUEST[$this->td]) && !empty($_REQUEST[$this->td]) && "webhook" == $_REQUEST[$this->td]) {
+      if (isset($_REQUEST["blackswan-telegram"]) && !empty($_REQUEST["blackswan-telegram"]) && "webhook" == $_REQUEST["blackswan-telegram"]) {
         try {
           $telegram = new \Longman\TelegramBot\Telegram($this->config["api_key"], $this->config["bot_username"]);
           $telegram->addCommandsPaths($this->config["commands"]["paths"]);
@@ -102,25 +98,41 @@ if (!class_exists("Notifier")) {
       );
       add_action("before_woocommerce_init", [$this, "add_hpos_support"]);
     }
+    public function get_notifications_by_type($type=""){
+      $all_notif = $this->read("notifications");
+      if (empty($all_notif)) return [];
+      $all_notif = json_decode($all_notif);
+      if (!is_array($all_notif) || empty($all_notif)) return [];
+      if (!empty($type)) {
+        $all_notif = array_filter($all_notif, function($arg) use ($type){return $arg->type == $type && $arg->config->_enabled == "yes";});
+      }
+      return $all_notif;
+    }
     #region hooked-functions >>>>>>>>>>>>>
     public function init_plugin() {
       $this->title = __("BlackSwan - Telegram Notification", $this->td);
       $this->title_small = __("Telegram Notification", $this->td);
       $this->include_class();
       if ($this->enabled("jdate")) {
-        require "{$this->include_dir}/class-jdate.php";
         add_filter("date_i18n", array($this, "jdate"), 10, 4);
         add_action("woocommerce_email_before_order_table", function($order, $sent_to_admin, $plain_text, $email){ add_filter("date_i18n", array($this, "jdate"), 10, 4); }, 10, 4);
         add_action("woocommerce_admin_order_data_after_payment_info", function($order){ remove_filter("date_i18n", array($this, "jdate"), 10); });
         add_action("woocommerce_admin_order_data_after_order_details", function($order){ add_filter("date_i18n", array($this, "jdate"), 10, 4); });
       }
+      do_action("blackswan-telegram/init");
+    }
+    public function add_plugin_settings_link($links) {
+      $links[$this->td] = '<a href="' . esc_attr(admin_url("options-general.php?page={$this->td}#tab_general")) . '">' . _x("Settings", "action-row", $this->td) . '</a>';
+      return $links;
     }
     public function jdate($date, $format, $timestamp, $gmt){
       return pu_jdate($format, $timestamp, "", "local", "en");
     }
     public function include_class(){
+      require "{$this->include_dir}/class-jdate.php";
       require "{$this->include_dir}/vendor/autoload.php";
       require "{$this->include_dir}/class-setting.php";
+      require "{$this->include_dir}/class-wp-hook.php";
     }
     public function add_hpos_support() {
       if (class_exists(\Automattic\WooCommerce\Utilities\FeaturesUtil::class)) {
@@ -160,7 +172,7 @@ if (!class_exists("Notifier")) {
 
           case 'send_test':
             global $wp_version;
-            $site_host = parse_url(get_bloginfo('url'), PHP_URL_HOST);
+            $site_host = parse_url(home_url(), PHP_URL_HOST);
             $message = "✅ *BlackSwan - Telegram Notification*\n\nVersion.{$this->version} | WP: {$wp_version} | PHP: " . PHP_VERSION;
             $message .= "\nTest Message Sent from [".get_bloginfo("name")."](" . home_url() . ")";
             $message .= "\nServer Date: " . date_i18n("Y/m/d H:i:s", current_time("timestamp"));
@@ -331,8 +343,9 @@ if (!class_exists("Notifier")) {
             (trim("$user_info->first_name $user_info->last_name") == "" ? $user_info->user_login : "$user_info->first_name $user_info->last_name"),
             ($id ? "&nbsp;&nbsp;<sup title='ID $uid'>ID: $uid</sup>" : "")
           );
-        } else {
-          return "$user_info->first_name $user_info->last_name";
+        }
+        else {
+          return !empty(trim("{$user_info->first_name} {$user_info->last_name}")) ? "{$user_info->first_name} {$user_info->last_name}" : (!empty(trim($user_info->display_name)) ? $user_info->display_name : $user_info->user_login);
         }
       } else {
         return sprintf(__("ID #%s [deleted-user]", $this->td), $uid);
@@ -363,6 +376,146 @@ if (!class_exists("Notifier")) {
     }
     public static function str_ends_with(string $haystack, string $needle): bool {
       return '' === $needle || ('' !== $haystack && 0 === substr_compare($haystack, $needle, -\strlen($needle)));
+    }
+    #endregion
+    #region send telegram notif >>>>>>>>>>>>>
+    public function send_telegram_msg($message="", $buttons=[], $reference="", $html_parser=false, $json=false){
+      // $sample = $this->tg_send_msg("Sample Test Sent!", [ ["text" => "btn1", "url" => home_url("/pg-1"),], ["text" => "btn2", "url" => home_url("/pg-2"),], ]);
+      $chat_ids = $this->read("chat_ids");
+      if (empty(trim($chat_ids))){
+        $debug = ["msg"=>__("No Chat ID found. Please add a Chat ID to send a test message.",$this->td)];
+        if ($this->debug) { error_log("BlackSwan - Telegram Notification :: debugging ".current_action().": ".__METHOD__.PHP_EOL.var_export($debug,1)); }
+        if ($json) { wp_send_json_error($debug); }
+        return new \WP_Error("chat_id", __("No Chat ID found. Please add a Chat ID to send a test message.",$this->td));
+      }
+
+      $chat_ids  = explode("\n", $chat_ids);
+      $chat_ids  = array_map("trim", $chat_ids);
+      $res_array = []; $failed = false; $errors = []; $errors2 = [];
+      if (empty($chat_ids)) {
+        $debug = ["msg"=>__("No Chat ID found. Please add a Chat ID to send a test message.",$this->td)];
+        if ($this->debug) { error_log("BlackSwan - Telegram Notification :: debugging ".current_action().": ".__METHOD__.PHP_EOL.var_export($debug,1)); }
+        if ($json) { wp_send_json_error($debug); }
+        return new \WP_Error("chat_id", __("No Chat ID found. Please add a Chat ID to send a test message.",$this->td));
+      }
+
+
+      if (is_string($buttons) && !empty($buttons)) {
+        $markup = array();
+        $button = explode("\n", $buttons);
+        foreach ($button as $btn) {
+          list($text, $url) = explode("|", $btn);
+          $markup[] = ["text" => $text, "url" => $this->sanitize_url($url),];
+        }
+        $buttons = $markup;
+      }
+
+      if (!is_bool($html_parser)) $html_parser = "yes" == $html_parser;
+      $message = $this->translate_param($message, $reference);
+
+      if ($buttons && !empty($buttons)) {
+        $buttons = apply_filters("blackswan-telegram/helper/send-message-buttons", array_slice($buttons, 0, 4), $buttons, $reference, func_get_args());
+        $markup = array($buttons, [['text' => "BlackSwan - Telegram Notification", "url" => "https://wordpress.org/plugins/blackswan-telegram/"]] );
+      }else{
+        $markup = [[['text' => "BlackSwan - Telegram Notification", "url" => "https://wordpress.org/plugins/blackswan-telegram/"]]];
+      }
+      try {
+        $telegram  = new \Longman\TelegramBot\Telegram($this->read("token"), $this->read("username"));
+        foreach ($chat_ids as $chat) {
+          $tg = (new \Longman\TelegramBot\Request);
+          $method = apply_filters("blackswan-telegram/helper/send-message-method", "sendMessage", func_get_args());
+          $site_host = parse_url(home_url(), PHP_URL_HOST);
+          $message .= "\n\n```disclaimer\nSent via BlackSwan - Telegram Notification Plugin for WordPress v.{$this->version} from $site_host```";
+          $tg_arguments = apply_filters("blackswan-telegram/helper/send-message-arguments", array("chat_id" => $chat, "text" => $message, "reply_markup" => ["inline_keyboard"=>$markup], "parse_mode" => $html_parser ? "html" : "markdown", ), $tg, func_get_args() );
+          $result = @forward_static_call_array([$tg, $method], [$tg_arguments]);
+          $result = apply_filters("blackswan-telegram/helper/sent-message-result", $result, $tg, func_get_args());
+          if ($result->isOk()) {
+            $res_array[] = sprintf(__("Test Message sent successfully to ChatID: %s", $this->td), $chat);
+            if ($this->debug) {
+              error_log("BlackSwan - Telegram Notification :: debugging send msg ~> REF:" . $reference . " - " . sprintf(__("Test Message sent successfully to ChatID: %s", $this->td), $chat) . PHP_EOL . var_export($result, 1));
+            }
+          }
+          else {
+            $errors[] = var_export($result, 1);
+            $errors2[] = print_r($result, 1);
+            if ($this->debug) { error_log("BlackSwan - Telegram Notification :: debugging send msg ~> " . PHP_EOL . var_export($result, 1)); }
+            $res_array[] = sprintf(__("Error sending test message to ChatID: %s", $this->td), $chat);
+            $failed = true;
+          }
+        }
+      }
+      catch (\Longman\TelegramBot\Exception\TelegramException $e) {
+        $failed = true;
+        $errors2[] = print_r([$e->getMessage(), $e], 1);
+        $errors[] = var_export($e->getMessage(), 1);
+        $res_array[] = sprintf(__("Error Occured: %s", $this->td), $e->getMessage());
+        if ($this->debug) { error_log("BlackSwan - Telegram Notification :: debugging send msg ~> " . PHP_EOL . var_export($e, 1)); }
+      }
+      if ($failed) {
+        $debug = ["msg"=> implode(PHP_EOL, $res_array), "err" => $errors, "err2" => $errors2, "message" => $message,];
+        do_action("blackswan-telegram/helper/send-message-result/failed", $debug, func_get_args());
+        if ($this->debug) { error_log("BlackSwan - Telegram Notification :: debugging ".current_action().": ".__METHOD__.PHP_EOL.var_export($debug,1)); }
+        if ($json) { wp_send_json_error($debug); }
+        return new \WP_Error("err_send", implode(PHP_EOL, $res_array), $debug);
+      }
+      else{
+        do_action("blackswan-telegram/helper/send-message-result/success", $res_array, func_get_args());
+        if ($this->debug) { error_log("BlackSwan - Telegram Notification :: SUCCESS ".current_action().": ".__METHOD__.PHP_EOL.var_export(implode(PHP_EOL, $res_array),1)); }
+        if ($json) {wp_send_json_success(["msg"=> implode(PHP_EOL, $res_array)]);}
+        return $res_array;
+      }
+    }
+    public function sanitize_url($url="") {
+      if (empty($url)) return home_url();
+      #page_id / @page_slug / {special_pages} / Full URL
+      $url = trim($this->translate_param($url, "SANITIZE_URL"));
+      if ($this->str_starts_with($url, "#")) {
+        $url = get_permalink(ltrim($url, "#"));
+        return $url ? sanitize_url($url) : sanitize_url(home_url($url));
+      }
+      if ($this->str_starts_with($url, "@")) {
+        $slug = ltrim(sanitize_text_field($url), "@");
+        return sanitize_url(home_url("/{$slug}"));
+      }
+      $url = $this->special_pages_to_url($url);
+      return sanitize_url($url);
+    }
+    public function special_pages_to_url($url = "") {
+      global $PeproDevUPS_Profile;
+      if ($PeproDevUPS_Profile) {
+        $profile = $PeproDevUPS_Profile->get_profile_page(true);
+        $profileEdit = $PeproDevUPS_Profile->get_profile_page(["section" => "edit"]);
+      }else{
+        $profile = home_url("/profile");
+        $profileEdit = add_query_arg(["section" => "edit"], home_url("/profile"));
+      }
+      $url = str_replace(
+        ["{home}", "{admin}", "{profile}", "{profile_edit}",],
+        [ home_url(), admin_url(), $profile, $profileEdit,],
+      $url);
+      return apply_filters("pepro_reglogin_special_pages", $url);
+    }
+    public function translate_param($message, $reference){
+      $return = $message;
+      remove_all_filters("date_i18n");
+      add_filter("date_i18n", array($this, "jdate"), 10, 4);
+      $pairs = array(
+        "current_time"       => wp_date(get_option("time_format"), current_time("timestamp")),
+        "current_date"       => wp_date(get_option("date_format"), current_time("timestamp")),
+        "current_date_time"  => wp_date(get_option("date_format") . " " . get_option("time_format"), current_time("timestamp")),
+        "current_jdate"      => date_i18n("Y/m/d", current_time("timestamp")),
+        "current_jdate_time" => date_i18n("Y/m/d H:i:s", current_time("timestamp")),
+        "current_user_id"    => get_current_user_id(),
+        "current_user_name"  => $this->display_user(get_current_user_id(), false, false),
+        "site_name"          => get_bloginfo("name"),
+        "site_url"           => home_url(),
+        "admin_url"          => admin_url(),
+      );
+      $pairs = apply_filters("blackswan-telegram/helper/translate-pairs", $pairs, $message, $reference);
+      foreach ($pairs as $macro => $value) {
+        $return = str_replace("{".$macro."}", $value, $return);
+      }
+      return apply_filters("blackswan-telegram/helper/translated-message", $return, $message, $pairs);
     }
     #endregion
   }
