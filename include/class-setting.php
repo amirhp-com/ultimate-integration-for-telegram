@@ -400,10 +400,11 @@ if (!class_exists("class_setting")) {
     }
     public function print_notif_types($return=false){
       $options = array();
-      $options["wp_general"] = array(
-        "title" => __("WordPress General", $this->td),
+      $options["wp_users"] = array(
+        "title" => __("WordPress Users", $this->td),
         "options" => array(
           "wp_user_registered" => __("New User Registered", $this->td),
+          "wp_user_edited" => __("User Profile Updated", $this->td),
           "wp_comment_submitted" => __("New Comment Submitted", $this->td),
         ),
       );

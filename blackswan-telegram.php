@@ -20,7 +20,7 @@
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/17 05:07:09
+ * @Last modified time: 2025/01/17 05:43:13
 */
 
 namespace BlackSwan\Telegram;
@@ -332,7 +332,7 @@ if (!class_exists("Notifier")) {
     }
     #endregion
     #region display-user, sanitize-number, get user ip >>>>>>>>>>>>>
-    public function display_user($uid = 0, $link = false, $id = true) {
+    public static function display_user($uid = 0, $link = false, $id = true) {
       $user_info = get_userdata($uid);
       if ($user_info) {
         if ($link) {
@@ -348,7 +348,7 @@ if (!class_exists("Notifier")) {
           return !empty(trim("{$user_info->first_name} {$user_info->last_name}")) ? "{$user_info->first_name} {$user_info->last_name}" : (!empty(trim($user_info->display_name)) ? $user_info->display_name : $user_info->user_login);
         }
       } else {
-        return sprintf(__("ID #%s [deleted-user]", $this->td), $uid);
+        return sprintf(__("ID #%s [deleted-user]", "blackswan-telegram"), $uid);
       }
     }
     public function sanitize_number($num) {
@@ -379,7 +379,7 @@ if (!class_exists("Notifier")) {
     }
     #endregion
     #region send telegram notif >>>>>>>>>>>>>
-    public function send_telegram_msg($message="", $buttons=[], $reference="", $html_parser=false, $json=false){
+    public function send_telegram_msg($message="", $buttons=[], $reference="", $extra_data=[], $html_parser=false, $json=false){
       // $sample = $this->tg_send_msg("Sample Test Sent!", [ ["text" => "btn1", "url" => home_url("/pg-1"),], ["text" => "btn2", "url" => home_url("/pg-2"),], ]);
       $chat_ids = $this->read("chat_ids");
       if (empty(trim($chat_ids))){
@@ -405,13 +405,13 @@ if (!class_exists("Notifier")) {
         $button = explode("\n", $buttons);
         foreach ($button as $btn) {
           list($text, $url) = explode("|", $btn);
-          $markup[] = ["text" => $text, "url" => $this->sanitize_url($url),];
+          $markup[] = ["text" => $this->translate_param($text, "SANITIZE_BTN"), "url" => $this->sanitize_url($url),];
         }
         $buttons = $markup;
       }
 
       if (!is_bool($html_parser)) $html_parser = "yes" == $html_parser;
-      $message = $this->translate_param($message, $reference);
+      $message = $this->translate_param($message, $reference, $extra_data, []);
 
       if ($buttons && !empty($buttons)) {
         $buttons = apply_filters("blackswan-telegram/helper/send-message-buttons", array_slice($buttons, 0, 4), $buttons, $reference, func_get_args());
@@ -495,7 +495,7 @@ if (!class_exists("Notifier")) {
       $url);
       return apply_filters("pepro_reglogin_special_pages", $url);
     }
-    public function translate_param($message, $reference){
+    public function translate_param($message="", $reference="", $extra_data=[], $defaults=[]){
       $return = $message;
       remove_all_filters("date_i18n");
       add_filter("date_i18n", array($this, "jdate"), 10, 4);
@@ -511,11 +511,12 @@ if (!class_exists("Notifier")) {
         "site_url"           => home_url(),
         "admin_url"          => admin_url(),
       );
-      $pairs = apply_filters("blackswan-telegram/helper/translate-pairs", $pairs, $message, $reference);
+      $pairs = wp_parse_args($pairs, $defaults);
+      $pairs = apply_filters("blackswan-telegram/helper/translate-pairs", $pairs, $message, $reference, $extra_data, $defaults);
       foreach ($pairs as $macro => $value) {
         $return = str_replace("{".$macro."}", $value, $return);
       }
-      return apply_filters("blackswan-telegram/helper/translated-message", $return, $message, $pairs);
+      return apply_filters("blackswan-telegram/helper/translated-message", $return, $message, $pairs, $reference, $extra_data, $defaults);
     }
     #endregion
   }
