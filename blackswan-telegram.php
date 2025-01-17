@@ -20,7 +20,7 @@
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/17 05:43:13
+ * @Last modified time: 2025/01/17 06:42:09
 */
 
 namespace BlackSwan\Telegram;
@@ -405,7 +405,10 @@ if (!class_exists("Notifier")) {
         $button = explode("\n", $buttons);
         foreach ($button as $btn) {
           list($text, $url) = explode("|", $btn);
-          $markup[] = ["text" => $this->translate_param($text, "SANITIZE_BTN"), "url" => $this->sanitize_url($url),];
+          $markup[] = [
+            "text" => $this->translate_param($text, "SANITIZE_BTN", $extra_data, []),
+            "url" => $this->sanitize_url($url, $extra_data),
+          ];
         }
         $buttons = $markup;
       }
@@ -465,10 +468,10 @@ if (!class_exists("Notifier")) {
         return $res_array;
       }
     }
-    public function sanitize_url($url="") {
+    public function sanitize_url($url="", $extra_data=[]) {
       if (empty($url)) return home_url();
+      $url = $this->translate_param($url, "SANITIZE_URL", $extra_data, []);
       #page_id / @page_slug / {special_pages} / Full URL
-      $url = trim($this->translate_param($url, "SANITIZE_URL"));
       if ($this->str_starts_with($url, "#")) {
         $url = get_permalink(ltrim($url, "#"));
         return $url ? sanitize_url($url) : sanitize_url(home_url($url));

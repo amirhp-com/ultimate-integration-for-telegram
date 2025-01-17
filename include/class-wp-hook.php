@@ -37,8 +37,9 @@ class class_wp_hook extends Notifier{
 
       // handle macro replacement
       add_filter("blackswan-telegram/helper/translate-pairs", function($pairs, $message, $reference, $extra_data, $defaults){
+
         // if we are sending request from this class, then handle macro
-        if ($reference == __CLASS__ && !empty($extra_data["user_id"])) {
+        if ( in_array($reference, [__CLASS__, "SANITIZE_BTN", "SANITIZE_URL"]) && !empty($extra_data["user_id"]) ) {
 
           $user_id = $extra_data["user_id"];
           $user = get_user_by("ID", $user_id);
@@ -67,47 +68,37 @@ class class_wp_hook extends Notifier{
             $pairs = array_merge($pairs, $new_macros);
 
           }
+
         }
+
+        echo "<pre style='text-align: left; direction: ltr; border:1px solid gray; padding: 1rem; overflow: auto;'>". print_r([$reference, $pairs],1) ."</pre>";
 
         // always return array
         return (array) $pairs;
+
       }, 10, 5);
 
       // add hooks to send messages
       add_action("user_register", array($this, "send_new_user_msg"), 10, 2);
-      add_action("wp_update_user", array($this, "send_edit_user_msg"), 9999, 1);
+      add_action("wp_update_user", array($this, "send_edit_user_msg"), 9999, 3);
 
     }
   }
   public function send_new_user_msg($user_id=0, $userdata=[]){
     foreach ($this->notif as $notif) {
-      $message = $this->translate_param($notif->config->message, __CLASS__, [], [
+      $message = $this->translate_param($notif->config->message, __CLASS__, ["user_id" => $user_id], [
         "user_data" => print_r($userdata, 1),
       ]);
-      $this->send_telegram_msg(
-        $message,
-        $notif->config->btn_row1,
-        __CLASS__,
-        ["user_id" => $user_id],
-        $notif->config->html_parser,
-        false
-      );
+      $this->send_telegram_msg( $message, $notif->config->btn_row1, __CLASS__, ["user_id" => $user_id], $notif->config->html_parser, false );
     }
   }
   public function send_edit_user_msg($user_id=0, $userdata=[], $userdata_raw=[]){
     foreach ($this->notif2 as $notif) {
-      $message = $this->translate_param($notif->config->message, __CLASS__, [], [
+      $message = $this->translate_param($notif->config->message, __CLASS__, ["user_id" => $user_id], [
         "user_data" => print_r($userdata, 1),
-        "user_data_raw" => print_r($userdata, 1),
+        "user_data_raw" => print_r($userdata_raw, 1),
       ]);
-      $this->send_telegram_msg(
-        $notif->config->message,
-        $notif->config->btn_row1,
-        __CLASS__,
-        ["user_id" => $user_id],
-        $notif->config->html_parser,
-        false
-      );
+      $this->send_telegram_msg( $message, $notif->config->btn_row1, __CLASS__, ["user_id" => $user_id], $notif->config->html_parser, false );
     }
   }
 }

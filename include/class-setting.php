@@ -405,7 +405,6 @@ if (!class_exists("class_setting")) {
         "options" => array(
           "wp_user_registered" => __("New User Registered", $this->td),
           "wp_user_edited" => __("User Profile Updated", $this->td),
-          "wp_comment_submitted" => __("New Comment Submitted", $this->td),
         ),
       );
       if (class_exists("WooCommerce")) {
