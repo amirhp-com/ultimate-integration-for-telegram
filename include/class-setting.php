@@ -370,16 +370,16 @@ if (!class_exists("class_setting")) {
       <div class="workspace-notifications-list">
         <div class="workspace-tools">
           <select id="notif_types">
-            <option value="" ><?=__("-- None --", $this->td);?></option>
+            <option value="" ><?=__("-- Select Notif --", $this->td);?></option>
             <?php
             do_action("blackswan-telegram/notif-panel/after-general-notif-dropdown");
             $this->print_notif_types();
             do_action("blackswan-telegram/notif-panel/after-notif-types-dropdown");
             ?>
           </select>
-          <a href="#" class="button button-secondary add-new-notif"><?=__("Add New Notif", $this->td);?></a>
-          <a href="#" class="button button-secondary clear-all-notif"><?=__("Clear All Notif", $this->td);?></a>
-          <a href="#" class="button button-secondary export-import-notif"><?=__("Export/Import Notif", $this->td);?></a>
+          <a href="#" class="button button-secondary add-new-notif"><?=__("Add New", $this->td);?></a>
+          <a href="#" class="button button-secondary clear-all-notif"><?=__("Clear All", $this->td);?></a>
+          <a href="#" class="button button-secondary export-import-notif"><?=__("Import / Export", $this->td);?></a>
         </div>
         <div class="template-wrapper">
           <?php
@@ -456,7 +456,7 @@ if (!class_exists("class_setting")) {
     }
     public function print_notif_setting($slug){
       ob_start();
-      $btn_placeholder = __("Button label | Button URL",$this->td);
+      $btn_placeholder = "Button label | Button URL\nButton label | Button URL";
       do_action("blackswan-telegram/notif-panel/before-notif-setting", $slug);
       $default_message = apply_filters("blackswan-telegram/notif-panel/notif-default-message", "", $slug);
       $default_parser = apply_filters("blackswan-telegram/notif-panel/notif-default-parser", false, $slug);

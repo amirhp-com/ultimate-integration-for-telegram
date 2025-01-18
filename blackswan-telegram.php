@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: BlackSwan - Telegram Notification
- * Description: Send Customized WooCommerce Emails/Notifications to Telegram Channel/Group/Bot/PrivateChat with Built-in Gettext Replace, Translation Manager and String Replace across site
+ * Description: Send Customized WordPress/WooCommerce Notifications to Telegram Channel/Group/Bot/PrivateChat with Built-in Gettext Replace, Translation Manager and String Replace across site
  * Version: 1.0.0
  * Stable tag: 1.0.0
  * Author: BlackSwan
@@ -20,7 +20,7 @@
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/17 06:42:09
+ * @Last modified time: 2025/01/17 12:54:25
 */
 
 namespace BlackSwan\Telegram;
@@ -55,7 +55,32 @@ if (!class_exists("Notifier")) {
       add_action("shutdown", array($this, "buffer_finish_replace_translate"));
       #endregion
     }
-    private function handle_bot_webhook(){
+    private function setup_variables() {
+      $this->assets_url = plugins_url("/assets/", __FILE__);
+      $this->include_dir = plugin_dir_path(__FILE__) . "include";
+
+      require "{$this->include_dir}/vendor/autoload.php";
+
+      $this->debug = $this->enabled("debug");
+      $this->str_replace = $this->read("str_replace");
+      $this->gettext_replace = $this->read("gettext_replace");
+      $this->hook_url = home_url("?{$this->td}=webhook");
+      $this->config = array(
+        "api_key" => $this->read("token"),
+        "bot_username" => $this->read("username"),
+        "secret" => "super_secret",
+        "webhook" => ["url" => $this->hook_url,],
+        "commands" => ["paths" => ["{$this->include_dir}/CustomCommands"], "configs" => ["setup" => []]],
+        "admins" => [],
+        "limiter" => [],
+        "paths" => [
+          "download" => "{$this->include_dir}/temp/download",
+          "upload"   => "{$this->include_dir}/temp/upload",
+        ],
+      );
+      add_action("before_woocommerce_init", [$this, "add_hpos_support"]);
+    }
+    public function handle_bot_webhook(){
       if (isset($_REQUEST["blackswan-telegram"]) && !empty($_REQUEST["blackswan-telegram"]) && "webhook" == $_REQUEST["blackswan-telegram"]) {
         try {
           $telegram = new \Longman\TelegramBot\Telegram($this->config["api_key"], $this->config["bot_username"]);
@@ -75,28 +100,6 @@ if (!class_exists("Notifier")) {
         }
         die("<!-- BlackSwan - Telegram Notification :: Webhook done ./ -->");
       }
-    }
-    private function setup_variables() {
-      $this->assets_url = plugins_url("/assets/", __FILE__);
-      $this->include_dir = plugin_dir_path(__FILE__) . "include";
-      $this->debug = $this->enabled("debug");
-      $this->str_replace = $this->read("str_replace");
-      $this->gettext_replace = $this->read("gettext_replace");
-      $this->hook_url = add_query_arg([$this->td=>"webhook"], home_url());
-      $this->config = array(
-        "api_key" => $this->read("token"),
-        "bot_username" => $this->read("username"),
-        "secret" => "super_secret",
-        "webhook" => ["url" => $this->hook_url,],
-        "commands" => ["paths" => ["{$this->include_dir}/CustomCommands"], "configs" => ["setup" => []]],
-        "admins" => [ ],
-        "limiter" => [],
-        "paths" => [
-          "download" => "{$this->include_dir}/temp/download",
-          "upload"   => "{$this->include_dir}/temp/upload",
-        ],
-      );
-      add_action("before_woocommerce_init", [$this, "add_hpos_support"]);
     }
     public function get_notifications_by_type($type=""){
       $all_notif = $this->read("notifications");
@@ -130,7 +133,6 @@ if (!class_exists("Notifier")) {
     }
     public function include_class(){
       require "{$this->include_dir}/class-jdate.php";
-      require "{$this->include_dir}/vendor/autoload.php";
       require "{$this->include_dir}/class-setting.php";
       require "{$this->include_dir}/class-wp-hook.php";
     }

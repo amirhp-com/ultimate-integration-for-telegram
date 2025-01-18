@@ -17,9 +17,9 @@ class SetupCommand extends UserCommand
   {
     $message = $this->getMessage();
     $chat_id = $message->getChat()->getId();
-    $url = admin_url("admin.php?page=wcuitgbot");
-    $msg = "*PeproDev Ultimate Invoice TelegramBot*\n\n_To send Invoice PDFs here, you just need to:_\n\n".
-    "1️⃣ Open [Setting page]($url) in host site\n2️⃣ Add below ID to the Recipient List\n3️⃣ ChatID: `$chat_id`";
+    $msg = "*BlackSwan - Telegram Notification*\n\n_To send notifications here, you just need to:_\n\n".
+    "1️⃣ Open Setting in host site\n2️⃣ Add below ID to the ChatID List".
+    "\n🆔 ChatID: `$chat_id`\n\n👨‍🔧 Support: @ahosseinhp";
     return $this->replyToChat($msg, array(
       "parse_mode"               => "markdown",
       "reply_to_message_id"      => $message->getMessageId(),
