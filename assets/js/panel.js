@@ -1,7 +1,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/17 04:49:37
+ * @Last modified time: 2025/01/18 15:54:04
  */
 
 (function ($) {
@@ -439,7 +439,7 @@
         if (last && "" != last) { $(".nav-tab[data-tab=" + last.replace("#", "") + "]").trigger("click"); }
       }
     }
-    function show_toast(data = "Sample Toast!", bg = "", delay = 3000) {
+    function show_toast(data = "Sample Toast!", bg = "", delay = 8000) {
       if (!$("toast").length) {
         $(document.body).append($("<toast>"));
       } else {

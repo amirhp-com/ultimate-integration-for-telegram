@@ -20,7 +20,7 @@
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/17 12:54:25
+ * @Last modified time: 2025/01/18 16:02:51
 */
 
 namespace BlackSwan\Telegram;
@@ -174,28 +174,72 @@ if (!class_exists("Notifier")) {
 
           case 'send_test':
             global $wp_version;
+            $wc_version = defined('WC_VERSION') ? WC_VERSION : "Not Found";
             $site_host = parse_url(home_url(), PHP_URL_HOST);
-            $message = "‌\n✅ *BlackSwan - Telegram Notification*\n\nVersion.{$this->version} | WP: {$wp_version} | PHP: " . PHP_VERSION;
-            $message .= "\nTest Message Sent from [".get_bloginfo("name")."](" . home_url() . ")";
-            $message .= "\nServer Date: " . date_i18n("Y/m/d H:i:s", current_time("timestamp"));
-            $message .= "\nDeveloped by @amirhp\_com 🦖";
-            $message .= "\n\n```disclaimer\nSent via BlackSwan - Telegram Notification Plugin for WordPress v.{$this->version} from $site_host```";
+
+            $message = "Hi there! 👋\n\n*Welcome to BlackSwan - Telegram Notifications*\n" .
+            "Seamlessly connect your WordPress site & WooCommerce store to Telegram.\n\n" .
+            "With our Plugin, you’ll receive instant, real-time notifications for important events like new WooCommerce orders, user registrations, and WordPress emails. Replace traditional email notifications with fast and customizable Telegram messages tailored to your needs.\n\n" .
+            "Receive notifications wherever you want:\n" .
+            "- In *groups* or *channels* by adding this bot as an Administrator.\n" .
+            "- Directly in this *private chat* with the bot for instant updates.\n\n" .
+            ">*Your Site Information:*\n" .
+            ">Host URL: {$site_host}\n".
+            ">Server Date: " . wp_date("Y/m/d H:i:s", current_time("timestamp")) . "\n" .
+            ">Server jDate: " . pu_jdate("Y/m/d H:i:s", current_time("timestamp"), "", "local", "en") . "\n" .
+            ">Plugin Version: {$this->version}\n".
+            ">WordPress: {$wp_version}\n".
+            ">WooCommerce: {$wc_version}\n".
+            ">PHP Version: " . PHP_VERSION."".
+            "\n
+            "."\nTo get started:\n" .
+            "1️⃣ Add me as an *Administrator* to your group or channel.\n" .
+            "2️⃣ Send the command /setup to get the *Chat ID*.\n" .
+            "3️⃣ Go to the *Settings* on your site & add it to the list.\n\n" .
+            "🆔 *Your Chat ID:* `{chat_id}` _(specific to this chat)_\n\n" .
+            "👨‍🔧 For support or questions, contact: @amirhp\\_com";
+            $message = str_replace(
+              [
+                "(",
+                ")",
+                "[",
+                "]",
+                ".",
+                "!",
+                "-",
+              ], [
+                "\\(",
+                "\\)",
+                "\\[",
+                "\\]",
+                "\\.",
+                "\\!",
+                "\\-",
+              ],
+              $message
+            );
+
+            $markup = array(
+              array(
+                ["text" => "🏠 Home", "url"  => home_url()],
+                ["text" => "⚙️ Config","url"  => admin_url("options-general.php?page={$this->td}")],
+                ["text" => "😍 Developer", "url"  => "https://amirhp.com/landing"],
+              ),
+              array(
+                ['text' => "💻 Contribute (Github)", "url" => "https://github.com/blackswandevcom/blackswan-telegram"],
+                ['text' => "🍺 Buy me a Beer (Donate)", "url" => "https://amirhp.com/contact#payment"],
+              ),
+              array(
+                ['text' => "🌏 BlackSwan - Telegram Notification", "url" => "https://wordpress.org/plugins/blackswan-telegram/"],
+              ),
+            );
+
             $chat_ids  = $this->read("chat_ids");
             if (empty(trim($chat_ids))) wp_send_json_error(["msg"=>__("No Chat ID found. Please add a Chat ID to send a test message.",$this->td)]);
             $chat_ids  = explode("\n", $chat_ids);
             $chat_ids  = array_map("trim", $chat_ids);
-            $res_array = []; $failed = false; $errors = []; $errors2 = [];
+            $res_array = []; $failed = false; $errors = []; $errors2 = []; $errors3 = [];
             if (empty($chat_ids)) wp_send_json_error(["msg"=>__("No Chat ID found. Please add a Chat ID to send a test message.",$this->td)]);
-            $markup = array(
-              array(
-                ["text" => "🏠", "url"  => home_url()],
-                ["text" => "⚙️","url"  => admin_url("options-general.php?page={$this->td}")],
-                ["text" => "😍","url"  => "https://amirhp.com/landing"],
-              ),
-              array(
-                ['text' => "BlackSwan - Telegram Notification", "url" => "https://wordpress.org/plugins/blackswan-telegram/"],
-              )
-            );
             try {
               $telegram  = new \Longman\TelegramBot\Telegram($this->read("token"), $this->read("username"));
               /* sample send document
@@ -204,19 +248,29 @@ if (!class_exists("Notifier")) {
                   "caption" => $message,
                   "document" => (new \Longman\TelegramBot\Request)::encodeFile($pdf_temp),
                   "reply_markup" => ["inline_keyboard"=>$markup],
-                  "parse_mode" => "markdown",
+                  "parse_mode" => "MarkdownV2",
                 ));
                */
               foreach ($chat_ids as $chat) {
-                $result = (new \Longman\TelegramBot\Request)::sendMessage(["chat_id" => $chat, "text" => $message, "reply_markup" => ["inline_keyboard"=>$markup], "parse_mode" => "markdown"]);
+                $msg = str_replace("{chat_id}", $chat, $message);
+                $result = (new \Longman\TelegramBot\Request)::sendMessage([
+                  "chat_id"                  => $chat,
+                  "text"                     => $msg,
+                  "protect_content"          => true,
+                  "quote"                    => "Host URL",
+                  "disable_web_page_preview" => true,
+                  "reply_markup"             => ["inline_keyboard" => $markup],
+                  "parse_mode"               => "MarkdownV2",
+                ]);
                 if ($result->isOk()) {
                   $res_array[] = sprintf(__("Test Message sent successfully to ChatID: %s", $this->td), $chat);
                 }
                 else {
                   $errors[] = var_export($result, 1);
                   $errors2[] = print_r($result, 1);
+                  $errors3[] = $result->getDescription();
                   if ($this->debug) { error_log("BlackSwan - Telegram Notification :: debugging send test msg ~> " . PHP_EOL . var_export($result, 1)); }
-                  $res_array[] = sprintf(__("Error sending test message to ChatID: %s", $this->td), $chat);
+                  $res_array[] = sprintf(__("Error sending test message to ChatID: %s", $this->td) . "<br>" . $result->getDescription(), $chat);
                   $failed = true;
                 }
               }
@@ -228,7 +282,7 @@ if (!class_exists("Notifier")) {
               if ($this->debug) { error_log("BlackSwan - Telegram Notification :: debugging send test msg ~> " . PHP_EOL . var_export($e, 1)); }
             }
             if ($failed) {
-              wp_send_json_error(["msg"=> implode(PHP_EOL, $res_array), "err" => $errors, "err2" => $errors2,]);
+              wp_send_json_error(["msg"=> implode(PHP_EOL, $res_array), "err_msg" => $errors3, "err" => $errors, "err2" => $errors2,]);
             }else{
               wp_send_json_success(["msg"=> implode(PHP_EOL, $res_array)]);
             }
@@ -431,7 +485,7 @@ if (!class_exists("Notifier")) {
           $method = apply_filters("blackswan-telegram/helper/send-message-method", "sendMessage", func_get_args());
           $site_host = parse_url(home_url(), PHP_URL_HOST);
           $message .= "\n\n```disclaimer\nSent via BlackSwan - Telegram Notification Plugin for WordPress v.{$this->version} from $site_host```";
-          $tg_arguments = apply_filters("blackswan-telegram/helper/send-message-arguments", array("chat_id" => $chat, "text" => $message, "reply_markup" => ["inline_keyboard"=>$markup], "parse_mode" => $html_parser ? "html" : "markdown", ), $tg, func_get_args() );
+          $tg_arguments = apply_filters("blackswan-telegram/helper/send-message-arguments", array("chat_id" => $chat, "text" => $message, "reply_markup" => ["inline_keyboard"=>$markup], "parse_mode" => $html_parser ? "html" : "MarkdownV2", ), $tg, func_get_args() );
           $result = @forward_static_call_array([$tg, $method], [$tg_arguments]);
           $result = apply_filters("blackswan-telegram/helper/sent-message-result", $result, $tg, func_get_args());
           if ($result->isOk()) {
