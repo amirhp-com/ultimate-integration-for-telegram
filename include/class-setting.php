@@ -2,7 +2,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/19 11:36:45
+ * @Last modified time: 2025/01/20 01:43:24
  */
 use BlackSwan\Telegram\Notifier;
 if (!class_exists("class_setting")) {
@@ -20,14 +20,15 @@ if (!class_exists("class_setting")) {
         array(
           "name" => "general",
           "data" => array(
-            "debug" => "no",
-            "jdate" => "no",
+            "debug"           => "no",
+            "jdate"           => "no",
+            "admin_bar_link"  => "yes",
             "gettext_replace" => "",
-            "str_replace" => "",
-            "token" => "",
-            "username" => "",
-            "chat_ids" => "",
-            "notifications" => "",
+            "str_replace"     => "",
+            "token"           => "",
+            "username"        => "",
+            "chat_ids"        => "",
+            "notifications"   => "",
           ),
         ),
       );
@@ -117,6 +118,11 @@ if (!class_exists("class_setting")) {
                     "desc" => __("Enable to log detailed information for troubleshooting. Recommended for development only.",$this->td),
                   ]);
                   $this->print_setting_checkbox([
+                    "slug" => "admin_bar_link",
+                    "caption" => __("Show Plugin Link in Admin Bar", $this->td),
+                    "desc" => __("Enable this option to display a link to the plugin in the WordPress admin bar for administrators.", $this->td),
+                ]);
+                  $this->print_setting_checkbox([
                     "slug" => "jdate",
                     "caption" => __("Enable Built-in Jalali Date", $this->td),
                     "desc" => __("Enable to use the Jalali (Shamsi) calendar format. Disable other Jalali plugins to avoid conflicts.",$this->td),
@@ -167,7 +173,7 @@ if (!class_exists("class_setting")) {
                 <tfoot>
                   <tr class="type-textarea notifications toggle-export-import hide">
                     <th scope="row" colspan="2">
-                      <h3 style="margin-top: 0;"><label for="notifications"><?=__("Import/Export as JSON Data", $this->td);?></label></h3><a href="#" class="button button-secondary copy-code"><?=__("Copy to Clipboard", $this->td);?></a><br>
+                      <h3 style="margin-top: 0;"><label for="notifications"><?=__("Import / Export as JSON Data", $this->td);?></label></h3><a href="#" class="button button-secondary copy-code"><?=__("Copy to Clipboard", $this->td);?></a><br>
                       <p class="data-textarea"><textarea name="blackswan-telegram__notifications" id="notifications" rows="4" style="width: 100%; direction: ltr; font-family: monospace; font-size: smaller;" class="regular-text"><?=$this->read("notifications");?></textarea></p>
                       <p class="description"><?=__("you can use the json data to migrate settings across multiple sites. Enter JSON Data and Save page to reload Workspace.", $this->td);?></p>
                     </th>
@@ -198,8 +204,13 @@ if (!class_exists("class_setting")) {
                   </tr>
 
                   <tr>
-                    <td><?=$this->highlight('do_action("blackswan-telegram/notif-panel/notif-macro-list", $slug)');?></td>
+                    <td><?=$this->highlight('apply_filters("blackswan-telegram/notif-panel/notif-macro-list", $array, $slug)');?></td>
                     <td>Add Custom Macro for a Notification type</td>
+                  </tr>
+
+                  <tr>
+                    <td><?=$this->highlight('do_action("blackswan-telegram/notif-panel/after-macro-list", $macros_filtered, $default_macro, $slug)');?></td>
+                    <td>Print Custom content after Macro section for a Notification type</td>
                   </tr>
 
                   <tr>
@@ -413,12 +424,13 @@ if (!class_exists("class_setting")) {
           "title" => __("WooCommerce / Order", $this->td),
           "options" => array(
             "wc_new_order"              => __("New Order Created", $this->td),
-            "wc_payment_complete"       => __("Order Payment Complete", $this->td),
-            "wc_checkout_processed"     => __("Checkout Order Processed", $this->td),
-            "wc_checkout_api_processed" => __("Checkout Order Processed via API", $this->td),
+            "wc_order_saved"            => __("Order Updated / Saved", $this->td),
             "wc_trash_order"            => __("Trash Order", $this->td),
             "wc_delete_order"           => __("Delete Order", $this->td),
             "wc_order_refunded"         => __("Refunded Order", $this->td),
+            "wc_payment_complete"       => __("Order Payment Complete", $this->td),
+            "wc_checkout_processed"     => __("Checkout Order Processed", $this->td),
+            "wc_checkout_api_processed" => __("Checkout Order Processed via API", $this->td),
           ),
         );
         $statuses = wc_get_order_statuses();
@@ -442,8 +454,8 @@ if (!class_exists("class_setting")) {
             "--wc_product_stock_decreased" => __("Product Stock Quantity Decreased",$this->td),
           ),
         );
+        $mail_options["wc_mail_sent"] = sprintf(__("Mail Sent: All Emails",$this->td), $name);
         foreach ($emails as $slug => $name) {
-          $slug = $this->remove_status_prefix($slug);
           $mail_options["wc_mail_{$slug}"] = sprintf(__("Mail Sent: %s",$this->td), $name);
         }
         $options["woocommerce_mail"] = array(
@@ -483,27 +495,48 @@ if (!class_exists("class_setting")) {
         </td>
       </tr>
       <tr class="tg-formatting">
-        <th><?=__("Message Formatting Method", $this->td);?></th>
+        <th><?=__("HTML Formatting", $this->td);?></th>
         <td>
           <label><input type="checkbox" <?=checked($default_parser, true, false);?> data-slug="html_parser" value="html">&nbsp;
           <?=__("Enable (green) to use HTML, or disable (red) to use Markdown", $this->td);?></label>
         </td>
       </tr>
       <tr class="description">
-        <th><?=__("Available Macros for this Notif", $this->td);?></th>
-        <td class="macro-list">
-            <strong><?=__("General", $this->td);?></strong>
-            <copy data-tippy-content="<?=esc_attr(_x("Current Time","macro",$this->td));?>">{current_time}</copy>
-            <copy data-tippy-content="<?=esc_attr(_x("Current Date","macro",$this->td));?>">{current_date}</copy>
-            <copy data-tippy-content="<?=esc_attr(_x("Current Date-time","macro",$this->td));?>">{current_date_time}</copy>
-            <copy data-tippy-content="<?=esc_attr(_x("Current Jalali Date","macro",$this->td));?>">{current_jdate}</copy>
-            <copy data-tippy-content="<?=esc_attr(_x("Current Jalali Date-time","macro",$this->td));?>">{current_jdate_time}</copy>
-            <copy data-tippy-content="<?=esc_attr(_x("Current User id","macro",$this->td));?>">{current_user_id}</copy>
-            <copy data-tippy-content="<?=esc_attr(_x("Current User name","macro",$this->td));?>">{current_user_name}</copy>
-            <copy data-tippy-content="<?=esc_attr(_x("Site name","macro",$this->td));?>">{site_name}</copy>
-            <copy data-tippy-content="<?=esc_attr(_x("Site URL","macro",$this->td));?>">{site_url}</copy>
-            <copy data-tippy-content="<?=esc_attr(_x("Admin URL","macro",$this->td));?>">{admin_url}</copy>
-            <?php do_action("blackswan-telegram/notif-panel/notif-macro-list", $slug); ?>
+        <td colspan="2" class="macro-list">
+          <?php
+           echo "<h4 style='color: #1d2327;margin: 0;font-weight: normal;'>" . __("Available Macros for this Notif", $this->td) . "</h4>";
+           ?>
+           <div class="macro-list-wrapper">
+            <?php
+              $default_macros = array(
+                "general" => array(
+                  "title" => __("General", $this->td),
+                  "macros" => array(
+                    "current_time"       => _x("Current Time","macro",$this->td),
+                    "current_date"       => _x("Current Date","macro",$this->td),
+                    "current_date_time"  => _x("Current Date-time","macro",$this->td),
+                    "current_jdate"      => _x("Current Jalali Date","macro",$this->td),
+                    "current_jdate_time" => _x("Current Jalali Date-time","macro",$this->td),
+                    "current_user_id"    => _x("Current User id","macro",$this->td),
+                    "current_user_name"  => _x("Current User name","macro",$this->td),
+                    "site_name"          => _x("Site name","macro",$this->td),
+                    "site_url"           => _x("Site URL","macro",$this->td),
+                    "admin_url"          => _x("Admin URL","macro",$this->td),
+                  ),
+                ),
+              );
+              $filtered_hooks = apply_filters("blackswan-telegram/notif-panel/notif-macro-list", (array) $default_macros, $slug);
+              foreach ((array) $filtered_hooks as $macro_slug => $macro_category) {
+                echo "<strong>".(isset($macro_category['title'])?$macro_category['title']:$macro_slug)."</strong>";
+                if (isset($macro_category["macros"])) {
+                  foreach ($macro_category["macros"] as $key => $value) {
+                    echo "<copy data-tippy-content='".esc_attr($value)."'>{{$key}}</copy>";
+                  }
+                }
+              }
+              ?>
+              <?php do_action("blackswan-telegram/notif-panel/after-macro-list", $filtered_hooks, $default_macros, $slug); ?>
+           </div>
         </td>
       </tr>
       <tr class="tg-buttons">
@@ -566,7 +599,7 @@ if (!class_exists("class_setting")) {
                       name='" . esc_attr("{$this->db_slug}__{$slug}") . "'
                       id='" . esc_attr($slug) . "'
                       type='checkbox'
-                      data-tippy-content='" . esc_attr(sprintf(_x("Enter %s", "setting-page", $this->td), $caption)) . "'
+                      data-tippy-content='" . esc_attr(sprintf(_x("Toggle: %s", "setting-page", $this->td), $caption)) . "'
                       value='" . esc_attr($value) . "'
                       " . checked($value, get_option("{$this->db_slug}__{$slug}", ""), false) . "
                       class='regular-text " . esc_attr($extra_class) . "' " . esc_attr($extra_html) . " />

@@ -1,7 +1,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/17 12:53:16
+ * @Last modified time: 2025/01/19 23:14:44
  */
 @font-face {
   font-family: bodyfont;
@@ -236,6 +236,8 @@ copy {
   padding: 1px;
   cursor: pointer;
   position: relative;
+  -webkit-margin-end: 8px;
+  margin-inline-end: 8px;
 }
 
 copy:after {
@@ -253,6 +255,21 @@ copy:hover:after {
   background: #3d7ef94f;
   height: 10px;
   transform-origin: top;
+}
+
+.macro-list-wrapper {
+  max-height: 210px;
+  overflow: auto;
+  border-left: 2px solid #ccc;
+  padding-left: 0.5rem;
+  position: relative;
+}
+
+[dir="rtl"] .macro-list-wrapper {
+  border-left: none;
+  padding-left: none;
+  border-right: 2px solid #ccc;
+  padding-right: 0.5rem;
 }
 
 .form-row {
@@ -492,6 +509,12 @@ div#wpfooter {
 
 td.macro-list strong {
   display: block;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  background: #fff;
+  width: 100%;
+  z-index: 5;
 }
 
 .button.button-link {
@@ -500,4 +523,51 @@ td.macro-list strong {
   min-height: -webkit-fit-content !important;
   min-height: -moz-fit-content !important;
   min-height: fit-content !important;
+}
+
+h3.entry-name {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: pointer;
+}
+
+tr[data-type] h3.entry-name {
+  position: relative;
+}
+
+tr[data-type^="wc_"] .entry-name {
+  padding-left: 40px;
+  color: #7f54b4;
+}
+
+[dir="rtl"] tr[data-type^="wc_"] .entry-name {
+  padding-right: 40px;
+  padding-left: 0;
+}
+
+tr[data-type^="wc_"] .entry-name:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 34px;
+  height: 100%;
+  z-index: 1;
+  background: url("data:image/svg+xml,%3Csvg version='1.0' xmlns='http://www.w3.org/2000/svg' width='50.000000pt' height='50.000000pt' viewBox='0 0 50.000000 50.000000' preserveAspectRatio='xMidYMid meet'%3E%3Cg transform='translate(0.000000,50.000000) scale(0.100000,-0.100000)'%0Afill='%237f54b4' stroke='none'%3E%3Cpath d='M25 475 c-25 -24 -25 -25 -25 -225 0 -270 -20 -250 250 -250 270 0%0A250 -20 250 250 0 270 20 250 -250 250 -200 0 -201 0 -225 -25z m378 -80 c13%0A-13 13 -20 0 -57 -8 -24 -20 -87 -26 -140 -10 -89 -13 -98 -32 -98 -22 0 -71%0A65 -82 108 -5 21 -10 17 -42 -40 -25 -42 -44 -64 -58 -66 -24 -4 -31 16 -58%0A148 -24 119 -22 140 15 140 20 0 25 -11 35 -84 13 -95 19 -98 54 -28 47 94 72%0A95 95 6 l13 -49 8 45 c9 55 31 112 48 122 15 10 13 10 30 -7z'/%3E%3C/g%3E%3C/svg%3E") center/contain no-repeat;
+  bottom: -2px;
+}
+
+[dir="rtl"] tr[data-type^="wc_"] .entry-name:after {
+  left: auto;
+  right: 0;
+}
+
+tr[data-type^="wc_"] .macro-list strong {
+  color: #7f54b4;
+}
+
+tr[data-type^="wc_"] .macro-list copy:hover::after {
+  background: #7f54b44f;
 }

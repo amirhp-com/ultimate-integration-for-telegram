@@ -1,7 +1,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/18 15:54:04
+ * @Last modified time: 2025/01/19 20:45:02
  */
 
 (function ($) {
@@ -116,6 +116,12 @@
     }
 
     $(document).on("click tap", ".edit--entry", function(e){
+      e.preventDefault(); var me = $(this);
+      me.parents("th").find(".sub-setting").toggleClass("hide");
+      me.parents("tr").toggleClass("highlight active-editing");
+      me.parents("tr").find(".fa-cog").toggleClass("fa-spin");
+    });
+    $(document).on("click tap", "h3.entry-name", function(e){
       e.preventDefault(); var me = $(this);
       me.parents("th").find(".sub-setting").toggleClass("hide");
       me.parents("tr").toggleClass("highlight active-editing");

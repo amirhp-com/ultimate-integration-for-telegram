@@ -20,7 +20,7 @@
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/19 11:27:01
+ * @Last modified time: 2025/01/20 02:33:29
 */
 
 namespace BlackSwan\Telegram;
@@ -35,6 +35,7 @@ if (!class_exists("Notifier")) {
     protected $title_small = "Telegram Notification";
     protected $assets_url;
     protected $hook_url;
+    protected $cog_url;
     protected $config;
     protected $str_replace;
     protected $gettext_replace;
@@ -56,6 +57,7 @@ if (!class_exists("Notifier")) {
       #endregion
     }
     private function setup_variables() {
+      $this->cog_url = admin_url("options-general.php?page={$this->td}#tab_general");
       $this->assets_url = plugins_url("/assets/", __FILE__);
       $this->include_dir = plugin_dir_path(__FILE__) . "include";
 
@@ -122,7 +124,13 @@ if (!class_exists("Notifier")) {
         add_action("woocommerce_admin_order_data_after_payment_info", function($order){ remove_filter("date_i18n", array($this, "jdate"), 10); });
         add_action("woocommerce_admin_order_data_after_order_details", function($order){ add_filter("date_i18n", array($this, "jdate"), 10, 4); });
       }
+      add_action("admin_bar_menu", array($this, "add_link_to_admin_bar"), 100);
       do_action("blackswan-telegram/init");
+    }
+    public function add_link_to_admin_bar($wp_admin_bar) {
+      if ($this->enabled("admin_bar_link")) {
+        $wp_admin_bar->add_node(array( "id" => $this->td, "title" => $this->title_small, "href" => $this->cog_url, ));
+      }
     }
     public function add_plugin_settings_link($links) {
       $links[$this->td] = '<a href="' . esc_attr(admin_url("options-general.php?page={$this->td}#tab_general")) . '">' . _x("Settings", "action-row", $this->td) . '</a>';
@@ -136,6 +144,7 @@ if (!class_exists("Notifier")) {
       require "{$this->include_dir}/class-setting.php";
       require "{$this->include_dir}/hooks/class-wp-hook.php";
       require "{$this->include_dir}/hooks/class-wc-product.php";
+      require "{$this->include_dir}/hooks/class-wc-order.php";
       do_action("blackswan-telegram/load-library");
     }
     public function add_hpos_support() {
@@ -462,7 +471,6 @@ if (!class_exists("Notifier")) {
         return new \WP_Error("chat_id", __("No Chat ID found. Please add a Chat ID to send a test message.",$this->td));
       }
 
-
       if (is_string($buttons) && !empty($buttons)) {
         $markup = array();
         $button = explode("\n", $buttons);
@@ -491,7 +499,12 @@ if (!class_exists("Notifier")) {
           $tg = (new \Longman\TelegramBot\Request);
           $method = apply_filters("blackswan-telegram/helper/send-message-method", "sendMessage", func_get_args());
           $site_host = parse_url(home_url(), PHP_URL_HOST);
-          $message .= "\n\n```disclaimer\nSent via BlackSwan - Telegram Notification Plugin for WordPress v.{$this->version} from $site_host```";
+          $host_ip = $_SERVER['SERVER_ADDR'];
+          if ($html_parser) {
+            $message .= "\n\n<blockquote>Disclaimer: sent via BlackSwan - Telegram Notification Plugin for WordPress from Host: $site_host ($host_ip)</blockquote>";
+          }else{
+            $message .= "\n\n-----------\n_Disclaimer: sent via BlackSwan - Telegram Notification Plugin for WordPress from Host: $site_host ($host_ip)_";
+          }
           $tg_arguments = apply_filters("blackswan-telegram/helper/send-message-arguments", array(
             "chat_id"                  => $chat,
             "text"                     => $message,

@@ -2,7 +2,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/19 10:51:15
+ * @Last modified time: 2025/01/20 01:11:56
  */
 use BlackSwan\Telegram\Notifier;
 class class_wp_hook extends Notifier{
@@ -11,34 +11,41 @@ class class_wp_hook extends Notifier{
   public $notif_id = "wp_user_registered";
   public $notif_id2 = "wp_user_edited";
   public function __construct() {
+    parent::__construct();
     $this->notif = $this->get_notifications_by_type($this->notif_id);
     $this->notif2 = $this->get_notifications_by_type($this->notif_id2);
-    add_action("blackswan-telegram/notif-panel/notif-macro-list", array($this, "add_custom_macros"));
+    add_filter("blackswan-telegram/notif-panel/notif-macro-list", array($this, "add_custom_macros"), 2, 2);
     add_filter("blackswan-telegram/helper/translate-pairs", array($this, "translate_params_custom"), 10, 5);
     if (!empty($this->notif) || !empty($this->notif2)) {
       add_action("user_register", array($this, "send_new_user_msg"), 10, 2);
       add_action("wp_update_user", array($this, "send_edit_user_msg"), 9999, 3);
     }
   }
-  public function add_custom_macros($notif_id){
-    // check if we are showing setting for this class
-    if ($this->notif_id == $notif_id || $this->notif_id2 == $notif_id ) { ?>
-      <strong><?=__("User Information", $this->td);?></strong>
-        <copy data-tippy-content="<?=esc_attr(_x("User ID","macro",$this->td));?>">{user_id}</copy>
-        <copy data-tippy-content="<?=esc_attr(_x("User Login (username)","macro",$this->td));?>">{user_login}</copy>
-        <copy data-tippy-content="<?=esc_attr(_x("User Role","macro",$this->td));?>">{user_role}</copy>
-        <copy data-tippy-content="<?=esc_attr(_x("User Email","macro",$this->td));?>">{user_email}</copy>
-        <copy data-tippy-content="<?=esc_attr(_x("User Mobile","macro",$this->td));?>">{user_mobile}</copy>
-        <copy data-tippy-content="<?=esc_attr(_x("User First name","macro",$this->td));?>">{first_name}</copy>
-        <copy data-tippy-content="<?=esc_attr(_x("User Last name","macro",$this->td));?>">{last_name}</copy>
-        <copy data-tippy-content="<?=esc_attr(_x("User Nickname","macro",$this->td));?>">{nickname}</copy>
-        <copy data-tippy-content="<?=esc_attr(_x("Author posts Archive","macro",$this->td));?>">{user_archive}</copy>
-        <copy data-tippy-content="<?=esc_attr(_x("User Website","macro",$this->td));?>">{user_site}</copy>
-        <copy data-tippy-content="<?=esc_attr(_x("User Registered Date","macro",$this->td));?>">{user_registered}</copy>
-        <copy data-tippy-content="<?=esc_attr(_x("User Registered Jalali Date","macro",$this->td));?>">{user_jregistered}</copy>
-        <copy data-tippy-content="<?=esc_attr(_x("User Meta Array","macro",$this->td));?>">{user_meta}</copy>
-      <?php
+  public function add_custom_macros($macros, $notif_id){
+    if (in_array($notif_id, [$this->notif_id,$this->notif_id2]) && is_array($macros)) {
+      $new_macros = array(
+        "wp_user_info" => array(
+          "title" => __("User Information", $this->td),
+          "macros" => array(
+            "user_id"          => _x("User ID","macro",$this->td),
+            "user_login"       => _x("User Login (username)","macro",$this->td),
+            "user_role"        => _x("User Role","macro",$this->td),
+            "user_email"       => _x("User Email","macro",$this->td),
+            "user_mobile"      => _x("User Mobile","macro",$this->td),
+            "first_name"       => _x("User First name","macro",$this->td),
+            "last_name"        => _x("User Last name","macro",$this->td),
+            "nickname"         => _x("User Nickname","macro",$this->td),
+            "user_archive"     => _x("Author posts Archive","macro",$this->td),
+            "user_site"        => _x("User Website","macro",$this->td),
+            "user_registered"  => _x("User Registered Date","macro",$this->td),
+            "user_jregistered" => _x("User Registered Jalali Date","macro",$this->td),
+            "user_meta"        => _x("User Meta Array","macro",$this->td),
+          ),
+        ),
+      );
+      $macros = array_merge($macros, $new_macros);
     }
+    return (array) $macros;
   }
   public function translate_params_custom($pairs, $message, $reference, $extra_data, $defaults){
 

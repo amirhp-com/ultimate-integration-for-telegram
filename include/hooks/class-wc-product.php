@@ -2,7 +2,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/19 10:49:36
+ * @Last modified time: 2025/01/20 01:11:44
  */
 
 use BlackSwan\Telegram\Notifier;
@@ -10,12 +10,13 @@ class class_wc_product extends Notifier {
   public $notif = [];
   public $notif_id = "wc_product_updated";
   public function __construct() {
+    parent::__construct();
     $this->notif = $this->get_notifications_by_type($this->notif_id);
     // add_action("blackswan-telegram/init", array($this, "handle_wc_updated"));
     if (!empty($this->notif)) {
       add_action("save_post_product", array($this, "send_msg"), 10, 1);
     }
-    add_action("blackswan-telegram/notif-panel/notif-macro-list", array($this, "add_custom_macros"));
+    add_filter("blackswan-telegram/notif-panel/notif-macro-list", array($this, "add_custom_macros"), 30, 2);
     add_filter("blackswan-telegram/helper/translate-pairs", array($this, "translate_params_custom"), 10, 5);
   }
   public function translate_params_custom($pairs, $msg, $ref, $ex, $def) {
@@ -53,30 +54,36 @@ class class_wc_product extends Notifier {
     // always return array
     return (array) $pairs;
   }
-  public function add_custom_macros($notif_id) {
-    // check if we are showing setting for this class
-    if ($this->notif_id == $notif_id) { ?>
-      <strong><?= __("Product Information", $this->td); ?></strong>
-      <copy data-tippy-content="<?= esc_attr(_x("Product ID", "macro", $this->td)); ?>">{product_id}</copy>
-      <copy data-tippy-content="<?= esc_attr(_x("Product name", "macro", $this->td)); ?>">{name}</copy>
-      <copy data-tippy-content="<?= esc_attr(_x("Product permalink URL", "macro", $this->td)); ?>">{url}</copy>
-      <copy data-tippy-content="<?= esc_attr(_x("Product name with SKU or ID", "macro", $this->td)); ?>">{formatted_name}</copy>
-      <copy data-tippy-content="<?= esc_attr(_x("Product Thumbnail URL", "macro", $this->td)); ?>">{thumbnail}</copy>
-      <copy data-tippy-content="<?= esc_attr(_x("Product SKU", "macro", $this->td)); ?>">{sku}</copy>
-      <copy data-tippy-content="<?= esc_attr(_x("Product Price", "macro", $this->td)); ?>">{price}</copy>
-      <copy data-tippy-content="<?= esc_attr(_x("Product Sale Price", "macro", $this->td)); ?>">{sale_price}</copy>
-      <copy data-tippy-content="<?= esc_attr(_x("Product Regular Price", "macro", $this->td)); ?>">{regular_price}</copy>
-      <copy data-tippy-content="<?= esc_attr(_x("Product Type", "macro", $this->td)); ?>">{type}</copy>
-      <copy data-tippy-content="<?= esc_attr(_x("Product short description", "macro", $this->td)); ?>">{description}</copy>
-      <copy data-tippy-content="<?= esc_attr(_x("Product published date", "macro", $this->td)); ?>">{date_published}</copy>
-      <copy data-tippy-content="<?= esc_attr(_x("Product modified date", "macro", $this->td)); ?>">{date_modified}</copy>
-      <copy data-tippy-content="<?= esc_attr(_x("Product published date in Jalali", "macro", $this->td)); ?>">{date_jpublished}</copy>
-      <copy data-tippy-content="<?= esc_attr(_x("Product modified date in Jalali", "macro", $this->td)); ?>">{date_jmodified}</copy>
-      <copy data-tippy-content="<?= esc_attr(_x("Product stock status", "macro", $this->td)); ?>">{stock_status}</copy>
-      <copy data-tippy-content="<?= esc_attr(_x("Product stock quantity", "macro", $this->td)); ?>">{stock_quantity}</copy>
-      <copy data-tippy-content="<?= esc_attr(_x("Product meta Array", "macro", $this->td)); ?>">{product_meta}</copy>
-      <?php
+  public function add_custom_macros($macros, $notif_id) {
+    if (in_array($notif_id, [$this->notif_id]) && is_array($macros)) {
+      $new_macros = array(
+        "wc_product_info" => array(
+          "title" => __("Product Information", $this->td),
+          "macros" => array(
+            "product_id"      => _x("Product ID", "macro", $this->td),
+            "name"            => _x("Product name", "macro", $this->td),
+            "url"             => _x("Product permalink URL", "macro", $this->td),
+            "formatted_name"  => _x("Product name with SKU or ID", "macro", $this->td),
+            "thumbnail"       => _x("Product Thumbnail URL", "macro", $this->td),
+            "sku"             => _x("Product SKU", "macro", $this->td),
+            "price"           => _x("Product Price", "macro", $this->td),
+            "sale_price"      => _x("Product Sale Price", "macro", $this->td),
+            "regular_price"   => _x("Product Regular Price", "macro", $this->td),
+            "type"            => _x("Product Type", "macro", $this->td),
+            "description"     => _x("Product short description", "macro", $this->td),
+            "date_published"  => _x("Product published date", "macro", $this->td),
+            "date_modified"   => _x("Product modified date", "macro", $this->td),
+            "date_jpublished" => _x("Product published date in Jalali", "macro", $this->td),
+            "date_jmodified"  => _x("Product modified date in Jalali", "macro", $this->td),
+            "stock_status"    => _x("Product stock status", "macro", $this->td),
+            "stock_quantity"  => _x("Product stock quantity", "macro", $this->td),
+            "product_meta"    => _x("Product meta Array", "macro", $this->td),
+          ),
+        ),
+      );
+      $macros = array_merge($macros, $new_macros);
     }
+    return (array) $macros;
   }
   public function send_msg($product_id = 0) {
     foreach ($this->notif as $notif) {
