@@ -2,7 +2,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/19 08:39:08
+ * @Last modified time: 2025/01/19 11:36:45
  */
 use BlackSwan\Telegram\Notifier;
 if (!class_exists("class_setting")) {
@@ -347,10 +347,6 @@ if (!class_exists("class_setting")) {
     public function highlight($php){
       return str_replace("&lt;?php", "", highlight_string('<?php'.$php, 1));
     }
-    public static function remove_status_prefix( string $status ): string {
-      if ( strpos( $status, 'wc-' ) === 0 ) $status = substr( $status, 3 );
-      return $status;
-    }
     public function sample_setting_row_wrapper(){
       ob_start();
       ?>
@@ -416,14 +412,19 @@ if (!class_exists("class_setting")) {
         $options["woocommerce_order"] = array(
           "title" => __("WooCommerce / Order", $this->td),
           "options" => array(
-            "wc_new_order_checkout" => __("New Order at Checkout Processed", $this->td),
-            "wc_new_order_thank_you" => __("New Order on Thank You", $this->td),
-            "wc_new_order_payment_complete" => __("New Order Payment Complete", $this->td),
+            "wc_new_order"              => __("New Order Created", $this->td),
+            "wc_payment_complete"       => __("Order Payment Complete", $this->td),
+            "wc_checkout_processed"     => __("Checkout Order Processed", $this->td),
+            "wc_checkout_api_processed" => __("Checkout Order Processed via API", $this->td),
+            "wc_trash_order"            => __("Trash Order", $this->td),
+            "wc_delete_order"           => __("Delete Order", $this->td),
+            "wc_order_refunded"         => __("Refunded Order", $this->td),
           ),
         );
         $statuses = wc_get_order_statuses();
         $emails = wp_list_pluck(WC()->mailer()->get_emails(), "title", "id");
         $statuses_options = $mail_options = array();
+        $statuses_options["wc_order_status_changed"] = __("Changed to anything",$this->td);
         foreach ($statuses as $slug => $name) {
           $slug = $this->remove_status_prefix($slug);
           $statuses_options["wc_order_status_to_{$slug}"] = sprintf(__("Changed to %s",$this->td), $name);

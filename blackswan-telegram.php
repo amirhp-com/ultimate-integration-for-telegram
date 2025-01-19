@@ -20,7 +20,7 @@
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/19 10:47:43
+ * @Last modified time: 2025/01/19 11:27:01
 */
 
 namespace BlackSwan\Telegram;
@@ -101,13 +101,13 @@ if (!class_exists("Notifier")) {
         die("<!-- BlackSwan - Telegram Notification :: Webhook done ./ -->");
       }
     }
-    public function get_notifications_by_type($type=""){
+    public function get_notifications_by_type($type=[]){
       $all_notif = $this->read("notifications");
       if (empty($all_notif)) return [];
       $all_notif = json_decode($all_notif);
       if (!is_array($all_notif) || empty($all_notif)) return [];
       if (!empty($type)) {
-        $all_notif = array_filter($all_notif, function($arg) use ($type){return $arg->type == $type && $arg->config->_enabled == "yes";});
+        $all_notif = array_filter($all_notif, function($arg) use ($type){return in_array($arg->type, (array) $type) && $arg->config->_enabled == "yes";});
       }
       return $all_notif;
     }
@@ -134,8 +134,8 @@ if (!class_exists("Notifier")) {
     public function include_class(){
       require "{$this->include_dir}/class-jdate.php";
       require "{$this->include_dir}/class-setting.php";
-      require "{$this->include_dir}/class-wp-hook.php";
-      require "{$this->include_dir}/class-wc-product.php";
+      require "{$this->include_dir}/hooks/class-wp-hook.php";
+      require "{$this->include_dir}/hooks/class-wc-product.php";
       do_action("blackswan-telegram/load-library");
     }
     public function add_hpos_support() {
@@ -434,6 +434,10 @@ if (!class_exists("Notifier")) {
     }
     public static function str_ends_with($haystack, $needle): bool {
       return '' === $needle || ('' !== $haystack && 0 === substr_compare($haystack, $needle, -\strlen($needle)));
+    }
+    public static function remove_status_prefix( string $status ): string {
+      if ( strpos( $status, 'wc-' ) === 0 ) $status = substr( $status, 3 );
+      return $status;
     }
     #endregion
     #region send telegram notif >>>>>>>>>>>>>
