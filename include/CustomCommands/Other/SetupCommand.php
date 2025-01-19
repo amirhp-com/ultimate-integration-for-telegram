@@ -2,7 +2,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/18 15:41:29
+ * @Last modified time: 2025/01/20 02:37:56
  */
 
 namespace Longman\TelegramBot\Commands\UserCommands;
@@ -19,7 +19,7 @@ class SetupCommand extends UserCommand {
   public function execute(): ServerResponse {
     $message = $this->getMessage();
     $chat_id = $message->getChat()->getId();
-    $msg = "Hi there! 👋\n\n*Welcome to BlackSwan - Telegram Notifications*\n" .
+    $msg = "Hi there! 👋\n\n*Welcome to BlackSwan - Ultimate Telegram Integrations*\n" .
       "Seamlessly connect your WordPress site & WooCommerce store to Telegram.\n\n" .
       "To get started:\n" .
       "1️⃣ Add me as an *Administrator* to your group or channel.\n" .

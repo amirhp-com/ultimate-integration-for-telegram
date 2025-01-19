@@ -2,7 +2,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/18 15:41:23
+ * @Last modified time: 2025/01/20 02:37:56
 */
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
@@ -21,7 +21,7 @@ class StartCommand extends SystemCommand {
     // If you use deep-linking, get the parameter like this: @see https://core.telegram.org/bots#deep-linking
     $cmd_line = $this->getMessage()->getText(true);
     $chat_id = $this->getMessage()->getChat()->getId();
-    $msg = "Hi there! 👋\n\n*Welcome to BlackSwan - Telegram Notifications*\n" .
+    $msg = "Hi there! 👋\n\n*Welcome to BlackSwan - Ultimate Telegram Integrations*\n" .
       "Seamlessly connect your WordPress site & WooCommerce store to Telegram.\n\n" .
       "With our Plugin, you’ll receive instant, real-time notifications for important events like new WooCommerce orders, user registrations, and WordPress emails. Replace traditional email notifications with fast and customizable Telegram messages tailored to your needs.\n\n" .
       "Receive notifications wherever you want:\n" .
@@ -44,7 +44,7 @@ class StartCommand extends SystemCommand {
         ['text' => "🍺 Buy me a Beer (Donate)", "url" => "https://amirhp.com/contact#payment"],
       ),
       array(
-        ['text' => "🌏 BlackSwan - Telegram Notification", "url" => "https://wordpress.org/plugins/blackswan-telegram/"],
+        ['text' => "🌏 BlackSwan - Ultimate Telegram Integration", "url" => "https://wordpress.org/plugins/blackswan-telegram/"],
       ),
     );
 
