@@ -1,4 +1,9 @@
 <?php
+/*
+ * @Author: Amirhossein Hosseinpour <https://amirhp.com>
+ * @Last modified by: amirhp-com <its@amirhp.com>
+ * @Last modified time: 2025/01/19 09:44:13
+ */
 use BlackSwan\Telegram\Notifier;
 class class_wp_hook extends Notifier{
   public $notif = [];
@@ -45,10 +50,6 @@ class class_wp_hook extends Notifier{
           $user = get_user_by("ID", $user_id);
 
           if ($user) {
-
-            remove_all_filters("date_i18n");
-            add_filter("date_i18n", array($this, "jdate"), 10, 4);
-
             $new_macros = array(
               "user_id"         => $user_id,
               "user_role"       => wp_roles()->get_names()[$user->roles[0]],
@@ -61,7 +62,7 @@ class class_wp_hook extends Notifier{
               "user_archive"    => get_author_posts_url($user_id, $user->nickname),
               "user_site"       => $user->user_url,
               "user_registered" => $user->user_registered,
-              "user_jregistered" => date_i18n('Y-m-d H:i:s', strtotime($user->user_registered)),
+              "user_jregistered" => pu_jdate('Y-m-d H:i:s', strtotime($user->user_registered), "", "local", "en"),
               "user_meta"       => print_r(get_user_meta($user_id), 1),
             );
 
@@ -70,8 +71,6 @@ class class_wp_hook extends Notifier{
           }
 
         }
-
-        echo "<pre style='text-align: left; direction: ltr; border:1px solid gray; padding: 1rem; overflow: auto;'>". print_r([$reference, $pairs],1) ."</pre>";
 
         // always return array
         return (array) $pairs;

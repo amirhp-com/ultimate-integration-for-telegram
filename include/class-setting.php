@@ -1,4 +1,9 @@
 <?php
+/*
+ * @Author: Amirhossein Hosseinpour <https://amirhp.com>
+ * @Last modified by: amirhp-com <its@amirhp.com>
+ * @Last modified time: 2025/01/19 08:39:08
+ */
 use BlackSwan\Telegram\Notifier;
 if (!class_exists("class_setting")) {
   class class_setting extends Notifier {
@@ -411,8 +416,8 @@ if (!class_exists("class_setting")) {
         $options["woocommerce_order"] = array(
           "title" => __("WooCommerce / Order", $this->td),
           "options" => array(
-            "wc_new_order_at_checkout_processed" => __("New Order at Checkout Processed", $this->td),
-            "wc_new_order_on_thank_you" => __("New Order on Thank You", $this->td),
+            "wc_new_order_checkout" => __("New Order at Checkout Processed", $this->td),
+            "wc_new_order_thank_you" => __("New Order on Thank You", $this->td),
             "wc_new_order_payment_complete" => __("New Order Payment Complete", $this->td),
           ),
         );
@@ -430,10 +435,10 @@ if (!class_exists("class_setting")) {
         $options["woocommerce_product"] = array(
           "title" => __("WooCommerce / Product", $this->td),
           "options" => array(
-            "wc_product_updated" => __("Product Status/Meta Updated",$this->td),
-            "wc_product_purchased" => __("Product Purchased on New Order",$this->td),
-            "wc_product_stock_increased" => __("Product Stock Quantity Increased",$this->td),
-            "wc_product_stock_decreased" => __("Product Stock Quantity Decreased",$this->td),
+            "wc_product_updated" => __("Product Updated or Saved",$this->td),
+            "--wc_product_purchased" => __("Product Purchased on New Order",$this->td),
+            "--wc_product_stock_increased" => __("Product Stock Quantity Increased",$this->td),
+            "--wc_product_stock_decreased" => __("Product Stock Quantity Decreased",$this->td),
           ),
         );
         foreach ($emails as $slug => $name) {
@@ -450,7 +455,11 @@ if (!class_exists("class_setting")) {
       foreach ($options as $category => $items) {
         echo "<optgroup data-id='".esc_attr($category)."' label='".esc_attr($items["title"])."'></optgroup>";
         foreach ($items["options"] as $key => $value) {
-          echo "<option value='".esc_attr($key)."'>".esc_attr($value)."</option>";
+          $attr = "";
+          if ($this->str_starts_with($key, "--")) {
+            $attr .= "disabled ";
+          }
+          echo "<option ".esc_attr($attr)." value='".esc_attr($key)."'>".esc_attr($value)."</option>";
         }
       }
     }
@@ -468,7 +477,7 @@ if (!class_exists("class_setting")) {
           <textarea rows="4" data-slug="message"><?=$default_message;?></textarea>
           <p class="description"><?=sprintf(
             __('You can use <b>HTML</b>, <b>Markdown</b>, and <b>Macros</b> in your message (See the %1$s). Ensure your Markdown is valid with the "%2$s".',$this->td),
-            '<a href="https://core.telegram.org/api/entities#allowed-entities" target="_blank">'.__("Telegram Formatting Guide",$this->td).'</a>',
+            '<a href="https://core.telegram.org/bots/api#markdown-style" target="_blank">'.__("Telegram Formatting Guide",$this->td).'</a>',
             "<a href='#' class='button button-link validate_markdown'>".__("Markdown Validator",$this->td)."</a>");?></p>
         </td>
       </tr>

@@ -20,7 +20,7 @@
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/18 16:02:51
+ * @Last modified time: 2025/01/19 10:47:43
 */
 
 namespace BlackSwan\Telegram;
@@ -135,6 +135,8 @@ if (!class_exists("Notifier")) {
       require "{$this->include_dir}/class-jdate.php";
       require "{$this->include_dir}/class-setting.php";
       require "{$this->include_dir}/class-wp-hook.php";
+      require "{$this->include_dir}/class-wc-product.php";
+      do_action("blackswan-telegram/load-library");
     }
     public function add_hpos_support() {
       if (class_exists(\Automattic\WooCommerce\Utilities\FeaturesUtil::class)) {
@@ -427,10 +429,10 @@ if (!class_exists("Notifier")) {
     }
     #endregion
     #region php8 string-related functions >>>>>>>>>>>>>
-    public static function str_starts_with(string $haystack, string $needle): bool {
+    public static function str_starts_with($haystack, $needle): bool {
       return 0 === strncmp($haystack, $needle, \strlen($needle));
     }
-    public static function str_ends_with(string $haystack, string $needle): bool {
+    public static function str_ends_with($haystack, $needle): bool {
       return '' === $needle || ('' !== $haystack && 0 === substr_compare($haystack, $needle, -\strlen($needle)));
     }
     #endregion
@@ -447,6 +449,7 @@ if (!class_exists("Notifier")) {
 
       $chat_ids  = explode("\n", $chat_ids);
       $chat_ids  = array_map("trim", $chat_ids);
+      $chat_ids  = array_unique($chat_ids);
       $res_array = []; $failed = false; $errors = []; $errors2 = [];
       if (empty($chat_ids)) {
         $debug = ["msg"=>__("No Chat ID found. Please add a Chat ID to send a test message.",$this->td)];
@@ -474,9 +477,9 @@ if (!class_exists("Notifier")) {
 
       if ($buttons && !empty($buttons)) {
         $buttons = apply_filters("blackswan-telegram/helper/send-message-buttons", array_slice($buttons, 0, 4), $buttons, $reference, func_get_args());
-        $markup = array($buttons, [['text' => "BlackSwan - Telegram Notification", "url" => "https://wordpress.org/plugins/blackswan-telegram/"]] );
+        $markup = array($buttons, [['text' => "🌏 BlackSwan - Telegram Notification", "url" => "https://wordpress.org/plugins/blackswan-telegram/"],] );
       }else{
-        $markup = [[['text' => "BlackSwan - Telegram Notification", "url" => "https://wordpress.org/plugins/blackswan-telegram/"]]];
+        $markup = [[['text' => "🌏 BlackSwan - Telegram Notification", "url" => "https://wordpress.org/plugins/blackswan-telegram/"],]];
       }
       try {
         $telegram  = new \Longman\TelegramBot\Telegram($this->read("token"), $this->read("username"));
@@ -485,7 +488,14 @@ if (!class_exists("Notifier")) {
           $method = apply_filters("blackswan-telegram/helper/send-message-method", "sendMessage", func_get_args());
           $site_host = parse_url(home_url(), PHP_URL_HOST);
           $message .= "\n\n```disclaimer\nSent via BlackSwan - Telegram Notification Plugin for WordPress v.{$this->version} from $site_host```";
-          $tg_arguments = apply_filters("blackswan-telegram/helper/send-message-arguments", array("chat_id" => $chat, "text" => $message, "reply_markup" => ["inline_keyboard"=>$markup], "parse_mode" => $html_parser ? "html" : "MarkdownV2", ), $tg, func_get_args() );
+          $tg_arguments = apply_filters("blackswan-telegram/helper/send-message-arguments", array(
+            "chat_id"                  => $chat,
+            "text"                     => $message,
+            "protect_content"          => false,
+            "disable_web_page_preview" => false,
+            "reply_markup"             => ["inline_keyboard"=>$markup],
+            "parse_mode"               => $html_parser ? "html" : "markdown",
+          ), $tg, func_get_args() );
           $result = @forward_static_call_array([$tg, $method], [$tg_arguments]);
           $result = apply_filters("blackswan-telegram/helper/sent-message-result", $result, $tg, func_get_args());
           if ($result->isOk()) {
@@ -556,14 +566,13 @@ if (!class_exists("Notifier")) {
     }
     public function translate_param($message="", $reference="", $extra_data=[], $defaults=[]){
       $return = $message;
-      remove_all_filters("date_i18n");
-      add_filter("date_i18n", array($this, "jdate"), 10, 4);
       $pairs = array(
+        "ref_hook"           => $reference,
         "current_time"       => wp_date(get_option("time_format"), current_time("timestamp")),
         "current_date"       => wp_date(get_option("date_format"), current_time("timestamp")),
         "current_date_time"  => wp_date(get_option("date_format") . " " . get_option("time_format"), current_time("timestamp")),
-        "current_jdate"      => date_i18n("Y/m/d", current_time("timestamp")),
-        "current_jdate_time" => date_i18n("Y/m/d H:i:s", current_time("timestamp")),
+        "current_jdate"      => pu_jdate("Y/m/d", current_time("timestamp"), "", "local", "en"),
+        "current_jdate_time" => pu_jdate("Y/m/d H:i:s", current_time("timestamp"), "", "local", "en"),
         "current_user_id"    => get_current_user_id(),
         "current_user_name"  => $this->display_user(get_current_user_id(), false, false),
         "site_name"          => get_bloginfo("name"),
