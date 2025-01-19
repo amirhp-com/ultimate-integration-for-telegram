@@ -2,7 +2,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/20 01:11:44
+ * @Last modified time: 2025/01/20 02:59:37
  */
 
 use BlackSwan\Telegram\Notifier;
@@ -58,26 +58,26 @@ class class_wc_product extends Notifier {
     if (in_array($notif_id, [$this->notif_id]) && is_array($macros)) {
       $new_macros = array(
         "wc_product_info" => array(
-          "title" => __("Product Information", $this->td),
+          "title" => __("Product Information", "blackswan-telegram"),
           "macros" => array(
-            "product_id"      => _x("Product ID", "macro", $this->td),
-            "name"            => _x("Product name", "macro", $this->td),
-            "url"             => _x("Product permalink URL", "macro", $this->td),
-            "formatted_name"  => _x("Product name with SKU or ID", "macro", $this->td),
-            "thumbnail"       => _x("Product Thumbnail URL", "macro", $this->td),
-            "sku"             => _x("Product SKU", "macro", $this->td),
-            "price"           => _x("Product Price", "macro", $this->td),
-            "sale_price"      => _x("Product Sale Price", "macro", $this->td),
-            "regular_price"   => _x("Product Regular Price", "macro", $this->td),
-            "type"            => _x("Product Type", "macro", $this->td),
-            "description"     => _x("Product short description", "macro", $this->td),
-            "date_published"  => _x("Product published date", "macro", $this->td),
-            "date_modified"   => _x("Product modified date", "macro", $this->td),
-            "date_jpublished" => _x("Product published date in Jalali", "macro", $this->td),
-            "date_jmodified"  => _x("Product modified date in Jalali", "macro", $this->td),
-            "stock_status"    => _x("Product stock status", "macro", $this->td),
-            "stock_quantity"  => _x("Product stock quantity", "macro", $this->td),
-            "product_meta"    => _x("Product meta Array", "macro", $this->td),
+            "product_id"      => _x("Product ID", "macro", "blackswan-telegram"),
+            "name"            => _x("Product name", "macro", "blackswan-telegram"),
+            "url"             => _x("Product permalink URL", "macro", "blackswan-telegram"),
+            "formatted_name"  => _x("Product name with SKU or ID", "macro", "blackswan-telegram"),
+            "thumbnail"       => _x("Product Thumbnail URL", "macro", "blackswan-telegram"),
+            "sku"             => _x("Product SKU", "macro", "blackswan-telegram"),
+            "price"           => _x("Product Price", "macro", "blackswan-telegram"),
+            "sale_price"      => _x("Product Sale Price", "macro", "blackswan-telegram"),
+            "regular_price"   => _x("Product Regular Price", "macro", "blackswan-telegram"),
+            "type"            => _x("Product Type", "macro", "blackswan-telegram"),
+            "description"     => _x("Product short description", "macro", "blackswan-telegram"),
+            "date_published"  => _x("Product published date", "macro", "blackswan-telegram"),
+            "date_modified"   => _x("Product modified date", "macro", "blackswan-telegram"),
+            "date_jpublished" => _x("Product published date in Jalali", "macro", "blackswan-telegram"),
+            "date_jmodified"  => _x("Product modified date in Jalali", "macro", "blackswan-telegram"),
+            "stock_status"    => _x("Product stock status", "macro", "blackswan-telegram"),
+            "stock_quantity"  => _x("Product stock quantity", "macro", "blackswan-telegram"),
+            "product_meta"    => _x("Product meta Array", "macro", "blackswan-telegram"),
           ),
         ),
       );

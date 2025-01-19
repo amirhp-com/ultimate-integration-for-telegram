@@ -118,7 +118,7 @@ class class_wc_order extends Notifier {
             "email_id"           => $email_id,
             "email_from_name"    => $email_obj->get_from_name(),
             "email_from_address" => $email_obj->get_from_address(),
-            "email_attachments"  => json_encode($email_obj->get_attachments()),
+            "email_attachments"  => wp_json_encode($email_obj->get_attachments()),
             "email_title"        => $email_obj->get_title(),
             "email_recipient"    => $email_obj->get_recipient(),
             "email_body_html"    => $email_obj->get_content_html(),
@@ -166,7 +166,7 @@ class class_wc_order extends Notifier {
         "order_jalali_paid"          => pu_jdate('Y/m/d H:i:s', strtotime($order->get_date_paid()), "", "local", "en"), // Order Paid Date (Jalali)
         "order_customer_ip"          => $order->get_customer_ip_address(), // Customer IP Address
         "order_user_agent"           => $order->get_customer_user_agent(), // Customer User Agent
-        "order_meta_data"            => json_encode($order->get_meta_data()), // Order Meta Data
+        "order_meta_data"            => wp_json_encode($order->get_meta_data()), // Order Meta Data
         // URLs
         "edit_url"      => admin_url("post.php?post={$order->get_id()}&action=edit"), // Order Edit URL (Admin)
         "view_url"      => $order->get_view_order_url(), // Order View URL (Customer)
@@ -339,18 +339,21 @@ class class_wc_order extends Notifier {
 
       $wc_email_notif = array(
         "wc_email_notif" => array(
-          "title" => __("WooCommerce Emails", $this->td),
+          "title" => __("WooCommerce Emails", "blackswan-telegram"),
           "macros" => array(
-            "email_id"                 => _x("Email ID", "macro", $this->td),
-            "email_title"              => _x("Email Title", "macro", $this->td),
-            "email_recipient"          => _x("Email Recipient", "macro", $this->td),
-            "email_subject"            => _x("Email Subject", "macro", $this->td),
-            "email_attachments"        => _x("Email Attachments", "macro", $this->td),
-            "email_from_name"          => _x("Email From name", "macro", $this->td),
-            "email_from_address"       => _x("Email From address", "macro", $this->td),
-            "email_body_text"          => sprintf(_x("Email Body TEXT %s", "macro", $this->td), "<span style='color:white; background: red; display: block;'>&nbsp;".__("Only use when HTML Formatting is set to 'ENABLED' or within preformatted blocks (`code`, ```code```, &amp;lt;pre&amp;gt;code&amp;lt;/pre&amp;gt;) for proper rendering.",$this->td)."&nbsp;</span>"),
-            "email_body_html"          => sprintf(_x("Email Body HTML %s", "macro", $this->td), "<span style='color:white; background: red; display: block;'>&nbsp;".__("Only use when HTML Formatting is set to 'ENABLED' or within preformatted blocks (`code`, ```code```, &amp;lt;pre&amp;gt;code&amp;lt;/pre&amp;gt;) for proper rendering.",$this->td)."&nbsp;</span>"),
-            "email_body_html_stripped" => sprintf(_x("Email Body HTML (tags stripped) %s", "macro", $this->td), "<span style='color:white; background: red; display: block;'>&nbsp;".__("Only use when HTML Formatting is set to 'ENABLED' or within preformatted blocks (`code`, ```code```, &amp;lt;pre&amp;gt;code&amp;lt;/pre&amp;gt;) for proper rendering.",$this->td)."&nbsp;</span>"),
+            "email_id"                 => _x("Email ID", "macro", "blackswan-telegram"),
+            "email_title"              => _x("Email Title", "macro", "blackswan-telegram"),
+            "email_recipient"          => _x("Email Recipient", "macro", "blackswan-telegram"),
+            "email_subject"            => _x("Email Subject", "macro", "blackswan-telegram"),
+            "email_attachments"        => _x("Email Attachments", "macro", "blackswan-telegram"),
+            "email_from_name"          => _x("Email From name", "macro", "blackswan-telegram"),
+            "email_from_address"       => _x("Email From address", "macro", "blackswan-telegram"),
+            /* translators: 1: notice */
+            "email_body_text"          => sprintf(_x("Email Body TEXT %s", "macro", "blackswan-telegram"), "<span style='color:white; background: red; display: block;'>&nbsp;".__("Only use when HTML Formatting is set to 'ENABLED' or within preformatted blocks (`code`, ```code```, &amp;lt;pre&amp;gt;code&amp;lt;/pre&amp;gt;) for proper rendering.", "blackswan-telegram")."&nbsp;</span>"),
+            /* translators: 1: notice */
+            "email_body_html"          => sprintf(_x("Email Body HTML %s", "macro", "blackswan-telegram"), "<span style='color:white; background: red; display: block;'>&nbsp;".__("Only use when HTML Formatting is set to 'ENABLED' or within preformatted blocks (`code`, ```code```, &amp;lt;pre&amp;gt;code&amp;lt;/pre&amp;gt;) for proper rendering.", "blackswan-telegram")."&nbsp;</span>"),
+            /* translators: 1: notice */
+            "email_body_html_stripped" => sprintf(_x("Email Body HTML (tags stripped) %s", "macro", "blackswan-telegram"), "<span style='color:white; background: red; display: block;'>&nbsp;".__("Only use when HTML Formatting is set to 'ENABLED' or within preformatted blocks (`code`, ```code```, &amp;lt;pre&amp;gt;code&amp;lt;/pre&amp;gt;) for proper rendering.", "blackswan-telegram")."&nbsp;</span>"),
           ),
         ),
       );
@@ -363,130 +366,130 @@ class class_wc_order extends Notifier {
 
       $new_macros = array(
         "wc_order_general_details" => array(
-          "title" => __("Order General Details", $this->td),
+          "title" => __("Order General Details", "blackswan-telegram"),
           "macros" => array(
             // General Order Details
-            "order_id"                   => _x("Order ID", "macro", $this->td),
-            "order_number"               => _x("Order Number", "macro", $this->td),
-            "order_key"                  => _x("Order Key", "macro", $this->td),
-            "order_status"               => _x("Order Status", "macro", $this->td),
-            "order_status_raw"           => _x("Order Status RAW", "macro", $this->td),
-            "order_status_prev"          => _x("Prev. Order Status", "macro", $this->td),
-            "order_status_new"           => _x("New Order Status", "macro", $this->td),
-            "order_total"                => _x("Order Total Amount", "macro", $this->td),
-            "order_subtotal"             => _x("Order Subtotal Amount", "macro", $this->td),
-            "order_discount_total"       => _x("Order Discount Amount", "macro", $this->td),
-            "order_tax_total"            => _x("Order Tax Amount", "macro", $this->td),
-            "order_shipping_total"       => _x("Order Shipping Amount", "macro", $this->td),
-            "order_fees_total"           => _x("Order Fees Total", "macro", $this->td),
-            "order_currency"             => _x("Order Currency", "macro", $this->td),
-            "order_payment_method"       => _x("Order Payment Method", "macro", $this->td),
-            "order_payment_method_title" => _x("Payment Method Title", "macro", $this->td),
-            "transaction_id"             => _x("Transaction ID", "macro", $this->td),
-            "order_date"                 => _x("Order Creation Date", "macro", $this->td),
-            "order_jalali_date"          => _x("Order Creation Date (Jalali)", "macro", $this->td),
-            "order_modified_date"        => _x("Order Last Modified Date", "macro", $this->td),
-            "order_jalali_modified"      => _x("Order Last Modified Date (Jalali)", "macro", $this->td),
-            "order_date_completed"       => _x("Order Completed Date", "macro", $this->td),
-            "order_jalali_completed"     => _x("Order Completed Date (Jalali)", "macro", $this->td),
-            "order_date_paid"            => _x("Order Paid Date", "macro", $this->td),
-            "order_jalali_paid"          => _x("Order Paid Date (Jalali)", "macro", $this->td),
-            "order_customer_ip"          => _x("Customer IP Address", "macro", $this->td),
-            "order_user_agent"           => _x("Customer User Agent", "macro", $this->td),
-            "order_meta_data"            => _x("Order Meta Data", "macro", $this->td),
+            "order_id"                   => _x("Order ID", "macro", "blackswan-telegram"),
+            "order_number"               => _x("Order Number", "macro", "blackswan-telegram"),
+            "order_key"                  => _x("Order Key", "macro", "blackswan-telegram"),
+            "order_status"               => _x("Order Status", "macro", "blackswan-telegram"),
+            "order_status_raw"           => _x("Order Status RAW", "macro", "blackswan-telegram"),
+            "order_status_prev"          => _x("Prev. Order Status", "macro", "blackswan-telegram"),
+            "order_status_new"           => _x("New Order Status", "macro", "blackswan-telegram"),
+            "order_total"                => _x("Order Total Amount", "macro", "blackswan-telegram"),
+            "order_subtotal"             => _x("Order Subtotal Amount", "macro", "blackswan-telegram"),
+            "order_discount_total"       => _x("Order Discount Amount", "macro", "blackswan-telegram"),
+            "order_tax_total"            => _x("Order Tax Amount", "macro", "blackswan-telegram"),
+            "order_shipping_total"       => _x("Order Shipping Amount", "macro", "blackswan-telegram"),
+            "order_fees_total"           => _x("Order Fees Total", "macro", "blackswan-telegram"),
+            "order_currency"             => _x("Order Currency", "macro", "blackswan-telegram"),
+            "order_payment_method"       => _x("Order Payment Method", "macro", "blackswan-telegram"),
+            "order_payment_method_title" => _x("Payment Method Title", "macro", "blackswan-telegram"),
+            "transaction_id"             => _x("Transaction ID", "macro", "blackswan-telegram"),
+            "order_date"                 => _x("Order Creation Date", "macro", "blackswan-telegram"),
+            "order_jalali_date"          => _x("Order Creation Date (Jalali)", "macro", "blackswan-telegram"),
+            "order_modified_date"        => _x("Order Last Modified Date", "macro", "blackswan-telegram"),
+            "order_jalali_modified"      => _x("Order Last Modified Date (Jalali)", "macro", "blackswan-telegram"),
+            "order_date_completed"       => _x("Order Completed Date", "macro", "blackswan-telegram"),
+            "order_jalali_completed"     => _x("Order Completed Date (Jalali)", "macro", "blackswan-telegram"),
+            "order_date_paid"            => _x("Order Paid Date", "macro", "blackswan-telegram"),
+            "order_jalali_paid"          => _x("Order Paid Date (Jalali)", "macro", "blackswan-telegram"),
+            "order_customer_ip"          => _x("Customer IP Address", "macro", "blackswan-telegram"),
+            "order_user_agent"           => _x("Customer User Agent", "macro", "blackswan-telegram"),
+            "order_meta_data"            => _x("Order Meta Data", "macro", "blackswan-telegram"),
           )
         ),
         "wc_order_urls" => array(
-          "title" => __("Order URLs", $this->td),
+          "title" => __("Order URLs", "blackswan-telegram"),
           "macros" => array(
             // URLs
-            "edit_url"      => _x("Order Edit URL (Admin)", "macro", $this->td),
-            "view_url"      => _x("Order View URL (Customer)", "macro", $this->td),
-            "pay_url"       => _x("Order Payment URL", "macro", $this->td),
-            "cancel_url"    => _x("Order Cancel URL", "macro", $this->td),
-            "thank_you_url" => _x("Order Thank You Page URL", "macro", $this->td),
+            "edit_url"      => _x("Order Edit URL (Admin)", "macro", "blackswan-telegram"),
+            "view_url"      => _x("Order View URL (Customer)", "macro", "blackswan-telegram"),
+            "pay_url"       => _x("Order Payment URL", "macro", "blackswan-telegram"),
+            "cancel_url"    => _x("Order Cancel URL", "macro", "blackswan-telegram"),
+            "thank_you_url" => _x("Order Thank You Page URL", "macro", "blackswan-telegram"),
           )
         ),
         "wc_order_customer_details" => array(
-          "title" => __("Order Customer Details", $this->td),
+          "title" => __("Order Customer Details", "blackswan-telegram"),
           "macros" => array(
             // Customer Details
-            "customer_id"             => _x("Customer ID", "macro", $this->td),
-            "customer_username"       => _x("Customer Username", "macro", $this->td),
-            "customer_email"          => _x("Customer Email", "macro", $this->td),
-            "customer_phone"          => _x("Customer Phone Number", "macro", $this->td),
-            "customer_first_name"     => _x("Customer First Name", "macro", $this->td),
-            "customer_last_name"      => _x("Customer Last Name", "macro", $this->td),
-            "customer_display_name"   => _x("Customer Display Name", "macro", $this->td),
-            "customer_note"           => _x("Customer Note", "macro", $this->td),
+            "customer_id"             => _x("Customer ID", "macro", "blackswan-telegram"),
+            "customer_username"       => _x("Customer Username", "macro", "blackswan-telegram"),
+            "customer_email"          => _x("Customer Email", "macro", "blackswan-telegram"),
+            "customer_phone"          => _x("Customer Phone Number", "macro", "blackswan-telegram"),
+            "customer_first_name"     => _x("Customer First Name", "macro", "blackswan-telegram"),
+            "customer_last_name"      => _x("Customer Last Name", "macro", "blackswan-telegram"),
+            "customer_display_name"   => _x("Customer Display Name", "macro", "blackswan-telegram"),
+            "customer_note"           => _x("Customer Note", "macro", "blackswan-telegram"),
           )
         ),
         "wc_order_billing_details" => array(
-          "title" => __("Order Billing Details", $this->td),
+          "title" => __("Order Billing Details", "blackswan-telegram"),
           "macros" => array(
             // Billing Details
-            "billing_first_name"      => _x("Billing First Name", "macro", $this->td),
-            "billing_last_name"       => _x("Billing Last Name", "macro", $this->td),
-            "billing_company"         => _x("Billing Company", "macro", $this->td),
-            "billing_address"         => _x("Billing Full Address", "macro", $this->td),
-            "billing_city"            => _x("Billing City", "macro", $this->td),
-            "billing_state"           => _x("Billing State", "macro", $this->td),
-            "billing_postcode"        => _x("Billing Postcode", "macro", $this->td),
-            "billing_country"         => _x("Billing Country", "macro", $this->td),
-            "billing_phone"           => _x("Billing Phone Number", "macro", $this->td),
-            "billing_email"           => _x("Billing Email Address", "macro", $this->td),
+            "billing_first_name"      => _x("Billing First Name", "macro", "blackswan-telegram"),
+            "billing_last_name"       => _x("Billing Last Name", "macro", "blackswan-telegram"),
+            "billing_company"         => _x("Billing Company", "macro", "blackswan-telegram"),
+            "billing_address"         => _x("Billing Full Address", "macro", "blackswan-telegram"),
+            "billing_city"            => _x("Billing City", "macro", "blackswan-telegram"),
+            "billing_state"           => _x("Billing State", "macro", "blackswan-telegram"),
+            "billing_postcode"        => _x("Billing Postcode", "macro", "blackswan-telegram"),
+            "billing_country"         => _x("Billing Country", "macro", "blackswan-telegram"),
+            "billing_phone"           => _x("Billing Phone Number", "macro", "blackswan-telegram"),
+            "billing_email"           => _x("Billing Email Address", "macro", "blackswan-telegram"),
           )
         ),
         "wc_order_shipping_details" => array(
-          "title" => __("Order Shipping Details", $this->td),
+          "title" => __("Order Shipping Details", "blackswan-telegram"),
           "macros" => array(
             // Shipping Details
-            "shipping_first_name"     => _x("Shipping First Name", "macro", $this->td),
-            "shipping_last_name"      => _x("Shipping Last Name", "macro", $this->td),
-            "shipping_company"        => _x("Shipping Company", "macro", $this->td),
-            "shipping_address"        => _x("Shipping Full Address", "macro", $this->td),
-            "shipping_city"           => _x("Shipping City", "macro", $this->td),
-            "shipping_state"          => _x("Shipping State", "macro", $this->td),
-            "shipping_postcode"       => _x("Shipping Postcode", "macro", $this->td),
-            "shipping_country"        => _x("Shipping Country", "macro", $this->td),
-            "shipping_method"         => _x("Shipping Method", "macro", $this->td),
+            "shipping_first_name"     => _x("Shipping First Name", "macro", "blackswan-telegram"),
+            "shipping_last_name"      => _x("Shipping Last Name", "macro", "blackswan-telegram"),
+            "shipping_company"        => _x("Shipping Company", "macro", "blackswan-telegram"),
+            "shipping_address"        => _x("Shipping Full Address", "macro", "blackswan-telegram"),
+            "shipping_city"           => _x("Shipping City", "macro", "blackswan-telegram"),
+            "shipping_state"          => _x("Shipping State", "macro", "blackswan-telegram"),
+            "shipping_postcode"       => _x("Shipping Postcode", "macro", "blackswan-telegram"),
+            "shipping_country"        => _x("Shipping Country", "macro", "blackswan-telegram"),
+            "shipping_method"         => _x("Shipping Method", "macro", "blackswan-telegram"),
           )
         ),
         "wc_order_items" => array(
-          "title" => __("Order Items", $this->td),
+          "title" => __("Order Items", "blackswan-telegram"),
           "macros" => array(
             // Order Items
-            "order_items_count"                   => _x("Number of Items in Order", "macro", $this->td),
-            "order_items_list"                    => _x("List of Items in Order", "macro", $this->td),
-            "order_items_sku_list"                => _x("List of Items SKU", "macro", $this->td),
-            "order_items_price_list"              => _x("List of Items with Prices", "macro", $this->td),
-            "order_items_quantity_list"           => _x("List of Items with Quantity", "macro", $this->td),
-            "order_items_price_quantity_list"     => _x("List of Items with Prices & Quantity", "macro", $this->td),
-            "order_items_sku_price_list"          => _x("List of Items with SKU & Price", "macro", $this->td),
-            "order_items_sku_quantity_list"       => _x("List of Items with SKU & Quantity", "macro", $this->td),
-            "order_items_sku_price_quantity_list" => _x("List of Items with SKU, Price & Quantity", "macro", $this->td),
-            "order_items_total_qty"               => _x("Total Quantity of Items", "macro", $this->td),
+            "order_items_count"                   => _x("Number of Items in Order", "macro", "blackswan-telegram"),
+            "order_items_list"                    => _x("List of Items in Order", "macro", "blackswan-telegram"),
+            "order_items_sku_list"                => _x("List of Items SKU", "macro", "blackswan-telegram"),
+            "order_items_price_list"              => _x("List of Items with Prices", "macro", "blackswan-telegram"),
+            "order_items_quantity_list"           => _x("List of Items with Quantity", "macro", "blackswan-telegram"),
+            "order_items_price_quantity_list"     => _x("List of Items with Prices & Quantity", "macro", "blackswan-telegram"),
+            "order_items_sku_price_list"          => _x("List of Items with SKU & Price", "macro", "blackswan-telegram"),
+            "order_items_sku_quantity_list"       => _x("List of Items with SKU & Quantity", "macro", "blackswan-telegram"),
+            "order_items_sku_price_quantity_list" => _x("List of Items with SKU, Price & Quantity", "macro", "blackswan-telegram"),
+            "order_items_total_qty"               => _x("Total Quantity of Items", "macro", "blackswan-telegram"),
           )
         ),
         "wc_order_taxes_discounts" => array(
-          "title" => __("Order Taxes, Discounts, Fees, and Refunds", $this->td),
+          "title" => __("Order Taxes, Discounts, Fees, and Refunds", "blackswan-telegram"),
           "macros" => array(
             // Taxes, Discounts, Fees, and Refunds
-            "tax_lines"               => _x("Tax Lines Breakdown", "macro", $this->td),
-            "tax_total"               => _x("Total Tax Amount", "macro", $this->td),
-            "order_discount_total"    => _x("Order Discount Amount", "macro", $this->td),
-            "order_fees_total"        => _x("Order Fees Total", "macro", $this->td),
-            "refund_total"            => _x("Total Refund Amount", "macro", $this->td),
-            "refund_reason"           => _x("Reason for Refund", "macro", $this->td),
+            "tax_lines"               => _x("Tax Lines Breakdown", "macro", "blackswan-telegram"),
+            "tax_total"               => _x("Total Tax Amount", "macro", "blackswan-telegram"),
+            "order_discount_total"    => _x("Order Discount Amount", "macro", "blackswan-telegram"),
+            "order_fees_total"        => _x("Order Fees Total", "macro", "blackswan-telegram"),
+            "refund_total"            => _x("Total Refund Amount", "macro", "blackswan-telegram"),
+            "refund_reason"           => _x("Reason for Refund", "macro", "blackswan-telegram"),
           )
         ),
         "wc_order_coupons" => array(
-          "title" => __("Order Coupons", $this->td),
+          "title" => __("Order Coupons", "blackswan-telegram"),
           "macros" => array(
             // Coupons
-            "coupons_applied"         => _x("Coupons Applied", "macro", $this->td),
-            "coupon_codes"            => _x("List of Coupon Codes", "macro", $this->td),
-            "coupon_discounts"        => _x("List of Coupon Discounts", "macro", $this->td),
+            "coupons_applied"         => _x("Coupons Applied", "macro", "blackswan-telegram"),
+            "coupon_codes"            => _x("List of Coupon Codes", "macro", "blackswan-telegram"),
+            "coupon_discounts"        => _x("List of Coupon Discounts", "macro", "blackswan-telegram"),
           )
         ),
       );
@@ -494,56 +497,56 @@ class class_wc_order extends Notifier {
 
       $wc_subscriptions_info = array(
         "wc_subscriptions_info" => array(
-          "title" => __("Add-on: WooCommerce Subscription", $this->td),
+          "title" => __("Add-on: WooCommerce Subscription", "blackswan-telegram"),
           "macros" => array(
-            "subscription_id"         => _x("Subscription ID", "macro", $this->td),
-            "subscription_status"     => _x("Subscription Status", "macro", $this->td),
-            "subscription_total"      => _x("Subscription Total Amount", "macro", $this->td),
-            "subscription_start_date" => _x("Subscription Start Date", "macro", $this->td),
-            "subscription_end_date"   => _x("Subscription End Date", "macro", $this->td),
-            "subscription_next_payment" => _x("Next Payment Date", "macro", $this->td),
+            "subscription_id"         => _x("Subscription ID", "macro", "blackswan-telegram"),
+            "subscription_status"     => _x("Subscription Status", "macro", "blackswan-telegram"),
+            "subscription_total"      => _x("Subscription Total Amount", "macro", "blackswan-telegram"),
+            "subscription_start_date" => _x("Subscription Start Date", "macro", "blackswan-telegram"),
+            "subscription_end_date"   => _x("Subscription End Date", "macro", "blackswan-telegram"),
+            "subscription_next_payment" => _x("Next Payment Date", "macro", "blackswan-telegram"),
           ),
         ),
       );
       $wc_memberships_info = array(
         "wc_memberships_info" => array(
-          "title" => __("Add-on: WooCommerce Membership", $this->td),
+          "title" => __("Add-on: WooCommerce Membership", "blackswan-telegram"),
           "macros" => array(
-            "membership_plan"         => _x("Membership Plan Name", "macro", $this->td),
-            "membership_status"       => _x("Membership Status", "macro", $this->td),
-            "membership_start_date"   => _x("Membership Start Date", "macro", $this->td),
-            "membership_end_date"     => _x("Membership Expiration Date", "macro", $this->td),
+            "membership_plan"         => _x("Membership Plan Name", "macro", "blackswan-telegram"),
+            "membership_status"       => _x("Membership Status", "macro", "blackswan-telegram"),
+            "membership_start_date"   => _x("Membership Start Date", "macro", "blackswan-telegram"),
+            "membership_end_date"     => _x("Membership Expiration Date", "macro", "blackswan-telegram"),
           ),
         ),
       );
       $wc_bookings_info = array(
         "wc_bookings_info" => array(
-          "title" => __("Add-on: WooCommerce Booking", $this->td),
+          "title" => __("Add-on: WooCommerce Booking", "blackswan-telegram"),
           "macros" => array(
-            "booking_id"              => _x("Booking ID", "macro", $this->td),
-            "booking_status"          => _x("Booking Status", "macro", $this->td),
-            "booking_date"            => _x("Booking Date", "macro", $this->td),
-            "booking_start_time"      => _x("Booking Start Time", "macro", $this->td),
-            "booking_end_time"        => _x("Booking End Time", "macro", $this->td),
+            "booking_id"              => _x("Booking ID", "macro", "blackswan-telegram"),
+            "booking_status"          => _x("Booking Status", "macro", "blackswan-telegram"),
+            "booking_date"            => _x("Booking Date", "macro", "blackswan-telegram"),
+            "booking_start_time"      => _x("Booking Start Time", "macro", "blackswan-telegram"),
+            "booking_end_time"        => _x("Booking End Time", "macro", "blackswan-telegram"),
           ),
         ),
       );
       $wc_points_rewards_info = array(
         "wc_points_rewards_info" => array(
-          "title" => __("Add-on: WooCommerce Points and Rewards", $this->td),
+          "title" => __("Add-on: WooCommerce Points and Rewards", "blackswan-telegram"),
           "macros" => array(
-            "points_earned"           => _x("Points Earned", "macro", $this->td),
-            "points_balance"          => _x("Customer Points Balance", "macro", $this->td),
-            "points_redeemed"         => _x("Points Redeemed", "macro", $this->td),
+            "points_earned"           => _x("Points Earned", "macro", "blackswan-telegram"),
+            "points_balance"          => _x("Customer Points Balance", "macro", "blackswan-telegram"),
+            "points_redeemed"         => _x("Points Redeemed", "macro", "blackswan-telegram"),
           ),
         ),
       );
       $wc_multi_currency_info = array(
         "wc_multi_currency_info" => array(
-          "title" => __("Add-on: WooCommerce Multi-Currency", $this->td),
+          "title" => __("Add-on: WooCommerce Multi-Currency", "blackswan-telegram"),
           "macros" => array(
-            "currency_conversion_rate" => _x("Currency Conversion Rate", "macro", $this->td),
-            "order_total_converted"   => _x("Order Total (Converted)", "macro", $this->td),
+            "currency_conversion_rate" => _x("Currency Conversion Rate", "macro", "blackswan-telegram"),
+            "order_total_converted"   => _x("Order Total (Converted)", "macro", "blackswan-telegram"),
           ),
         ),
       );

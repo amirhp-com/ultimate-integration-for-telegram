@@ -20,7 +20,7 @@
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/20 02:44:45
+ * @Last modified time: 2025/01/20 03:22:18
 */
 
 namespace BlackSwan\Telegram;
@@ -115,8 +115,8 @@ if (!class_exists("Notifier")) {
     }
     #region hooked-functions >>>>>>>>>>>>>
     public function init_plugin() {
-      $this->title = __("BlackSwan - Ultimate Telegram Integration", $this->td);
-      $this->title_small = __("Telegram", $this->td);
+      $this->title = __("BlackSwan - Ultimate Telegram Integration", "blackswan-telegram");
+      $this->title_small = __("Telegram", "blackswan-telegram");
       $this->include_class();
       if ($this->enabled("jdate")) {
         add_filter("date_i18n", array($this, "jdate"), 10, 4);
@@ -133,7 +133,7 @@ if (!class_exists("Notifier")) {
       }
     }
     public function add_plugin_settings_link($links) {
-      $links[$this->td] = '<a href="' . esc_attr(admin_url("options-general.php?page={$this->td}#tab_general")) . '">' . _x("Settings", "action-row", $this->td) . '</a>';
+      $links[$this->td] = '<a href="' . esc_attr(admin_url("options-general.php?page={$this->td}#tab_general")) . '">' . _x("Settings", "action-row", "blackswan-telegram") . '</a>';
       return $links;
     }
     public function jdate($date, $format, $timestamp, $gmt){
@@ -155,10 +155,10 @@ if (!class_exists("Notifier")) {
     public function handel_ajax_req() {
       if (wp_doing_ajax() && $_POST["action"] == $this->td) {
         if (!isset($_POST["nonce"])) {
-          wp_send_json_error(array("msg" => __("Unauthorized Access!", $this->td)));
+          wp_send_json_error(array("msg" => __("Unauthorized Access!", "blackswan-telegram")));
         }
-        if (!wp_verify_nonce($_POST["nonce"], $this->td)) {
-          wp_send_json_error(array("msg" => __("Unauthorized Access!", $this->td)));
+        if (!wp_verify_nonce(wp_unslash($_POST["nonce"]), "blackswan-telegram")) {
+          wp_send_json_error(array("msg" => __("Unauthorized Access!", "blackswan-telegram")));
         }
         switch ($_POST["wparam"]) {
 
@@ -186,7 +186,7 @@ if (!class_exists("Notifier")) {
           case 'send_test':
             global $wp_version;
             $wc_version = defined('WC_VERSION') ? WC_VERSION : "Not Found";
-            $site_host = parse_url(home_url(), PHP_URL_HOST);
+            $site_host = wp_parse_url(home_url(), PHP_URL_HOST);
 
             $message = "Hi there! 👋\n\n*Welcome to BlackSwan - Ultimate Telegram Integrations*\n" .
             "Seamlessly connect your WordPress site & WooCommerce store to Telegram.\n\n" .
@@ -246,11 +246,11 @@ if (!class_exists("Notifier")) {
             );
 
             $chat_ids  = $this->read("chat_ids");
-            if (empty(trim($chat_ids))) wp_send_json_error(["msg"=>__("No Chat ID found. Please add a Chat ID to send a test message.",$this->td)]);
+            if (empty(trim($chat_ids))) wp_send_json_error(["msg"=>__("No Chat ID found. Please add a Chat ID to send a test message.", "blackswan-telegram")]);
             $chat_ids  = explode("\n", $chat_ids);
             $chat_ids  = array_map("trim", $chat_ids);
             $res_array = []; $failed = false; $errors = []; $errors2 = []; $errors3 = [];
-            if (empty($chat_ids)) wp_send_json_error(["msg"=>__("No Chat ID found. Please add a Chat ID to send a test message.",$this->td)]);
+            if (empty($chat_ids)) wp_send_json_error(["msg"=>__("No Chat ID found. Please add a Chat ID to send a test message.", "blackswan-telegram")]);
             try {
               $telegram  = new \Longman\TelegramBot\Telegram($this->read("token"), $this->read("username"));
               /* sample send document
@@ -274,14 +274,16 @@ if (!class_exists("Notifier")) {
                   "parse_mode"               => "MarkdownV2",
                 ]);
                 if ($result->isOk()) {
-                  $res_array[] = sprintf(__("Test Message sent successfully to ChatID: %s", $this->td), $chat);
+                  /* translators: 1: Chat ID */
+                  $res_array[] = sprintf(__("Test Message sent successfully to ChatID: %s", "blackswan-telegram"), $chat);
                 }
                 else {
                   $errors[] = var_export($result, 1);
                   $errors2[] = print_r($result, 1);
                   $errors3[] = $result->getDescription();
                   if ($this->debug) { error_log("BlackSwan - Ultimate Telegram Integration :: debugging send test msg ~> " . PHP_EOL . var_export($result, 1)); }
-                  $res_array[] = sprintf(__("Error sending test message to ChatID: %s", $this->td) . "<br>" . $result->getDescription(), $chat);
+                  /* translators: 1: Chat ID */
+                  $res_array[] = sprintf(__("Error sending test message to ChatID: %s", "blackswan-telegram") . "<br>" . $result->getDescription(), $chat);
                   $failed = true;
                 }
               }
@@ -289,7 +291,8 @@ if (!class_exists("Notifier")) {
               $failed = true;
               $errors2[] = print_r([$e->getMessage(), $e], 1);
               $errors[] = var_export($e->getMessage(), 1);
-              $res_array[] = sprintf(__("Error Occured: %s", $this->td), $e->getMessage());
+              /* translators: 1: Error message */
+              $res_array[] = sprintf(__("Error Occured: %s", "blackswan-telegram"), $e->getMessage());
               if ($this->debug) { error_log("BlackSwan - Ultimate Telegram Integration :: debugging send test msg ~> " . PHP_EOL . var_export($e, 1)); }
             }
             if ($failed) {
@@ -300,10 +303,10 @@ if (!class_exists("Notifier")) {
           break;
 
           default:
-            wp_send_json_error(["msg" => __("An unknown error occured.", $this->td), "err" => "loop-default",]);
+            wp_send_json_error(["msg" => __("An unknown error occured.", "blackswan-telegram"), "err" => "loop-default",]);
             break;
         }
-        wp_send_json_error(["msg" => __("An unknown error occured.", $this->td), "err" => "out-of-loop",]);
+        wp_send_json_error(["msg" => __("An unknown error occured.", "blackswan-telegram"), "err" => "out-of-loop",]);
       }
     }
     #endregion
@@ -415,6 +418,7 @@ if (!class_exists("Notifier")) {
           return !empty(trim("{$user_info->first_name} {$user_info->last_name}")) ? "{$user_info->first_name} {$user_info->last_name}" : (!empty(trim($user_info->display_name)) ? $user_info->display_name : $user_info->user_login);
         }
       } else {
+        /* translators: 1: User ID */
         return sprintf(__("ID #%s [deleted-user]", "blackswan-telegram"), $uid);
       }
     }
@@ -454,10 +458,10 @@ if (!class_exists("Notifier")) {
       // $sample = $this->tg_send_msg("Sample Test Sent!", [ ["text" => "btn1", "url" => home_url("/pg-1"),], ["text" => "btn2", "url" => home_url("/pg-2"),], ]);
       $chat_ids = $this->read("chat_ids");
       if (empty(trim($chat_ids))){
-        $debug = ["msg"=>__("No Chat ID found. Please add a Chat ID to send a test message.",$this->td)];
+        $debug = ["msg"=>__("No Chat ID found. Please add a Chat ID to send a test message.", "blackswan-telegram")];
         if ($this->debug) { error_log("BlackSwan - Ultimate Telegram Integration :: debugging ".current_action().": ".__METHOD__.PHP_EOL.var_export($debug,1)); }
         if ($json) { wp_send_json_error($debug); }
-        return new \WP_Error("chat_id", __("No Chat ID found. Please add a Chat ID to send a test message.",$this->td));
+        return new \WP_Error("chat_id", __("No Chat ID found. Please add a Chat ID to send a test message.", "blackswan-telegram"));
       }
 
       $chat_ids  = explode("\n", $chat_ids);
@@ -465,10 +469,10 @@ if (!class_exists("Notifier")) {
       $chat_ids  = array_unique($chat_ids);
       $res_array = []; $failed = false; $errors = []; $errors2 = [];
       if (empty($chat_ids)) {
-        $debug = ["msg"=>__("No Chat ID found. Please add a Chat ID to send a test message.",$this->td)];
+        $debug = ["msg"=>__("No Chat ID found. Please add a Chat ID to send a test message.", "blackswan-telegram")];
         if ($this->debug) { error_log("BlackSwan - Ultimate Telegram Integration :: debugging ".current_action().": ".__METHOD__.PHP_EOL.var_export($debug,1)); }
         if ($json) { wp_send_json_error($debug); }
-        return new \WP_Error("chat_id", __("No Chat ID found. Please add a Chat ID to send a test message.",$this->td));
+        return new \WP_Error("chat_id", __("No Chat ID found. Please add a Chat ID to send a test message.", "blackswan-telegram"));
       }
 
       if (is_string($buttons) && !empty($buttons)) {
@@ -498,7 +502,7 @@ if (!class_exists("Notifier")) {
         foreach ($chat_ids as $chat) {
           $tg = (new \Longman\TelegramBot\Request);
           $method = apply_filters("blackswan-telegram/helper/send-message-method", "sendMessage", func_get_args());
-          $site_host = parse_url(home_url(), PHP_URL_HOST);
+          $site_host = wp_parse_url(home_url(), PHP_URL_HOST);
           $host_ip = $_SERVER['SERVER_ADDR'];
           if ($html_parser) {
             $message .= "\n\n<blockquote>Disclaimer: sent via BlackSwan - Ultimate Telegram Integration Plugin for WordPress from Host: $site_host ($host_ip)</blockquote>";
@@ -516,16 +520,19 @@ if (!class_exists("Notifier")) {
           $result = @forward_static_call_array([$tg, $method], [$tg_arguments]);
           $result = apply_filters("blackswan-telegram/helper/sent-message-result", $result, $tg, func_get_args());
           if ($result->isOk()) {
-            $res_array[] = sprintf(__("Test Message sent successfully to ChatID: %s", $this->td), $chat);
+            /* translators: 1: Chat ID */
+            $res_array[] = sprintf(__("Test Message sent successfully to ChatID: %s", "blackswan-telegram"), $chat);
             if ($this->debug) {
-              error_log("BlackSwan - Ultimate Telegram Integration :: debugging send msg ~> REF:" . $reference . " - " . sprintf(__("Test Message sent successfully to ChatID: %s", $this->td), $chat) . PHP_EOL . var_export($result, 1));
+              /* translators: 1: Chat ID */
+              error_log("BlackSwan - Ultimate Telegram Integration :: debugging send msg ~> REF:" . $reference . " - " . sprintf(__("Test Message sent successfully to ChatID: %s", "blackswan-telegram"), $chat) . PHP_EOL . var_export($result, 1));
             }
           }
           else {
             $errors[] = var_export($result, 1);
             $errors2[] = print_r($result, 1);
             if ($this->debug) { error_log("BlackSwan - Ultimate Telegram Integration :: debugging send msg ~> " . PHP_EOL . var_export($result, 1)); }
-            $res_array[] = sprintf(__("Error sending test message to ChatID: %s", $this->td), $chat);
+            /* translators: 1: Chat ID */
+            $res_array[] = sprintf(__("Error sending test message to ChatID: %s", "blackswan-telegram"), $chat);
             $failed = true;
           }
         }
@@ -534,7 +541,8 @@ if (!class_exists("Notifier")) {
         $failed = true;
         $errors2[] = print_r([$e->getMessage(), $e], 1);
         $errors[] = var_export($e->getMessage(), 1);
-        $res_array[] = sprintf(__("Error Occured: %s", $this->td), $e->getMessage());
+        /* translators: 1: Error message */
+        $res_array[] = sprintf(__("Error Occured: %s", "blackswan-telegram"), $e->getMessage());
         if ($this->debug) { error_log("BlackSwan - Ultimate Telegram Integration :: debugging send msg ~> " . PHP_EOL . var_export($e, 1)); }
       }
       if ($failed) {
