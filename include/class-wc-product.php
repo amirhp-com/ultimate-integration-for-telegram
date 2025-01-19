@@ -2,7 +2,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/19 10:48:38
+ * @Last modified time: 2025/01/19 10:49:36
  */
 
 use BlackSwan\Telegram\Notifier;
@@ -29,7 +29,6 @@ class class_wc_product extends Notifier {
       $thumbnail = $get_image_id && isset($src_thumb[0]) ? $src_thumb[0] : wc_placeholder_img_src();
 
       $new_macros = array(
-        "hook"            => $ex["hook"]??"",
         "product_id"      => $product_id,
         "name"            => $product->get_name(),
         "url"             => $product->get_permalink(),
@@ -81,7 +80,7 @@ class class_wc_product extends Notifier {
   }
   public function send_msg($product_id = 0) {
     foreach ($this->notif as $notif) {
-      $res = $this->send_telegram_msg($notif->config->message, $notif->config->btn_row1, __CLASS__, ["hook" => current_action(), "product_id" => $product_id], $notif->config->html_parser, false);
+      $res = $this->send_telegram_msg($notif->config->message, $notif->config->btn_row1, __CLASS__, ["product_id" => $product_id], $notif->config->html_parser, false);
     }
   }
 }
