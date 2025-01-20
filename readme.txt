@@ -9,9 +9,9 @@ Contributors: amirhpcom, blackswanlab, pigmentdev
 Tags: woocommerce, telegram, notification, automation
 Requires PHP: 7.0
 Requires at least: 5.0
-Tested up to: 6.5.3
+Tested up to: 6.7.1
 WC requires at least: 5.0
-WC tested up to: 9.5.1
+WC tested up to: 9.5.2
 Text Domain: blackswan-telegram
 Domain Path: /languages
 Copyright: (c) BlackSwanDev, All rights reserved.
