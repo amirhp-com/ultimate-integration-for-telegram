@@ -2,7 +2,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: BlackSwan - Ultimate Telegram Integration\n"
+"Project-Id-Version: Ultimate Telegram Integration\n"
 "POT-Creation-Date: 2025-01-20 03:33+0330\n"
 "PO-Revision-Date: 2025-01-20 03:33\n"
 "Last-Translator: Amirhossein Hosseinpour <its@amirhp.com>\n"
@@ -24,7 +24,7 @@ msgstr ""
 
 #. Plugin Name of the plugin/theme
 #: blackswan-telegram.php:118
-msgid "BlackSwan - Ultimate Telegram Integration"
+msgid "Ultimate Telegram Integration"
 msgstr ""
 
 #: blackswan-telegram.php:119

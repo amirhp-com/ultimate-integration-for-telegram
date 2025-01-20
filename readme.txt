@@ -1,6 +1,6 @@
-=== BlackSwan - Ultimate Telegram Integration ===
-Version: 1.0.0
-Stable tag: 1.0.0
+=== Ultimate Telegram Integration ===
+Version: 1.0.2
+Stable tag: 1.0.2
 Author: BlackSwan
 Donate link: https://amirhp.com/contact/
 Author URI: https://amirhp.com/landing
@@ -21,7 +21,7 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 == Description ==
 Integrate Telegram with WordPress, WooCommerce, and a wide range of plugins. Send customized notifications to channels, groups, bots, or private chats with built-in advanced translation and string replacement tools.
 
-BlackSwan - Ultimate Telegram Integration is the most versatile plugin for sending notifications from WordPress and WooCommerce to Telegram. With features like translation management, string replacement, macros, and markdown validation, this plugin is the ultimate solution for Telegram automation.
+Ultimate Telegram Integration is the most versatile plugin for sending notifications from WordPress and WooCommerce to Telegram. With features like translation management, string replacement, macros, and markdown validation, this plugin is the ultimate solution for Telegram automation.
 
 == Features ==
 - Send notifications to Telegram channels, groups, bots, or private chats.
@@ -39,7 +39,7 @@ BlackSwan - Ultimate Telegram Integration is the most versatile plugin for sendi
 
 == Changelog ==
 = v1.0.0 | 2025-01-20 | 1403-11-01 =
-* Initial release of BlackSwan - Ultimate Telegram Integration.
+* Initial release of Ultimate Telegram Integration.
 * Telegram bot integration with webhook support.
 * Notification macros and string replacement features.
 * Full WooCommerce integration.
