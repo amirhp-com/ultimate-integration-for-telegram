@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Ultimate Telegram Integration\n"
-"POT-Creation-Date: 2025-01-20 03:33+0330\n"
-"PO-Revision-Date: 2025-01-20 03:33\n"
+"POT-Creation-Date: 2025-01-20 11:56+0330\n"
+"PO-Revision-Date: 2025-01-20 11:56\n"
 "Last-Translator: Amirhossein Hosseinpour <its@amirhp.com>\n"
 "Language-Team: Amirhossein Hosseinpour <its@amirhp.com>\n"
 "MIME-Version: 1.0\n"
@@ -1394,7 +1394,7 @@ msgid "User Meta Array"
 msgstr ""
 
 #. Plugin URI of the plugin/theme
-msgid "https://wordpress.org/plugins/blackswan-telegram/"
+msgid "https://wordpress.org/plugins/ultimate-telegram-integration/"
 msgstr ""
 
 #. Description of the plugin/theme

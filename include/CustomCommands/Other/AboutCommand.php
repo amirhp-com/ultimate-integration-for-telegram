@@ -2,7 +2,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/20 11:46:24
+ * @Last modified time: 2025/01/20 11:54:51
  */
 
 namespace Longman\TelegramBot\Commands\UserCommands;
@@ -25,11 +25,11 @@ class AboutCommand extends UserCommand {
       "\[ Developed by Amirhossein Hosseinpour [(amirhp.com)](https://amirhp.com/) ]";
     $markup = array(
       array(
-        ['text' => "💻 Contribute (Github)", "url" => "https://github.com/blackswandevcom/blackswan-telegram"],
+        ['text' => "💻 Contribute (Github)", "url" => "https://github.com/blackswandevcom/ultimate-telegram-integration"],
         ['text' => "🍺 Buy me a Beer (Donate)", "url" => "https://amirhp.com/contact#payment"],
       ),
       array(
-        ['text' => "🌏 Ultimate Telegram Integration", "url" => "https://wordpress.org/plugins/blackswan-telegram/"],
+        ['text' => "🌏 Ultimate Telegram Integration", "url" => "https://wordpress.org/plugins/ultimate-telegram-integration/"],
       ),
     );
 

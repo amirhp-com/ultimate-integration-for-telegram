@@ -2,7 +2,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/20 02:59:44
+ * @Last modified time: 2025/01/20 11:54:51
  */
 use BlackSwan\Telegram\Notifier;
 class class_wp_hook extends Notifier{
@@ -14,8 +14,8 @@ class class_wp_hook extends Notifier{
     parent::__construct();
     $this->notif = $this->get_notifications_by_type($this->notif_id);
     $this->notif2 = $this->get_notifications_by_type($this->notif_id2);
-    add_filter("blackswan-telegram/notif-panel/notif-macro-list", array($this, "add_custom_macros"), 2, 2);
-    add_filter("blackswan-telegram/helper/translate-pairs", array($this, "translate_params_custom"), 10, 5);
+    add_filter("ultimate-telegram-integration/notif-panel/notif-macro-list", array($this, "add_custom_macros"), 2, 2);
+    add_filter("ultimate-telegram-integration/helper/translate-pairs", array($this, "translate_params_custom"), 10, 5);
     if (!empty($this->notif) || !empty($this->notif2)) {
       add_action("user_register", array($this, "send_new_user_msg"), 10, 2);
       add_action("wp_update_user", array($this, "send_edit_user_msg"), 9999, 3);
@@ -25,21 +25,21 @@ class class_wp_hook extends Notifier{
     if (in_array($notif_id, [$this->notif_id,$this->notif_id2]) && is_array($macros)) {
       $new_macros = array(
         "wp_user_info" => array(
-          "title" => __("User Information", "blackswan-telegram"),
+          "title" => __("User Information", "ultimate-telegram-integration"),
           "macros" => array(
-            "user_id"          => _x("User ID","macro", "blackswan-telegram"),
-            "user_login"       => _x("User Login (username)","macro", "blackswan-telegram"),
-            "user_role"        => _x("User Role","macro", "blackswan-telegram"),
-            "user_email"       => _x("User Email","macro", "blackswan-telegram"),
-            "user_mobile"      => _x("User Mobile","macro", "blackswan-telegram"),
-            "first_name"       => _x("User First name","macro", "blackswan-telegram"),
-            "last_name"        => _x("User Last name","macro", "blackswan-telegram"),
-            "nickname"         => _x("User Nickname","macro", "blackswan-telegram"),
-            "user_archive"     => _x("Author posts Archive","macro", "blackswan-telegram"),
-            "user_site"        => _x("User Website","macro", "blackswan-telegram"),
-            "user_registered"  => _x("User Registered Date","macro", "blackswan-telegram"),
-            "user_jregistered" => _x("User Registered Jalali Date","macro", "blackswan-telegram"),
-            "user_meta"        => _x("User Meta Array","macro", "blackswan-telegram"),
+            "user_id"          => _x("User ID","macro", "ultimate-telegram-integration"),
+            "user_login"       => _x("User Login (username)","macro", "ultimate-telegram-integration"),
+            "user_role"        => _x("User Role","macro", "ultimate-telegram-integration"),
+            "user_email"       => _x("User Email","macro", "ultimate-telegram-integration"),
+            "user_mobile"      => _x("User Mobile","macro", "ultimate-telegram-integration"),
+            "first_name"       => _x("User First name","macro", "ultimate-telegram-integration"),
+            "last_name"        => _x("User Last name","macro", "ultimate-telegram-integration"),
+            "nickname"         => _x("User Nickname","macro", "ultimate-telegram-integration"),
+            "user_archive"     => _x("Author posts Archive","macro", "ultimate-telegram-integration"),
+            "user_site"        => _x("User Website","macro", "ultimate-telegram-integration"),
+            "user_registered"  => _x("User Registered Date","macro", "ultimate-telegram-integration"),
+            "user_jregistered" => _x("User Registered Jalali Date","macro", "ultimate-telegram-integration"),
+            "user_meta"        => _x("User Meta Array","macro", "ultimate-telegram-integration"),
           ),
         ),
       );

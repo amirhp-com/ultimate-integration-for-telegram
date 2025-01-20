@@ -4,7 +4,7 @@ Stable tag: 1.0.2
 Author: BlackSwan
 Donate link: https://amirhp.com/contact/
 Author URI: https://amirhp.com/landing
-Plugin URI: https://wordpress.org/plugins/blackswan-telegram/
+Plugin URI: https://wordpress.org/plugins/ultimate-telegram-integration/
 Contributors: amirhpcom, blackswanlab, pigmentdev
 Tags: woocommerce, telegram, notification, automation
 Requires PHP: 7.0
@@ -12,7 +12,7 @@ Requires at least: 5.0
 Tested up to: 6.7.1
 WC requires at least: 5.0
 WC tested up to: 9.5.2
-Text Domain: blackswan-telegram
+Text Domain: ultimate-telegram-integration
 Domain Path: /languages
 Copyright: (c) BlackSwanDev, All rights reserved.
 License: GPLv2 or later
@@ -49,7 +49,7 @@ Ultimate Telegram Integration is the most versatile plugin for sending notificat
 You need a Telegram bot. Follow the instructions in the plugin to set it up via BotFather.
 
 = How can I contribute to this plugin? =
-You can help us improve our works by committing your changes to [blackswandevcom/blackswan-telegram](https://github.com/blackswandevcom/blackswan-telegram)
+You can help us improve our works by committing your changes to [blackswandevcom/ultimate-telegram-integration](https://github.com/blackswandevcom/ultimate-telegram-integration)
 
 = Does the plugin support WooCommerce add-ons? =
 Yes, it supports major WooCommerce add-ons like WooCommerce Subscription, WooCommerce Membership, and WooCommerce Booking.
