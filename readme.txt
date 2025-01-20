@@ -1,6 +1,6 @@
 === Ultimate Telegram Integration ===
-Version: 1.0.2
-Stable tag: 1.0.2
+Version: 1.0.3
+Stable tag: 1.0.3
 Author: BlackSwan
 Donate link: https://amirhp.com/contact/
 Author URI: https://amirhp.com/landing
