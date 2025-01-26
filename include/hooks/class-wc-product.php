@@ -2,7 +2,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/20 11:54:51
+ * @Last modified time: 2025/01/26 22:11:55
  */
 
 use BlackSwan\Telegram\Notifier;
@@ -12,12 +12,12 @@ class class_wc_product extends Notifier {
   public function __construct() {
     parent::__construct();
     $this->notif = $this->get_notifications_by_type($this->notif_id);
-    // add_action("ultimate-telegram-integration/init", array($this, "handle_wc_updated"));
+    // add_action("ultimate-integration-for-telegram/init", array($this, "handle_wc_updated"));
     if (!empty($this->notif)) {
       add_action("save_post_product", array($this, "send_msg"), 10, 1);
     }
-    add_filter("ultimate-telegram-integration/notif-panel/notif-macro-list", array($this, "add_custom_macros"), 30, 2);
-    add_filter("ultimate-telegram-integration/helper/translate-pairs", array($this, "translate_params_custom"), 10, 5);
+    add_filter("ultimate-integration-for-telegram/notif-panel/notif-macro-list", array($this, "add_custom_macros"), 30, 2);
+    add_filter("ultimate-integration-for-telegram/helper/translate-pairs", array($this, "translate_params_custom"), 10, 5);
   }
   public function translate_params_custom($pairs, $msg, $ref, $ex, $def) {
     // if we are sending request from this class, then handle macro
@@ -58,26 +58,26 @@ class class_wc_product extends Notifier {
     if (in_array($notif_id, [$this->notif_id]) && is_array($macros)) {
       $new_macros = array(
         "wc_product_info" => array(
-          "title" => __("Product Information", "ultimate-telegram-integration"),
+          "title" => __("Product Information", "ultimate-integration-for-telegram"),
           "macros" => array(
-            "product_id"      => _x("Product ID", "macro", "ultimate-telegram-integration"),
-            "name"            => _x("Product name", "macro", "ultimate-telegram-integration"),
-            "url"             => _x("Product permalink URL", "macro", "ultimate-telegram-integration"),
-            "formatted_name"  => _x("Product name with SKU or ID", "macro", "ultimate-telegram-integration"),
-            "thumbnail"       => _x("Product Thumbnail URL", "macro", "ultimate-telegram-integration"),
-            "sku"             => _x("Product SKU", "macro", "ultimate-telegram-integration"),
-            "price"           => _x("Product Price", "macro", "ultimate-telegram-integration"),
-            "sale_price"      => _x("Product Sale Price", "macro", "ultimate-telegram-integration"),
-            "regular_price"   => _x("Product Regular Price", "macro", "ultimate-telegram-integration"),
-            "type"            => _x("Product Type", "macro", "ultimate-telegram-integration"),
-            "description"     => _x("Product short description", "macro", "ultimate-telegram-integration"),
-            "date_published"  => _x("Product published date", "macro", "ultimate-telegram-integration"),
-            "date_modified"   => _x("Product modified date", "macro", "ultimate-telegram-integration"),
-            "date_jpublished" => _x("Product published date in Jalali", "macro", "ultimate-telegram-integration"),
-            "date_jmodified"  => _x("Product modified date in Jalali", "macro", "ultimate-telegram-integration"),
-            "stock_status"    => _x("Product stock status", "macro", "ultimate-telegram-integration"),
-            "stock_quantity"  => _x("Product stock quantity", "macro", "ultimate-telegram-integration"),
-            "product_meta"    => _x("Product meta Array", "macro", "ultimate-telegram-integration"),
+            "product_id"      => _x("Product ID", "macro", "ultimate-integration-for-telegram"),
+            "name"            => _x("Product name", "macro", "ultimate-integration-for-telegram"),
+            "url"             => _x("Product permalink URL", "macro", "ultimate-integration-for-telegram"),
+            "formatted_name"  => _x("Product name with SKU or ID", "macro", "ultimate-integration-for-telegram"),
+            "thumbnail"       => _x("Product Thumbnail URL", "macro", "ultimate-integration-for-telegram"),
+            "sku"             => _x("Product SKU", "macro", "ultimate-integration-for-telegram"),
+            "price"           => _x("Product Price", "macro", "ultimate-integration-for-telegram"),
+            "sale_price"      => _x("Product Sale Price", "macro", "ultimate-integration-for-telegram"),
+            "regular_price"   => _x("Product Regular Price", "macro", "ultimate-integration-for-telegram"),
+            "type"            => _x("Product Type", "macro", "ultimate-integration-for-telegram"),
+            "description"     => _x("Product short description", "macro", "ultimate-integration-for-telegram"),
+            "date_published"  => _x("Product published date", "macro", "ultimate-integration-for-telegram"),
+            "date_modified"   => _x("Product modified date", "macro", "ultimate-integration-for-telegram"),
+            "date_jpublished" => _x("Product published date in Jalali", "macro", "ultimate-integration-for-telegram"),
+            "date_jmodified"  => _x("Product modified date in Jalali", "macro", "ultimate-integration-for-telegram"),
+            "stock_status"    => _x("Product stock status", "macro", "ultimate-integration-for-telegram"),
+            "stock_quantity"  => _x("Product stock quantity", "macro", "ultimate-integration-for-telegram"),
+            "product_meta"    => _x("Product meta Array", "macro", "ultimate-integration-for-telegram"),
           ),
         ),
       );

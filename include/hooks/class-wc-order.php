@@ -38,7 +38,7 @@ class class_wc_order extends Notifier {
       $this->notif_id[] = "wc_mail_{$slug}";
     }
 
-    $this->notif_id = apply_filters("ultimate-telegram-integration/helper/woocommerce-orders/macro-available-notif-list", $this->notif_id);
+    $this->notif_id = apply_filters("ultimate-integration-for-telegram/helper/woocommerce-orders/macro-available-notif-list", $this->notif_id);
 
     if (!empty($this->get_notifications_by_type("wc_new_order"))) {
       add_action("woocommerce_new_order", array($this, "wc_new_order"), 10, 1);
@@ -86,8 +86,8 @@ class class_wc_order extends Notifier {
     }
     add_action("woocommerce_email_sent", array($this, "send_notification_on_email_send"), 10, 3);
 
-    add_filter("ultimate-telegram-integration/notif-panel/notif-macro-list", array($this, "add_custom_macros"), 31, 2);
-    add_filter("ultimate-telegram-integration/helper/translate-pairs", array($this, "translate_params_custom"), 10, 5);
+    add_filter("ultimate-integration-for-telegram/notif-panel/notif-macro-list", array($this, "add_custom_macros"), 31, 2);
+    add_filter("ultimate-integration-for-telegram/helper/translate-pairs", array($this, "translate_params_custom"), 10, 5);
   }
   public function send_notification_on_email_send($wp_mail_return, $email_id, $email_obj) {
     if (!is_object($email_obj)) { return; }  // Ensure $email_obj is an object before accessing it.
@@ -339,21 +339,21 @@ class class_wc_order extends Notifier {
 
       $wc_email_notif = array(
         "wc_email_notif" => array(
-          "title" => __("WooCommerce Emails", "ultimate-telegram-integration"),
+          "title" => __("WooCommerce Emails", "ultimate-integration-for-telegram"),
           "macros" => array(
-            "email_id"                 => _x("Email ID", "macro", "ultimate-telegram-integration"),
-            "email_title"              => _x("Email Title", "macro", "ultimate-telegram-integration"),
-            "email_recipient"          => _x("Email Recipient", "macro", "ultimate-telegram-integration"),
-            "email_subject"            => _x("Email Subject", "macro", "ultimate-telegram-integration"),
-            "email_attachments"        => _x("Email Attachments", "macro", "ultimate-telegram-integration"),
-            "email_from_name"          => _x("Email From name", "macro", "ultimate-telegram-integration"),
-            "email_from_address"       => _x("Email From address", "macro", "ultimate-telegram-integration"),
+            "email_id"                 => _x("Email ID", "macro", "ultimate-integration-for-telegram"),
+            "email_title"              => _x("Email Title", "macro", "ultimate-integration-for-telegram"),
+            "email_recipient"          => _x("Email Recipient", "macro", "ultimate-integration-for-telegram"),
+            "email_subject"            => _x("Email Subject", "macro", "ultimate-integration-for-telegram"),
+            "email_attachments"        => _x("Email Attachments", "macro", "ultimate-integration-for-telegram"),
+            "email_from_name"          => _x("Email From name", "macro", "ultimate-integration-for-telegram"),
+            "email_from_address"       => _x("Email From address", "macro", "ultimate-integration-for-telegram"),
             /* translators: 1: notice */
-            "email_body_text"          => sprintf(_x("Email Body TEXT %s", "macro", "ultimate-telegram-integration"), "<span style='color:white; background: red; display: block;'>&nbsp;".__("Only use when HTML Formatting is set to 'ENABLED' or within preformatted blocks (`code`, ```code```, &amp;lt;pre&amp;gt;code&amp;lt;/pre&amp;gt;) for proper rendering.", "ultimate-telegram-integration")."&nbsp;</span>"),
+            "email_body_text"          => sprintf(_x("Email Body TEXT %s", "macro", "ultimate-integration-for-telegram"), "<span style='color:white; background: red; display: block;'>&nbsp;".__("Only use when HTML Formatting is set to 'ENABLED' or within preformatted blocks (`code`, ```code```, &amp;lt;pre&amp;gt;code&amp;lt;/pre&amp;gt;) for proper rendering.", "ultimate-integration-for-telegram")."&nbsp;</span>"),
             /* translators: 1: notice */
-            "email_body_html"          => sprintf(_x("Email Body HTML %s", "macro", "ultimate-telegram-integration"), "<span style='color:white; background: red; display: block;'>&nbsp;".__("Only use when HTML Formatting is set to 'ENABLED' or within preformatted blocks (`code`, ```code```, &amp;lt;pre&amp;gt;code&amp;lt;/pre&amp;gt;) for proper rendering.", "ultimate-telegram-integration")."&nbsp;</span>"),
+            "email_body_html"          => sprintf(_x("Email Body HTML %s", "macro", "ultimate-integration-for-telegram"), "<span style='color:white; background: red; display: block;'>&nbsp;".__("Only use when HTML Formatting is set to 'ENABLED' or within preformatted blocks (`code`, ```code```, &amp;lt;pre&amp;gt;code&amp;lt;/pre&amp;gt;) for proper rendering.", "ultimate-integration-for-telegram")."&nbsp;</span>"),
             /* translators: 1: notice */
-            "email_body_html_stripped" => sprintf(_x("Email Body HTML (tags stripped) %s", "macro", "ultimate-telegram-integration"), "<span style='color:white; background: red; display: block;'>&nbsp;".__("Only use when HTML Formatting is set to 'ENABLED' or within preformatted blocks (`code`, ```code```, &amp;lt;pre&amp;gt;code&amp;lt;/pre&amp;gt;) for proper rendering.", "ultimate-telegram-integration")."&nbsp;</span>"),
+            "email_body_html_stripped" => sprintf(_x("Email Body HTML (tags stripped) %s", "macro", "ultimate-integration-for-telegram"), "<span style='color:white; background: red; display: block;'>&nbsp;".__("Only use when HTML Formatting is set to 'ENABLED' or within preformatted blocks (`code`, ```code```, &amp;lt;pre&amp;gt;code&amp;lt;/pre&amp;gt;) for proper rendering.", "ultimate-integration-for-telegram")."&nbsp;</span>"),
           ),
         ),
       );
@@ -366,130 +366,130 @@ class class_wc_order extends Notifier {
 
       $new_macros = array(
         "wc_order_general_details" => array(
-          "title" => __("Order General Details", "ultimate-telegram-integration"),
+          "title" => __("Order General Details", "ultimate-integration-for-telegram"),
           "macros" => array(
             // General Order Details
-            "order_id"                   => _x("Order ID", "macro", "ultimate-telegram-integration"),
-            "order_number"               => _x("Order Number", "macro", "ultimate-telegram-integration"),
-            "order_key"                  => _x("Order Key", "macro", "ultimate-telegram-integration"),
-            "order_status"               => _x("Order Status", "macro", "ultimate-telegram-integration"),
-            "order_status_raw"           => _x("Order Status RAW", "macro", "ultimate-telegram-integration"),
-            "order_status_prev"          => _x("Prev. Order Status", "macro", "ultimate-telegram-integration"),
-            "order_status_new"           => _x("New Order Status", "macro", "ultimate-telegram-integration"),
-            "order_total"                => _x("Order Total Amount", "macro", "ultimate-telegram-integration"),
-            "order_subtotal"             => _x("Order Subtotal Amount", "macro", "ultimate-telegram-integration"),
-            "order_discount_total"       => _x("Order Discount Amount", "macro", "ultimate-telegram-integration"),
-            "order_tax_total"            => _x("Order Tax Amount", "macro", "ultimate-telegram-integration"),
-            "order_shipping_total"       => _x("Order Shipping Amount", "macro", "ultimate-telegram-integration"),
-            "order_fees_total"           => _x("Order Fees Total", "macro", "ultimate-telegram-integration"),
-            "order_currency"             => _x("Order Currency", "macro", "ultimate-telegram-integration"),
-            "order_payment_method"       => _x("Order Payment Method", "macro", "ultimate-telegram-integration"),
-            "order_payment_method_title" => _x("Payment Method Title", "macro", "ultimate-telegram-integration"),
-            "transaction_id"             => _x("Transaction ID", "macro", "ultimate-telegram-integration"),
-            "order_date"                 => _x("Order Creation Date", "macro", "ultimate-telegram-integration"),
-            "order_jalali_date"          => _x("Order Creation Date (Jalali)", "macro", "ultimate-telegram-integration"),
-            "order_modified_date"        => _x("Order Last Modified Date", "macro", "ultimate-telegram-integration"),
-            "order_jalali_modified"      => _x("Order Last Modified Date (Jalali)", "macro", "ultimate-telegram-integration"),
-            "order_date_completed"       => _x("Order Completed Date", "macro", "ultimate-telegram-integration"),
-            "order_jalali_completed"     => _x("Order Completed Date (Jalali)", "macro", "ultimate-telegram-integration"),
-            "order_date_paid"            => _x("Order Paid Date", "macro", "ultimate-telegram-integration"),
-            "order_jalali_paid"          => _x("Order Paid Date (Jalali)", "macro", "ultimate-telegram-integration"),
-            "order_customer_ip"          => _x("Customer IP Address", "macro", "ultimate-telegram-integration"),
-            "order_user_agent"           => _x("Customer User Agent", "macro", "ultimate-telegram-integration"),
-            "order_meta_data"            => _x("Order Meta Data", "macro", "ultimate-telegram-integration"),
+            "order_id"                   => _x("Order ID", "macro", "ultimate-integration-for-telegram"),
+            "order_number"               => _x("Order Number", "macro", "ultimate-integration-for-telegram"),
+            "order_key"                  => _x("Order Key", "macro", "ultimate-integration-for-telegram"),
+            "order_status"               => _x("Order Status", "macro", "ultimate-integration-for-telegram"),
+            "order_status_raw"           => _x("Order Status RAW", "macro", "ultimate-integration-for-telegram"),
+            "order_status_prev"          => _x("Prev. Order Status", "macro", "ultimate-integration-for-telegram"),
+            "order_status_new"           => _x("New Order Status", "macro", "ultimate-integration-for-telegram"),
+            "order_total"                => _x("Order Total Amount", "macro", "ultimate-integration-for-telegram"),
+            "order_subtotal"             => _x("Order Subtotal Amount", "macro", "ultimate-integration-for-telegram"),
+            "order_discount_total"       => _x("Order Discount Amount", "macro", "ultimate-integration-for-telegram"),
+            "order_tax_total"            => _x("Order Tax Amount", "macro", "ultimate-integration-for-telegram"),
+            "order_shipping_total"       => _x("Order Shipping Amount", "macro", "ultimate-integration-for-telegram"),
+            "order_fees_total"           => _x("Order Fees Total", "macro", "ultimate-integration-for-telegram"),
+            "order_currency"             => _x("Order Currency", "macro", "ultimate-integration-for-telegram"),
+            "order_payment_method"       => _x("Order Payment Method", "macro", "ultimate-integration-for-telegram"),
+            "order_payment_method_title" => _x("Payment Method Title", "macro", "ultimate-integration-for-telegram"),
+            "transaction_id"             => _x("Transaction ID", "macro", "ultimate-integration-for-telegram"),
+            "order_date"                 => _x("Order Creation Date", "macro", "ultimate-integration-for-telegram"),
+            "order_jalali_date"          => _x("Order Creation Date (Jalali)", "macro", "ultimate-integration-for-telegram"),
+            "order_modified_date"        => _x("Order Last Modified Date", "macro", "ultimate-integration-for-telegram"),
+            "order_jalali_modified"      => _x("Order Last Modified Date (Jalali)", "macro", "ultimate-integration-for-telegram"),
+            "order_date_completed"       => _x("Order Completed Date", "macro", "ultimate-integration-for-telegram"),
+            "order_jalali_completed"     => _x("Order Completed Date (Jalali)", "macro", "ultimate-integration-for-telegram"),
+            "order_date_paid"            => _x("Order Paid Date", "macro", "ultimate-integration-for-telegram"),
+            "order_jalali_paid"          => _x("Order Paid Date (Jalali)", "macro", "ultimate-integration-for-telegram"),
+            "order_customer_ip"          => _x("Customer IP Address", "macro", "ultimate-integration-for-telegram"),
+            "order_user_agent"           => _x("Customer User Agent", "macro", "ultimate-integration-for-telegram"),
+            "order_meta_data"            => _x("Order Meta Data", "macro", "ultimate-integration-for-telegram"),
           )
         ),
         "wc_order_urls" => array(
-          "title" => __("Order URLs", "ultimate-telegram-integration"),
+          "title" => __("Order URLs", "ultimate-integration-for-telegram"),
           "macros" => array(
             // URLs
-            "edit_url"      => _x("Order Edit URL (Admin)", "macro", "ultimate-telegram-integration"),
-            "view_url"      => _x("Order View URL (Customer)", "macro", "ultimate-telegram-integration"),
-            "pay_url"       => _x("Order Payment URL", "macro", "ultimate-telegram-integration"),
-            "cancel_url"    => _x("Order Cancel URL", "macro", "ultimate-telegram-integration"),
-            "thank_you_url" => _x("Order Thank You Page URL", "macro", "ultimate-telegram-integration"),
+            "edit_url"      => _x("Order Edit URL (Admin)", "macro", "ultimate-integration-for-telegram"),
+            "view_url"      => _x("Order View URL (Customer)", "macro", "ultimate-integration-for-telegram"),
+            "pay_url"       => _x("Order Payment URL", "macro", "ultimate-integration-for-telegram"),
+            "cancel_url"    => _x("Order Cancel URL", "macro", "ultimate-integration-for-telegram"),
+            "thank_you_url" => _x("Order Thank You Page URL", "macro", "ultimate-integration-for-telegram"),
           )
         ),
         "wc_order_customer_details" => array(
-          "title" => __("Order Customer Details", "ultimate-telegram-integration"),
+          "title" => __("Order Customer Details", "ultimate-integration-for-telegram"),
           "macros" => array(
             // Customer Details
-            "customer_id"             => _x("Customer ID", "macro", "ultimate-telegram-integration"),
-            "customer_username"       => _x("Customer Username", "macro", "ultimate-telegram-integration"),
-            "customer_email"          => _x("Customer Email", "macro", "ultimate-telegram-integration"),
-            "customer_phone"          => _x("Customer Phone Number", "macro", "ultimate-telegram-integration"),
-            "customer_first_name"     => _x("Customer First Name", "macro", "ultimate-telegram-integration"),
-            "customer_last_name"      => _x("Customer Last Name", "macro", "ultimate-telegram-integration"),
-            "customer_display_name"   => _x("Customer Display Name", "macro", "ultimate-telegram-integration"),
-            "customer_note"           => _x("Customer Note", "macro", "ultimate-telegram-integration"),
+            "customer_id"             => _x("Customer ID", "macro", "ultimate-integration-for-telegram"),
+            "customer_username"       => _x("Customer Username", "macro", "ultimate-integration-for-telegram"),
+            "customer_email"          => _x("Customer Email", "macro", "ultimate-integration-for-telegram"),
+            "customer_phone"          => _x("Customer Phone Number", "macro", "ultimate-integration-for-telegram"),
+            "customer_first_name"     => _x("Customer First Name", "macro", "ultimate-integration-for-telegram"),
+            "customer_last_name"      => _x("Customer Last Name", "macro", "ultimate-integration-for-telegram"),
+            "customer_display_name"   => _x("Customer Display Name", "macro", "ultimate-integration-for-telegram"),
+            "customer_note"           => _x("Customer Note", "macro", "ultimate-integration-for-telegram"),
           )
         ),
         "wc_order_billing_details" => array(
-          "title" => __("Order Billing Details", "ultimate-telegram-integration"),
+          "title" => __("Order Billing Details", "ultimate-integration-for-telegram"),
           "macros" => array(
             // Billing Details
-            "billing_first_name"      => _x("Billing First Name", "macro", "ultimate-telegram-integration"),
-            "billing_last_name"       => _x("Billing Last Name", "macro", "ultimate-telegram-integration"),
-            "billing_company"         => _x("Billing Company", "macro", "ultimate-telegram-integration"),
-            "billing_address"         => _x("Billing Full Address", "macro", "ultimate-telegram-integration"),
-            "billing_city"            => _x("Billing City", "macro", "ultimate-telegram-integration"),
-            "billing_state"           => _x("Billing State", "macro", "ultimate-telegram-integration"),
-            "billing_postcode"        => _x("Billing Postcode", "macro", "ultimate-telegram-integration"),
-            "billing_country"         => _x("Billing Country", "macro", "ultimate-telegram-integration"),
-            "billing_phone"           => _x("Billing Phone Number", "macro", "ultimate-telegram-integration"),
-            "billing_email"           => _x("Billing Email Address", "macro", "ultimate-telegram-integration"),
+            "billing_first_name"      => _x("Billing First Name", "macro", "ultimate-integration-for-telegram"),
+            "billing_last_name"       => _x("Billing Last Name", "macro", "ultimate-integration-for-telegram"),
+            "billing_company"         => _x("Billing Company", "macro", "ultimate-integration-for-telegram"),
+            "billing_address"         => _x("Billing Full Address", "macro", "ultimate-integration-for-telegram"),
+            "billing_city"            => _x("Billing City", "macro", "ultimate-integration-for-telegram"),
+            "billing_state"           => _x("Billing State", "macro", "ultimate-integration-for-telegram"),
+            "billing_postcode"        => _x("Billing Postcode", "macro", "ultimate-integration-for-telegram"),
+            "billing_country"         => _x("Billing Country", "macro", "ultimate-integration-for-telegram"),
+            "billing_phone"           => _x("Billing Phone Number", "macro", "ultimate-integration-for-telegram"),
+            "billing_email"           => _x("Billing Email Address", "macro", "ultimate-integration-for-telegram"),
           )
         ),
         "wc_order_shipping_details" => array(
-          "title" => __("Order Shipping Details", "ultimate-telegram-integration"),
+          "title" => __("Order Shipping Details", "ultimate-integration-for-telegram"),
           "macros" => array(
             // Shipping Details
-            "shipping_first_name"     => _x("Shipping First Name", "macro", "ultimate-telegram-integration"),
-            "shipping_last_name"      => _x("Shipping Last Name", "macro", "ultimate-telegram-integration"),
-            "shipping_company"        => _x("Shipping Company", "macro", "ultimate-telegram-integration"),
-            "shipping_address"        => _x("Shipping Full Address", "macro", "ultimate-telegram-integration"),
-            "shipping_city"           => _x("Shipping City", "macro", "ultimate-telegram-integration"),
-            "shipping_state"          => _x("Shipping State", "macro", "ultimate-telegram-integration"),
-            "shipping_postcode"       => _x("Shipping Postcode", "macro", "ultimate-telegram-integration"),
-            "shipping_country"        => _x("Shipping Country", "macro", "ultimate-telegram-integration"),
-            "shipping_method"         => _x("Shipping Method", "macro", "ultimate-telegram-integration"),
+            "shipping_first_name"     => _x("Shipping First Name", "macro", "ultimate-integration-for-telegram"),
+            "shipping_last_name"      => _x("Shipping Last Name", "macro", "ultimate-integration-for-telegram"),
+            "shipping_company"        => _x("Shipping Company", "macro", "ultimate-integration-for-telegram"),
+            "shipping_address"        => _x("Shipping Full Address", "macro", "ultimate-integration-for-telegram"),
+            "shipping_city"           => _x("Shipping City", "macro", "ultimate-integration-for-telegram"),
+            "shipping_state"          => _x("Shipping State", "macro", "ultimate-integration-for-telegram"),
+            "shipping_postcode"       => _x("Shipping Postcode", "macro", "ultimate-integration-for-telegram"),
+            "shipping_country"        => _x("Shipping Country", "macro", "ultimate-integration-for-telegram"),
+            "shipping_method"         => _x("Shipping Method", "macro", "ultimate-integration-for-telegram"),
           )
         ),
         "wc_order_items" => array(
-          "title" => __("Order Items", "ultimate-telegram-integration"),
+          "title" => __("Order Items", "ultimate-integration-for-telegram"),
           "macros" => array(
             // Order Items
-            "order_items_count"                   => _x("Number of Items in Order", "macro", "ultimate-telegram-integration"),
-            "order_items_list"                    => _x("List of Items in Order", "macro", "ultimate-telegram-integration"),
-            "order_items_sku_list"                => _x("List of Items SKU", "macro", "ultimate-telegram-integration"),
-            "order_items_price_list"              => _x("List of Items with Prices", "macro", "ultimate-telegram-integration"),
-            "order_items_quantity_list"           => _x("List of Items with Quantity", "macro", "ultimate-telegram-integration"),
-            "order_items_price_quantity_list"     => _x("List of Items with Prices & Quantity", "macro", "ultimate-telegram-integration"),
-            "order_items_sku_price_list"          => _x("List of Items with SKU & Price", "macro", "ultimate-telegram-integration"),
-            "order_items_sku_quantity_list"       => _x("List of Items with SKU & Quantity", "macro", "ultimate-telegram-integration"),
-            "order_items_sku_price_quantity_list" => _x("List of Items with SKU, Price & Quantity", "macro", "ultimate-telegram-integration"),
-            "order_items_total_qty"               => _x("Total Quantity of Items", "macro", "ultimate-telegram-integration"),
+            "order_items_count"                   => _x("Number of Items in Order", "macro", "ultimate-integration-for-telegram"),
+            "order_items_list"                    => _x("List of Items in Order", "macro", "ultimate-integration-for-telegram"),
+            "order_items_sku_list"                => _x("List of Items SKU", "macro", "ultimate-integration-for-telegram"),
+            "order_items_price_list"              => _x("List of Items with Prices", "macro", "ultimate-integration-for-telegram"),
+            "order_items_quantity_list"           => _x("List of Items with Quantity", "macro", "ultimate-integration-for-telegram"),
+            "order_items_price_quantity_list"     => _x("List of Items with Prices & Quantity", "macro", "ultimate-integration-for-telegram"),
+            "order_items_sku_price_list"          => _x("List of Items with SKU & Price", "macro", "ultimate-integration-for-telegram"),
+            "order_items_sku_quantity_list"       => _x("List of Items with SKU & Quantity", "macro", "ultimate-integration-for-telegram"),
+            "order_items_sku_price_quantity_list" => _x("List of Items with SKU, Price & Quantity", "macro", "ultimate-integration-for-telegram"),
+            "order_items_total_qty"               => _x("Total Quantity of Items", "macro", "ultimate-integration-for-telegram"),
           )
         ),
         "wc_order_taxes_discounts" => array(
-          "title" => __("Order Taxes, Discounts, Fees, and Refunds", "ultimate-telegram-integration"),
+          "title" => __("Order Taxes, Discounts, Fees, and Refunds", "ultimate-integration-for-telegram"),
           "macros" => array(
             // Taxes, Discounts, Fees, and Refunds
-            "tax_lines"               => _x("Tax Lines Breakdown", "macro", "ultimate-telegram-integration"),
-            "tax_total"               => _x("Total Tax Amount", "macro", "ultimate-telegram-integration"),
-            "order_discount_total"    => _x("Order Discount Amount", "macro", "ultimate-telegram-integration"),
-            "order_fees_total"        => _x("Order Fees Total", "macro", "ultimate-telegram-integration"),
-            "refund_total"            => _x("Total Refund Amount", "macro", "ultimate-telegram-integration"),
-            "refund_reason"           => _x("Reason for Refund", "macro", "ultimate-telegram-integration"),
+            "tax_lines"               => _x("Tax Lines Breakdown", "macro", "ultimate-integration-for-telegram"),
+            "tax_total"               => _x("Total Tax Amount", "macro", "ultimate-integration-for-telegram"),
+            "order_discount_total"    => _x("Order Discount Amount", "macro", "ultimate-integration-for-telegram"),
+            "order_fees_total"        => _x("Order Fees Total", "macro", "ultimate-integration-for-telegram"),
+            "refund_total"            => _x("Total Refund Amount", "macro", "ultimate-integration-for-telegram"),
+            "refund_reason"           => _x("Reason for Refund", "macro", "ultimate-integration-for-telegram"),
           )
         ),
         "wc_order_coupons" => array(
-          "title" => __("Order Coupons", "ultimate-telegram-integration"),
+          "title" => __("Order Coupons", "ultimate-integration-for-telegram"),
           "macros" => array(
             // Coupons
-            "coupons_applied"         => _x("Coupons Applied", "macro", "ultimate-telegram-integration"),
-            "coupon_codes"            => _x("List of Coupon Codes", "macro", "ultimate-telegram-integration"),
-            "coupon_discounts"        => _x("List of Coupon Discounts", "macro", "ultimate-telegram-integration"),
+            "coupons_applied"         => _x("Coupons Applied", "macro", "ultimate-integration-for-telegram"),
+            "coupon_codes"            => _x("List of Coupon Codes", "macro", "ultimate-integration-for-telegram"),
+            "coupon_discounts"        => _x("List of Coupon Discounts", "macro", "ultimate-integration-for-telegram"),
           )
         ),
       );
@@ -497,56 +497,56 @@ class class_wc_order extends Notifier {
 
       $wc_subscriptions_info = array(
         "wc_subscriptions_info" => array(
-          "title" => __("Add-on: WooCommerce Subscription", "ultimate-telegram-integration"),
+          "title" => __("Add-on: WooCommerce Subscription", "ultimate-integration-for-telegram"),
           "macros" => array(
-            "subscription_id"         => _x("Subscription ID", "macro", "ultimate-telegram-integration"),
-            "subscription_status"     => _x("Subscription Status", "macro", "ultimate-telegram-integration"),
-            "subscription_total"      => _x("Subscription Total Amount", "macro", "ultimate-telegram-integration"),
-            "subscription_start_date" => _x("Subscription Start Date", "macro", "ultimate-telegram-integration"),
-            "subscription_end_date"   => _x("Subscription End Date", "macro", "ultimate-telegram-integration"),
-            "subscription_next_payment" => _x("Next Payment Date", "macro", "ultimate-telegram-integration"),
+            "subscription_id"         => _x("Subscription ID", "macro", "ultimate-integration-for-telegram"),
+            "subscription_status"     => _x("Subscription Status", "macro", "ultimate-integration-for-telegram"),
+            "subscription_total"      => _x("Subscription Total Amount", "macro", "ultimate-integration-for-telegram"),
+            "subscription_start_date" => _x("Subscription Start Date", "macro", "ultimate-integration-for-telegram"),
+            "subscription_end_date"   => _x("Subscription End Date", "macro", "ultimate-integration-for-telegram"),
+            "subscription_next_payment" => _x("Next Payment Date", "macro", "ultimate-integration-for-telegram"),
           ),
         ),
       );
       $wc_memberships_info = array(
         "wc_memberships_info" => array(
-          "title" => __("Add-on: WooCommerce Membership", "ultimate-telegram-integration"),
+          "title" => __("Add-on: WooCommerce Membership", "ultimate-integration-for-telegram"),
           "macros" => array(
-            "membership_plan"         => _x("Membership Plan Name", "macro", "ultimate-telegram-integration"),
-            "membership_status"       => _x("Membership Status", "macro", "ultimate-telegram-integration"),
-            "membership_start_date"   => _x("Membership Start Date", "macro", "ultimate-telegram-integration"),
-            "membership_end_date"     => _x("Membership Expiration Date", "macro", "ultimate-telegram-integration"),
+            "membership_plan"         => _x("Membership Plan Name", "macro", "ultimate-integration-for-telegram"),
+            "membership_status"       => _x("Membership Status", "macro", "ultimate-integration-for-telegram"),
+            "membership_start_date"   => _x("Membership Start Date", "macro", "ultimate-integration-for-telegram"),
+            "membership_end_date"     => _x("Membership Expiration Date", "macro", "ultimate-integration-for-telegram"),
           ),
         ),
       );
       $wc_bookings_info = array(
         "wc_bookings_info" => array(
-          "title" => __("Add-on: WooCommerce Booking", "ultimate-telegram-integration"),
+          "title" => __("Add-on: WooCommerce Booking", "ultimate-integration-for-telegram"),
           "macros" => array(
-            "booking_id"              => _x("Booking ID", "macro", "ultimate-telegram-integration"),
-            "booking_status"          => _x("Booking Status", "macro", "ultimate-telegram-integration"),
-            "booking_date"            => _x("Booking Date", "macro", "ultimate-telegram-integration"),
-            "booking_start_time"      => _x("Booking Start Time", "macro", "ultimate-telegram-integration"),
-            "booking_end_time"        => _x("Booking End Time", "macro", "ultimate-telegram-integration"),
+            "booking_id"              => _x("Booking ID", "macro", "ultimate-integration-for-telegram"),
+            "booking_status"          => _x("Booking Status", "macro", "ultimate-integration-for-telegram"),
+            "booking_date"            => _x("Booking Date", "macro", "ultimate-integration-for-telegram"),
+            "booking_start_time"      => _x("Booking Start Time", "macro", "ultimate-integration-for-telegram"),
+            "booking_end_time"        => _x("Booking End Time", "macro", "ultimate-integration-for-telegram"),
           ),
         ),
       );
       $wc_points_rewards_info = array(
         "wc_points_rewards_info" => array(
-          "title" => __("Add-on: WooCommerce Points and Rewards", "ultimate-telegram-integration"),
+          "title" => __("Add-on: WooCommerce Points and Rewards", "ultimate-integration-for-telegram"),
           "macros" => array(
-            "points_earned"           => _x("Points Earned", "macro", "ultimate-telegram-integration"),
-            "points_balance"          => _x("Customer Points Balance", "macro", "ultimate-telegram-integration"),
-            "points_redeemed"         => _x("Points Redeemed", "macro", "ultimate-telegram-integration"),
+            "points_earned"           => _x("Points Earned", "macro", "ultimate-integration-for-telegram"),
+            "points_balance"          => _x("Customer Points Balance", "macro", "ultimate-integration-for-telegram"),
+            "points_redeemed"         => _x("Points Redeemed", "macro", "ultimate-integration-for-telegram"),
           ),
         ),
       );
       $wc_multi_currency_info = array(
         "wc_multi_currency_info" => array(
-          "title" => __("Add-on: WooCommerce Multi-Currency", "ultimate-telegram-integration"),
+          "title" => __("Add-on: WooCommerce Multi-Currency", "ultimate-integration-for-telegram"),
           "macros" => array(
-            "currency_conversion_rate" => _x("Currency Conversion Rate", "macro", "ultimate-telegram-integration"),
-            "order_total_converted"   => _x("Order Total (Converted)", "macro", "ultimate-telegram-integration"),
+            "currency_conversion_rate" => _x("Currency Conversion Rate", "macro", "ultimate-integration-for-telegram"),
+            "order_total_converted"   => _x("Order Total (Converted)", "macro", "ultimate-integration-for-telegram"),
           ),
         ),
       );

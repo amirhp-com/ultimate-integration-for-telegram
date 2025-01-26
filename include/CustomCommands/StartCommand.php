@@ -2,7 +2,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/20 11:54:51
+ * @Last modified time: 2025/01/26 22:11:55
 */
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
@@ -21,7 +21,7 @@ class StartCommand extends SystemCommand {
     // If you use deep-linking, get the parameter like this: @see https://core.telegram.org/bots#deep-linking
     $cmd_line = $this->getMessage()->getText(true);
     $chat_id = $this->getMessage()->getChat()->getId();
-    $msg = "Hi there! 👋\n\n*Welcome to Ultimate Telegram Integrations*\n" .
+    $msg = "Hi there! 👋\n\n*Welcome to Ultimate Integration for Telegrams*\n" .
       "Seamlessly connect your WordPress site & WooCommerce store to Telegram.\n\n" .
       "With our Plugin, you’ll receive instant, real-time notifications for important events like new WooCommerce orders, user registrations, and WordPress emails. Replace traditional email notifications with fast and customizable Telegram messages tailored to your needs.\n\n" .
       "Receive notifications wherever you want:\n" .
@@ -40,11 +40,11 @@ class StartCommand extends SystemCommand {
         ["text" => "😍 Developer", "url"  => "https://amirhp.com/landing"],
       ),
       array(
-        ['text' => "💻 Contribute (Github)", "url" => "https://github.com/blackswandevcom/ultimate-telegram-integration"],
+        ['text' => "💻 Contribute (Github)", "url" => "https://github.com/blackswandevcom/ultimate-integration-for-telegram"],
         ['text' => "🍺 Buy me a Beer (Donate)", "url" => "https://amirhp.com/contact#payment"],
       ),
       array(
-        ['text' => "🌏 Ultimate Telegram Integration", "url" => "https://wordpress.org/plugins/ultimate-telegram-integration/"],
+        ['text' => "🌏 Ultimate Integration for Telegram", "url" => "https://wordpress.org/plugins/ultimate-integration-for-telegram/"],
       ),
     );
 

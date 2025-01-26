@@ -1,10 +1,10 @@
-=== Ultimate Telegram Integration ===
+=== Ultimate Integration for Telegram ===
 Version: 1.0.3
 Stable tag: 1.0.3
 Author: BlackSwan
 Donate link: https://amirhp.com/contact/
 Author URI: https://amirhp.com/landing
-Plugin URI: https://wordpress.org/plugins/ultimate-telegram-integration/
+Plugin URI: https://wordpress.org/plugins/ultimate-integration-for-telegram/
 Contributors: amirhpcom, blackswanlab, pigmentdev
 Tags: woocommerce, telegram, notification, automation
 Requires PHP: 7.0
@@ -12,7 +12,7 @@ Requires at least: 5.0
 Tested up to: 6.7.1
 WC requires at least: 5.0
 WC tested up to: 9.5.2
-Text Domain: ultimate-telegram-integration
+Text Domain: ultimate-integration-for-telegram
 Domain Path: /languages
 Copyright: (c) BlackSwanDev, All rights reserved.
 License: GPLv2 or later
@@ -21,7 +21,7 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 == Description ==
 Integrate Telegram with WordPress, WooCommerce, and a wide range of plugins. Send customized notifications to channels, groups, bots, or private chats with built-in advanced translation and string replacement tools.
 
-Ultimate Telegram Integration is the most versatile plugin for sending notifications from WordPress and WooCommerce to Telegram. With features like translation management, string replacement, macros, and markdown validation, this plugin is the ultimate solution for Telegram automation.
+Ultimate Integration for Telegram is the most versatile plugin for sending notifications from WordPress and WooCommerce to Telegram. With features like translation management, string replacement, macros, and markdown validation, this plugin is the ultimate solution for Telegram automation.
 
 == Features ==
 - Send notifications to Telegram channels, groups, bots, or private chats.
@@ -39,7 +39,7 @@ Ultimate Telegram Integration is the most versatile plugin for sending notificat
 
 == Changelog ==
 = v1.0.0 | 2025-01-20 | 1403-11-01 =
-* Initial release of Ultimate Telegram Integration.
+* Initial release of Ultimate Integration for Telegram.
 * Telegram bot integration with webhook support.
 * Notification macros and string replacement features.
 * Full WooCommerce integration.
@@ -49,7 +49,7 @@ Ultimate Telegram Integration is the most versatile plugin for sending notificat
 You need a Telegram bot. Follow the instructions in the plugin to set it up via BotFather.
 
 = How can I contribute to this plugin? =
-You can help us improve our works by committing your changes to [blackswandevcom/ultimate-telegram-integration](https://github.com/blackswandevcom/ultimate-telegram-integration)
+You can help us improve our works by committing your changes to [blackswandevcom/ultimate-integration-for-telegram](https://github.com/blackswandevcom/ultimate-integration-for-telegram)
 
 = Does the plugin support WooCommerce add-ons? =
 Yes, it supports major WooCommerce add-ons like WooCommerce Subscription, WooCommerce Membership, and WooCommerce Booking.
