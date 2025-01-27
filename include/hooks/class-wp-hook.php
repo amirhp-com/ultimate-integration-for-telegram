@@ -2,10 +2,11 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/26 22:11:55
+ * @Last modified time: 2025/01/28 02:15:40
  */
-use BlackSwan\Telegram\Notifier;
-class class_wp_hook extends Notifier{
+defined("ABSPATH") or die("<h2>Unauthorized Access!</h2><hr><small>Ultimate Integration for Telegram :: Developed by <a href='https://amirhp.com/'>Amirhp-com</a></small>");
+use BlackSwan\Ultimate_Integration_Telegram\Notifier;
+class Ultimate_Integration_Telegram_Hooks extends Notifier{
   public $notif = [];
   public $notif2 = [];
   public $notif_id = "wp_user_registered";
@@ -100,4 +101,4 @@ class class_wp_hook extends Notifier{
     }
   }
 }
-new class_wp_hook;
+new Ultimate_Integration_Telegram_Hooks;

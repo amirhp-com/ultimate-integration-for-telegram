@@ -3,18 +3,19 @@
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Date Created: 2024/02/22 10:53:39
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2024/02/22 10:56:04
+ * @Last modified time: 2025/01/28 02:09:54
+ * @info Ultimate_Integration_Telegram__ Prefix means these functions are for Ultimate_Integration_Telegram Project
  */
 
-if (!function_exists("pu_jdate")) {
-    function pu_jdate($format, $timestamp = '', $none = '', $time_zone = 'Asia/Tehran', $pu_tr_num = 'en') {
+if (!function_exists("Ultimate_Integration_Telegram__jdate")) {
+    function Ultimate_Integration_Telegram__jdate($format, $timestamp = '', $none = '', $time_zone = 'Asia/Tehran', $tr_num = 'en') {
         (int) $T_sec = 0; // server date bug fix , use + and - following a second number. e.g. +5 -> add five second
         if ($time_zone != 'local') {
             date_default_timezone_set(($time_zone === '') ? 'Asia/Tehran' : $time_zone);
         }
-        $ts = $T_sec + (($timestamp === '') ? time() : pu_tr_num((int) $timestamp));
+        $ts = $T_sec + (($timestamp === '') ? time() : Ultimate_Integration_Telegram__tr_num((int) $timestamp));
         $date = explode('_', date('H_i_j_n_O_P_s_w_Y', $ts));
-        list($j_y, $j_m, $j_d) = pu_gregorian_to_jalali($date[8], $date[3], $date[2]);
+        list($j_y, $j_m, $j_d) = Ultimate_Integration_Telegram__gregorian_to_jalali($date[8], $date[3], $date[2]);
         $doy = ($j_m < 7) ? (($j_m - 1) * 31) + $j_d - 1 : (($j_m - 7) * 30) + $j_d + 185;
         $kab = (((($j_y % 33) % 4) - 1) == ((int)(($j_y % 33) * 0.05))) ? 1 : 0;
         $sl = strlen($format);
@@ -71,15 +72,15 @@ if (!function_exists("pu_jdate")) {
                     break;
 
                 case 'D':
-                    $out .= pu_jdate_words(array('kh' => $date[7]), ' ');
+                    $out .= Ultimate_Integration_Telegram__jdate_words(array('kh' => $date[7]), ' ');
                     break;
 
                 case 'f':
-                    $out .= pu_jdate_words(array('ff' => $j_m), ' ');
+                    $out .= Ultimate_Integration_Telegram__jdate_words(array('ff' => $j_m), ' ');
                     break;
 
                 case 'F':
-                    $out .= pu_jdate_words(array('mm' => $j_m), ' ');
+                    $out .= Ultimate_Integration_Telegram__jdate_words(array('mm' => $j_m), ' ');
                     break;
 
                 case 'H':
@@ -95,19 +96,19 @@ if (!function_exists("pu_jdate")) {
                     break;
 
                 case 'J':
-                    $out .= pu_jdate_words(array('rr' => $j_d), ' ');
+                    $out .= Ultimate_Integration_Telegram__jdate_words(array('rr' => $j_d), ' ');
                     break;
 
                 case 'k';
-                    $out .= pu_tr_num(100 - (int)($doy / ($kab + 365) * 1000) / 10, $pu_tr_num);
+                    $out .= Ultimate_Integration_Telegram__tr_num(100 - (int)($doy / ($kab + 365) * 1000) / 10, $tr_num);
                     break;
 
                 case 'K':
-                    $out .= pu_tr_num((int)($doy / ($kab + 365) * 1000) / 10, $pu_tr_num);
+                    $out .= Ultimate_Integration_Telegram__tr_num((int)($doy / ($kab + 365) * 1000) / 10, $tr_num);
                     break;
 
                 case 'l':
-                    $out .= pu_jdate_words(array('rh' => $date[7]), ' ');
+                    $out .= Ultimate_Integration_Telegram__jdate_words(array('rh' => $date[7]), ' ');
                     break;
 
                 case 'L':
@@ -119,7 +120,7 @@ if (!function_exists("pu_jdate")) {
                     break;
 
                 case 'M':
-                    $out .= pu_jdate_words(array('km' => $j_m), ' ');
+                    $out .= Ultimate_Integration_Telegram__jdate_words(array('km' => $j_m), ' ');
                     break;
 
                 case 'n':
@@ -141,7 +142,7 @@ if (!function_exists("pu_jdate")) {
                     break;
 
                 case 'p':
-                    $out .= pu_jdate_words(array('mb' => $j_m), ' ');
+                    $out .= Ultimate_Integration_Telegram__jdate_words(array('mb' => $j_m), ' ');
                     break;
 
                 case 'P':
@@ -149,7 +150,7 @@ if (!function_exists("pu_jdate")) {
                     break;
 
                 case 'q':
-                    $out .= pu_jdate_words(array('sh' => $j_y), ' ');
+                    $out .= Ultimate_Integration_Telegram__jdate_words(array('sh' => $j_y), ' ');
                     break;
 
                 case 'Q':
@@ -157,7 +158,7 @@ if (!function_exists("pu_jdate")) {
                     break;
 
                 case 'r':
-                    $key = pu_jdate_words(array('rh' => $date[7], 'mm' => $j_m));
+                    $key = Ultimate_Integration_Telegram__jdate_words(array('rh' => $date[7], 'mm' => $j_m));
                     $out .= $date[0] . ':' . $date[1] . ':' . $date[6] . ' ' . $date[4] . ' ' . $key['rh'] . '، ' . $j_d . ' ' . $key['mm'] . ' ' . $j_y;
                     break;
 
@@ -178,11 +179,11 @@ if (!function_exists("pu_jdate")) {
                     break;
 
                 case 'v':
-                    $out .= pu_jdate_words(array('ss' => ($j_y % 100)), ' ');
+                    $out .= Ultimate_Integration_Telegram__jdate_words(array('ss' => ($j_y % 100)), ' ');
                     break;
 
                 case 'V':
-                    $out .= pu_jdate_words(array('ss' => $j_y), ' ');
+                    $out .= Ultimate_Integration_Telegram__jdate_words(array('ss' => $j_y), ' ');
                     break;
 
                 case 'w':
@@ -223,20 +224,20 @@ if (!function_exists("pu_jdate")) {
                     $out .= $sub;
             }
         }
-        return ($pu_tr_num != 'en') ? pu_tr_num($out, 'fa', '.') : $out;
+        return ($tr_num != 'en') ? Ultimate_Integration_Telegram__tr_num($out, 'fa', '.') : $out;
     }
 }
-if (!function_exists("pu_jstrftime")) {
-    function pu_jstrftime($format, $timestamp = '', $none = '', $time_zone = 'Asia/Tehran', $pu_tr_num = 'fa') {
+if (!function_exists("Ultimate_Integration_Telegram__jstrftime")) {
+    function Ultimate_Integration_Telegram__jstrftime($format, $timestamp = '', $none = '', $time_zone = 'Asia/Tehran', $tr_num = 'fa') {
 
         $T_sec = 0;/* <= رفع خطاي زمان سرور ، با اعداد '+' و '-' بر حسب ثانيه */
 
         if ($time_zone != 'local') {
             date_default_timezone_set(($time_zone === '') ? 'Asia/Tehran' : $time_zone);
         }
-        $ts = $T_sec + (($timestamp === '') ? time() : pu_tr_num($timestamp));
+        $ts = $T_sec + (($timestamp === '') ? time() : Ultimate_Integration_Telegram__tr_num($timestamp));
         $date = explode('_', date('h_H_i_j_n_s_w_Y', $ts));
-        list($j_y, $j_m, $j_d) = pu_gregorian_to_jalali($date[7], $date[4], $date[3]);
+        list($j_y, $j_m, $j_d) = Ultimate_Integration_Telegram__gregorian_to_jalali($date[7], $date[4], $date[3]);
         $doy = ($j_m < 7) ? (($j_m - 1) * 31) + $j_d - 1 : (($j_m - 7) * 30) + $j_d + 185;
         $kab = (((($j_y % 33) % 4) - 1) == ((int)(($j_y % 33) * 0.05))) ? 1 : 0;
         $sl = strlen($format);
@@ -253,11 +254,11 @@ if (!function_exists("pu_jstrftime")) {
 
                     /* Day */
                 case 'a':
-                    $out .= pu_jdate_words(array('kh' => $date[6]), ' ');
+                    $out .= Ultimate_Integration_Telegram__jdate_words(array('kh' => $date[6]), ' ');
                     break;
 
                 case 'A':
-                    $out .= pu_jdate_words(array('rh' => $date[6]), ' ');
+                    $out .= Ultimate_Integration_Telegram__jdate_words(array('rh' => $date[6]), ' ');
                     break;
 
                 case 'd':
@@ -326,11 +327,11 @@ if (!function_exists("pu_jstrftime")) {
                     /* Month */
                 case 'b':
                 case 'h':
-                    $out .= pu_jdate_words(array('km' => $j_m), ' ');
+                    $out .= Ultimate_Integration_Telegram__jdate_words(array('km' => $j_m), ' ');
                     break;
 
                 case 'B':
-                    $out .= pu_jdate_words(array('mm' => $j_m), ' ');
+                    $out .= Ultimate_Integration_Telegram__jdate_words(array('mm' => $j_m), ' ');
                     break;
 
                 case 'm':
@@ -418,7 +419,7 @@ if (!function_exists("pu_jstrftime")) {
 
                     /* Time and Date Stamps */
                 case 'c':
-                    $key = pu_jdate_words(array('rh' => $date[6], 'mm' => $j_m));
+                    $key = Ultimate_Integration_Telegram__jdate_words(array('rh' => $date[6], 'mm' => $j_m));
                     $out .= $date[1] . ':' . $date[2] . ':' . $date[5] . ' ' . date('P', $ts) . ' ' . $key['rh'] . '، ' . $j_d . ' ' . $key['mm'] . ' ' . $j_y;
                     break;
 
@@ -455,18 +456,18 @@ if (!function_exists("pu_jstrftime")) {
                     $out .= $sub;
             }
         }
-        return ($pu_tr_num != 'en') ? pu_tr_num($out, 'fa', '.') : $out;
+        return ($tr_num != 'en') ? Ultimate_Integration_Telegram__tr_num($out, 'fa', '.') : $out;
     }
 }
-if (!function_exists("pu_jmktime")) {
-    function pu_jmktime($h = '', $m = '', $s = '', $jm = '', $jd = '', $jy = '', $none = '', $timezone = 'Asia/Tehran') {
+if (!function_exists("Ultimate_Integration_Telegram__jmktime")) {
+    function Ultimate_Integration_Telegram__jmktime($h = '', $m = '', $s = '', $jm = '', $jd = '', $jy = '', $none = '', $timezone = 'Asia/Tehran') {
         if ($timezone != 'local') {
             date_default_timezone_set($timezone);
         }
         if ($h === '') {
             return time();
         } else {
-            list($h, $m, $s, $jm, $jd, $jy) = explode('_', pu_tr_num($h . '_' . $m . '_' . $s . '_' . $jm . '_' . $jd . '_' . $jy));
+            list($h, $m, $s, $jm, $jd, $jy) = explode('_', Ultimate_Integration_Telegram__tr_num($h . '_' . $m . '_' . $s . '_' . $jm . '_' . $jd . '_' . $jy));
             if ($m === '') {
                 return mktime($h);
             } else {
@@ -476,16 +477,16 @@ if (!function_exists("pu_jmktime")) {
                     if ($jm === '') {
                         return mktime($h, $m, $s);
                     } else {
-                        $jdate = explode('_', pu_jdate('Y_j', '', '', $timezone, 'en'));
+                        $jdate = explode('_', Ultimate_Integration_Telegram__jdate('Y_j', '', '', $timezone, 'en'));
                         if ($jd === '') {
-                            list($gy, $gm, $gd) = pu_jalali_to_gregorian($jdate[0], $jm, $jdate[1]);
+                            list($gy, $gm, $gd) = Ultimate_Integration_Telegram__jalali_to_gregorian($jdate[0], $jm, $jdate[1]);
                             return mktime($h, $m, $s, $gm);
                         } else {
                             if ($jy === '') {
-                                list($gy, $gm, $gd) = pu_jalali_to_gregorian($jdate[0], $jm, $jd);
+                                list($gy, $gm, $gd) = Ultimate_Integration_Telegram__jalali_to_gregorian($jdate[0], $jm, $jd);
                                 return mktime($h, $m, $s, $gm, $gd);
                             } else {
-                                list($gy, $gm, $gd) = pu_jalali_to_gregorian($jy, $jm, $jd);
+                                list($gy, $gm, $gd) = Ultimate_Integration_Telegram__jalali_to_gregorian($jy, $jm, $jd);
                                 return mktime($h, $m, $s, $gm, $gd, $gy);
                             }
                         }
@@ -495,13 +496,13 @@ if (!function_exists("pu_jmktime")) {
         }
     }
 }
-if (!function_exists("pu_jgetdate")) {
-    function pu_jgetdate($timestamp = '', $none = '', $timezone = 'Asia/Tehran', $tn = 'en') {
-        $ts = ($timestamp === '') ? time() : pu_tr_num($timestamp);
-        $jdate = explode('_', pu_jdate('F_G_i_j_l_n_s_w_Y_z', $ts, '', $timezone, $tn));
+if (!function_exists("Ultimate_Integration_Telegram__jgetdate")) {
+    function Ultimate_Integration_Telegram__jgetdate($timestamp = '', $none = '', $timezone = 'Asia/Tehran', $tn = 'en') {
+        $ts = ($timestamp === '') ? time() : Ultimate_Integration_Telegram__tr_num($timestamp);
+        $jdate = explode('_', Ultimate_Integration_Telegram__jdate('F_G_i_j_l_n_s_w_Y_z', $ts, '', $timezone, $tn));
         return array(
-            'seconds' => pu_tr_num((int)pu_tr_num($jdate[6]), $tn),
-            'minutes' => pu_tr_num((int)pu_tr_num($jdate[2]), $tn),
+            'seconds' => Ultimate_Integration_Telegram__tr_num((int)Ultimate_Integration_Telegram__tr_num($jdate[6]), $tn),
+            'minutes' => Ultimate_Integration_Telegram__tr_num((int)Ultimate_Integration_Telegram__tr_num($jdate[2]), $tn),
             'hours' => $jdate[1],
             'mday' => $jdate[3],
             'wday' => $jdate[7],
@@ -510,28 +511,28 @@ if (!function_exists("pu_jgetdate")) {
             'yday' => $jdate[9],
             'weekday' => $jdate[4],
             'month' => $jdate[0],
-            0 => pu_tr_num($ts, $tn)
+            0 => Ultimate_Integration_Telegram__tr_num($ts, $tn)
         );
     }
 }
-if (!function_exists("pu_jcheckdate")) {
-    function pu_jcheckdate($jm, $jd, $jy) {
-        list($jm, $jd, $jy) = explode('_', pu_tr_num($jm . '_' . $jd . '_' . $jy));
+if (!function_exists("Ultimate_Integration_Telegram__jcheckdate")) {
+    function Ultimate_Integration_Telegram__jcheckdate($jm, $jd, $jy) {
+        list($jm, $jd, $jy) = explode('_', Ultimate_Integration_Telegram__tr_num($jm . '_' . $jd . '_' . $jy));
         $l_d = ($jm == 12) ? ((((($jy % 33) % 4) - 1) == ((int)(($jy % 33) * 0.05))) ? 30 : 29) : 31 - (int)($jm / 6.5);
         return ($jm > 12 or $jd > $l_d or $jm < 1 or $jd < 1 or $jy < 1) ? false : true;
     }
 }
-if (!function_exists("pu_tr_num")) {
-    function pu_tr_num($str, $mod = 'en', $mf = '٫') {
+if (!function_exists("Ultimate_Integration_Telegram__tr_num")) {
+    function Ultimate_Integration_Telegram__tr_num($str, $mod = 'en', $mf = '٫') {
         $num_a = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.');
         $key_a = array('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹', $mf);
         return ($mod == 'fa') ? str_replace($num_a, $key_a, $str) : str_replace($key_a, $num_a, $str);
     }
 }
-if (!function_exists("pu_jdate_words")) {
-    function pu_jdate_words($array, $mod = '') {
+if (!function_exists("Ultimate_Integration_Telegram__jdate_words")) {
+    function Ultimate_Integration_Telegram__jdate_words($array, $mod = '') {
         foreach ($array as $type => $num) {
-            $num = (int)pu_tr_num($num);
+            $num = (int)Ultimate_Integration_Telegram__tr_num($num);
             switch ($type) {
 
                 case 'ss':
@@ -606,9 +607,9 @@ if (!function_exists("pu_jdate_words")) {
         return ($mod === '') ? $array : implode($mod, $array);
     }
 }
-if (!function_exists("pu_gregorian_to_jalali")) {
-    function pu_gregorian_to_jalali($gy, $gm, $gd, $mod = '') {
-        list($gy, $gm, $gd) = explode('_', pu_tr_num($gy . '_' . $gm . '_' . $gd));/* <= Extra :اين سطر ، جزء تابع اصلي نيست */
+if (!function_exists("Ultimate_Integration_Telegram__gregorian_to_jalali")) {
+    function Ultimate_Integration_Telegram__gregorian_to_jalali($gy, $gm, $gd, $mod = '') {
+        list($gy, $gm, $gd) = explode('_', Ultimate_Integration_Telegram__tr_num($gy . '_' . $gm . '_' . $gd));/* <= Extra :اين سطر ، جزء تابع اصلي نيست */
         $g_d_m = array(0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334);
         if ($gy > 1600) {
             $jy = 979;
@@ -637,9 +638,9 @@ if (!function_exists("pu_gregorian_to_jalali")) {
         return ($mod === '') ? array($jy, $jm, $jd) : $jy . $mod . $jm . $mod . $jd;
     }
 }
-if (!function_exists("pu_jalali_to_gregorian")) {
-    function pu_jalali_to_gregorian($jy, $jm, $jd, $mod = '') {
-        list($jy, $jm, $jd) = explode('_', pu_tr_num($jy . '_' . $jm . '_' . $jd));/* <= Extra :اين سطر ، جزء تابع اصلي نيست */
+if (!function_exists("Ultimate_Integration_Telegram__jalali_to_gregorian")) {
+    function Ultimate_Integration_Telegram__jalali_to_gregorian($jy, $jm, $jd, $mod = '') {
+        list($jy, $jm, $jd) = explode('_', Ultimate_Integration_Telegram__tr_num($jy . '_' . $jm . '_' . $jd));/* <= Extra :اين سطر ، جزء تابع اصلي نيست */
         if ($jy > 979) {
             $gy = 1600;
             $jy -= 979;

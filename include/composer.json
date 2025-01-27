@@ -1,0 +1,33 @@
+{
+  "name": "blackswandev/ultimate-integration-telegram",
+  "description": "Ultimate Integration for Telegram - A WordPress plugin for integrating Telegram with WordPress and WooCommerce.",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "BlackSwanDev",
+      "email": "support@blackswandev.com",
+      "homepage": "https://blackswandev.com",
+      "role": "Developer"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "BlackSwanDev\\Ultimate_Integration_Telegram\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">=7.3.0",
+    "longman/telegram-bot": "^0.79.0"
+  },
+  "config": {
+    "platform": {
+      "php": "7.3.0"
+    },
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}

@@ -2,8 +2,8 @@
 /*
  * Plugin Name: Ultimate Integration for Telegram
  * Description: Integrate Telegram with WordPress, WooCommerce, and a wide range of plugins. Send customized notifications to channels, groups, bots, or private chats with built-in advanced translation and string replacement tools.
- * Version: 1.0.4
- * Stable tag: 1.0.4
+ * Version: 1.0.5
+ * Stable tag: 1.0.5
  * Author: BlackSwan
  * Author URI: https://amirhp.com/landing
  * Plugin URI: https://wordpress.org/plugins/ultimate-integration-for-telegram/
@@ -11,7 +11,7 @@
  * Tags: woocommerce, telegram, notification
  * Requires PHP: 7.0
  * Requires at least: 5.0
- * Tested up to: 6.7.1
+ * Tested up to: 6.7
  * WC requires at least: 5.0
  * WC tested up to: 9.5.2
  * Text Domain: ultimate-integration-for-telegram
@@ -20,10 +20,10 @@
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/26 22:14:35
+ * @Last modified time: 2025/01/28 02:24:00
 */
 
-namespace BlackSwan\Telegram;
+namespace BlackSwan\Ultimate_Integration_Telegram;
 defined("ABSPATH") or die("<h2>Unauthorized Access!</h2><hr><small>Ultimate Integration for Telegram :: Developed by <a href='https://amirhp.com/'>Amirhp-com</a></small>");
 
 if (!class_exists("Notifier")) {
@@ -115,6 +115,7 @@ if (!class_exists("Notifier")) {
     }
     #region hooked-functions >>>>>>>>>>>>>
     public function init_plugin() {
+      load_plugin_textdomain("ultimate-integration-for-telegram", false, dirname(plugin_basename(__FILE__)) . "/languages/");
       $this->title = __("Ultimate Integration for Telegram", "ultimate-integration-for-telegram");
       $this->title_small = __("Telegram", "ultimate-integration-for-telegram");
       $this->include_class();
@@ -137,7 +138,7 @@ if (!class_exists("Notifier")) {
       return $links;
     }
     public function jdate($date, $format, $timestamp, $gmt){
-      return pu_jdate($format, $timestamp, "", "local", "en");
+      return Ultimate_Integration_Telegram__jdate($format, $timestamp, "", "local", "en");
     }
     public function include_class(){
       require "{$this->include_dir}/class-jdate.php";
@@ -157,7 +158,7 @@ if (!class_exists("Notifier")) {
         if (!isset($_POST["nonce"])) {
           wp_send_json_error(array("msg" => __("Unauthorized Access!", "ultimate-integration-for-telegram")));
         }
-        if (!wp_verify_nonce(wp_unslash($_POST["nonce"]), "ultimate-integration-for-telegram")) {
+        if (!wp_verify_nonce(sanitize_text_field(wp_unslash($_POST["nonce"])), "ultimate-integration-for-telegram")) {
           wp_send_json_error(array("msg" => __("Unauthorized Access!", "ultimate-integration-for-telegram")));
         }
         switch ($_POST["wparam"]) {
@@ -428,17 +429,17 @@ if (!class_exists("Notifier")) {
     }
     public function get_real_IP_address() {
       if (!empty($_SERVER["GEOIP_ADDR"])) {
-        $ip = wp_unslash($_SERVER["GEOIP_ADDR"]);
+        $ip = sanitize_text_field(wp_unslash($_SERVER["GEOIP_ADDR"]));
       } elseif (!empty($_SERVER["HTTP_X_REAL_IP"])) {
-        $ip = wp_unslash($_SERVER["HTTP_X_REAL_IP"]);
+        $ip = sanitize_text_field(wp_unslash($_SERVER["HTTP_X_REAL_IP"]));
       } elseif (!empty($_SERVER["HTTP_CLIENT_IP"])) {
-        $ip = wp_unslash($_SERVER["HTTP_CLIENT_IP"]);
+        $ip = sanitize_text_field(wp_unslash($_SERVER["HTTP_CLIENT_IP"]));
       } elseif (!empty($_SERVER["HTTP_X_FORWARDED_FOR"])) {
-        $ip = wp_unslash($_SERVER["HTTP_X_FORWARDED_FOR"]);
+        $ip = sanitize_text_field(wp_unslash($_SERVER["HTTP_X_FORWARDED_FOR"]));
       } else {
-        $ip = wp_unslash($_SERVER["REMOTE_ADDR"]);
+        $ip = sanitize_text_field(wp_unslash($_SERVER["REMOTE_ADDR"]));
       }
-      return sanitize_text_field($ip);
+      return esc_html($ip);
     }
     #endregion
     #region php8 string-related functions >>>>>>>>>>>>>
@@ -503,7 +504,7 @@ if (!class_exists("Notifier")) {
           $tg = (new \Longman\TelegramBot\Request);
           $method = apply_filters("ultimate-integration-for-telegram/helper/send-message-method", "sendMessage", func_get_args());
           $site_host = wp_parse_url(home_url(), PHP_URL_HOST);
-          $host_ip = $_SERVER['SERVER_ADDR'];
+          $host_ip = sanitize_text_field(wp_unslash($_SERVER['SERVER_ADDR']));
           if ($html_parser) {
             $message .= "\n\n<blockquote>Disclaimer: sent via Ultimate Integration for Telegram Plugin for WordPress from Host: $site_host ($host_ip)</blockquote>";
           }else{
@@ -614,9 +615,8 @@ if (!class_exists("Notifier")) {
     #endregion
   }
   add_action("plugins_loaded", function () {
-    load_plugin_textdomain("ultimate-integration-for-telegram", false, dirname(plugin_basename(__FILE__)) . "/languages/");
-    global $BlackSwan_Telegram_Notifier;
-    $BlackSwan_Telegram_Notifier = new Notifier;
+    global $UltimateTelegramIntegration;
+    $UltimateTelegramIntegration = new Notifier;
   }, 2);
 }
 /*##################################################

@@ -2,11 +2,12 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/26 22:11:55
+ * @Last modified time: 2025/01/28 02:23:21
  */
-use BlackSwan\Telegram\Notifier;
+defined("ABSPATH") or die("<h2>Unauthorized Access!</h2><hr><small>Ultimate Integration for Telegram :: Developed by <a href='https://amirhp.com/'>Amirhp-com</a></small>");
+use BlackSwan\Ultimate_Integration_Telegram\Notifier;
 if (!class_exists("class_setting")) {
-  class class_setting extends Notifier {
+  class Ultimate_Integration_Telegram_Setting extends Notifier {
     public function __construct() {
       parent::__construct();
       add_action("admin_init", array($this, "register_settings"), 1);
@@ -36,8 +37,10 @@ if (!class_exists("class_setting")) {
     public function register_settings() {
       foreach ($this->get_setting_options_list() as $sections) {
         foreach ($sections["data"] as $id => $def) {
-          add_option("{$this->db_slug}__{$id}", $def, "", 'no');
-          register_setting("{$this->db_slug}__{$sections["name"]}", "{$this->db_slug}__{$id}");
+          $slug = $this->db_slug . "__" . $id;
+          $section = $this->db_slug . "__" . $sections["name"];
+          add_option($slug, $def, "", "no");
+          register_setting($section, $slug, array('type' => 'string', 'sanitize_callback' => 'sanitize_textarea_field'));
         }
       }
     }
@@ -51,10 +54,12 @@ if (!class_exists("class_setting")) {
       wp_enqueue_script('jquery-ui-core');
       wp_enqueue_script('jquery-ui-datepicker');
 
+      // Font Awesome is used to provide icons ONLY on the plugin's settings page for a better user experience.
+      // We've added the URL of FontAwesome to plugin Readme, 'Third-Party & External Resources Used' Section
       wp_enqueue_style($this->db_slug . "-fas", "//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css", array(), current_time("timestamp"));
       wp_enqueue_style($this->db_slug . "-setting", "{$this->assets_url}css/backend.css", [], time());
       wp_enqueue_script($this->db_slug . "-popper", "{$this->assets_url}js/popper.min.js", ["jquery"], "1.2.1");
-      wp_enqueue_script($this->db_slug . "-tippy", "{$this->assets_url}js/tippy-bundle.umd.js", ["jquery"], "1.2.1");
+      wp_enqueue_script($this->db_slug . "-tippy", "{$this->assets_url}js/tippy-bundle.umd.min.js", ["jquery"], "1.2.1");
       wp_enqueue_script($this->db_slug . "-setting", "{$this->assets_url}js/jquery.repeater.min.js", ["jquery"], "1.2.1");
       wp_enqueue_script($this->db_slug . "-panel", "{$this->assets_url}js/panel.js", ["jquery"], time());
       $data = $this->read("notifications");
@@ -356,7 +361,7 @@ if (!class_exists("class_setting")) {
       <?php
       $html = ob_get_contents();
       ob_end_clean();
-      print $html;
+      echo wp_kses_post($html);
     }
     public function highlight($php){
       return str_replace("&lt;?php", "", highlight_string('<?php'.$php, 1));
@@ -697,4 +702,4 @@ if (!class_exists("class_setting")) {
     #endregion
   }
 }
-new class_setting;
+new Ultimate_Integration_Telegram_Setting;

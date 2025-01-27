@@ -4,10 +4,9 @@
 * @Last modified by: amirhp-com <its@amirhp.com>
 * @Last modified time: 2025/01/19 22:52:03
 */
-
-use BlackSwan\Telegram\Notifier;
-
-class class_wc_order extends Notifier {
+defined("ABSPATH") or die("<h2>Unauthorized Access!</h2><hr><small>Ultimate Integration for Telegram :: Developed by <a href='https://amirhp.com/'>Amirhp-com</a></small>");
+use BlackSwan\Ultimate_Integration_Telegram\Notifier;
+class Ultimate_Integration_Telegram_Orders extends Notifier {
   public $notif_id = [];
   public $wc_emails = [];
   public $wc_statuses = [];
@@ -615,4 +614,4 @@ class class_wc_order extends Notifier {
   }
   #endregion
 }
-new class_wc_order;
+new Ultimate_Integration_Telegram_Orders;
