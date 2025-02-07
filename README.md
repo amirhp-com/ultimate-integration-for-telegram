@@ -182,7 +182,7 @@ This plugin is provided "as is" without any warranties, express or implied. Whil
 ---
 
 ## About the Developer
-**Ultimate Integration for Telegram** is developed and maintained by **BlackSwanDev**, a dedicated team of WordPress developers focused on creating powerful tools for automation and communication. For more information, visit us at **[BlackSwanDev](https://blackswandev.com/)** or reach out via **[support@blackswandev.com](mailto:support@blackswandev.com)**.
+**Ultimate Integration for Telegram** is developed and maintained by **Pigment.Dev**, a dedicated team of WordPress developers focused on creating powerful tools for automation and communication. For more information, visit us at **[pigment.dev](https://pigment.dev/)** or reach out via **[support@pigment.dev](mailto:support@pigment.dev)**.
 
 This project is led by **AmirhpCom**, a senior developer and WordPress expert. Learn more at **[AmirhpCom](https://amirhp.com/)**.
 
@@ -191,7 +191,7 @@ This project is led by **AmirhpCom**, a senior developer and WordPress expert. L
 ## Contribution and Support
 We welcome contributions to improve the plugin! If you have feature requests, bug reports, or suggestions, please create a GitHub issue or pull request.
 
-For support, contact us at **[support@blackswandev.com](mailto:support@blackswandev.com)**.
+For support, contact us at **[support@pigment.dev](mailto:support@pigment.dev)**.
 
 ---
 
