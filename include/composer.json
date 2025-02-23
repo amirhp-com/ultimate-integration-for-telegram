@@ -17,17 +17,15 @@
     }
   },
   "require": {
-    "php": ">=7.3.0",
-    "longman/telegram-bot": "^0.79.0"
+    "php": "^8.1",
+    "longman/telegram-bot": "^0.83"
   },
   "config": {
     "platform": {
-      "php": "7.3.0"
+      "php": "8.1.0"
     },
     "optimize-autoloader": true,
     "preferred-install": "dist",
     "sort-packages": true
-  },
-  "minimum-stability": "stable",
-  "prefer-stable": true
+  }
 }

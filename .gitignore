@@ -1,5 +1,5 @@
 **/.DS_Store
-.vscode
+.vscode/sftp.json
 
 # Wordpress - ignore core, configuration, examples, uploads and logs.
 # https://github.com/github/gitignore/blob/main/WordPress.gitignore
@@ -49,3 +49,5 @@ wp-config.php
 # Note: If you wish to whitelist themes,
 # uncomment the next line
 #/wp-content/themes
+.vscode/settings.json
+.vscode/bookmarks.json

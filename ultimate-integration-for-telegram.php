@@ -20,7 +20,7 @@
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/28 02:24:00
+ * @Last modified time: 2025/02/05 04:23:46
 */
 
 namespace BlackSwan\Ultimate_Integration_Telegram;
@@ -144,8 +144,10 @@ if (!class_exists("Notifier")) {
       require "{$this->include_dir}/class-jdate.php";
       require "{$this->include_dir}/class-setting.php";
       require "{$this->include_dir}/hooks/class-wp-hook.php";
-      require "{$this->include_dir}/hooks/class-wc-product.php";
-      require "{$this->include_dir}/hooks/class-wc-order.php";
+      if (function_exists("is_woocommerce") || class_exists("WooCommerce")) {
+        require "{$this->include_dir}/hooks/class-wc-product.php";
+        require "{$this->include_dir}/hooks/class-wc-order.php";
+      }
       do_action("ultimate-integration-for-telegram/load-library");
     }
     public function add_hpos_support() {

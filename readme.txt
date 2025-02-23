@@ -63,7 +63,7 @@ This plugin utilizes the following third-party libraries to enhance functionalit
 
 3. Font Awesome (Free Version)
   - **Description**: Font Awesome is used to provide icons ONLY on the plugin's settings page for a better user experience.
-  - **Source**: [https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css)
+  - **Source**: [https://github.com/FortAwesome/Font-Awesome](https://github.com/FortAwesome/Font-Awesome)
   - **License**: [Font Awesome Free License](https://fontawesome.com/license/free).
   - **No Account Required**: No additional setup or account is needed.
 
