@@ -42,7 +42,15 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
           $slug = $this->db_slug . "__" . $id;
           $section = $this->db_slug . "__" . $sections["name"];
           add_option($slug, $def, "", "no");
-          register_setting($section, $slug, array('type' => 'string', 'sanitize_callback' => 'sanitize_textarea_field'));
+          // phpcs:ignore PluginCheck.CodeAnalysis.SettingSanitization.register_settingDynamic
+          register_setting(
+            $section,
+            $slug,
+            array(
+              'type' => 'string',
+              'sanitize_callback' => 'sanitize_textarea_field'
+            )
+          );
         }
       }
     }
@@ -59,10 +67,10 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
       // Font Awesome is used to provide icons ONLY on the plugin's settings page for a better user experience.
       wp_enqueue_style($this->db_slug . "-setting", "{$this->assets_url}css/backend.css", [], time());
       wp_enqueue_style($this->db_slug . "-fas", "{$this->assets_url}/fa/css/all.min.css", [], "1.2.1");
-      wp_enqueue_script($this->db_slug . "-popper", "{$this->assets_url}js/popper.min.js", ["jquery"], "1.2.1");
-      wp_enqueue_script($this->db_slug . "-tippy", "{$this->assets_url}js/tippy-bundle.umd.min.js", ["jquery"], "1.2.1");
-      wp_enqueue_script($this->db_slug . "-setting", "{$this->assets_url}js/jquery.repeater.min.js", ["jquery"], "1.2.1");
-      wp_enqueue_script($this->db_slug . "-panel", "{$this->assets_url}js/panel.js", ["jquery"], time());
+      wp_enqueue_script($this->db_slug . "-popper", "{$this->assets_url}js/popper.min.js", ["jquery"], "1.2.1", true);
+      wp_enqueue_script($this->db_slug . "-tippy", "{$this->assets_url}js/tippy-bundle.umd.min.js", ["jquery"], "1.2.1", true);
+      wp_enqueue_script($this->db_slug . "-setting", "{$this->assets_url}js/jquery.repeater.min.js", ["jquery"], "1.2.1", true);
+      wp_enqueue_script($this->db_slug . "-panel", "{$this->assets_url}js/panel.js", ["jquery"], time(), true);
 
       $data = $this->read("notifications");
       $localized = apply_filters("ultimate-integration-for-telegram/notif-panel/localize-front-script", array(

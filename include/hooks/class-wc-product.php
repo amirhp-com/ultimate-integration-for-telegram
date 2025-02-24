@@ -2,7 +2,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/28 02:15:35
+ * @Last modified time: 2025/02/23 22:15:42
  */
 defined("ABSPATH") or die("<h2>Unauthorized Access!</h2><hr><small>Ultimate Integration for Telegram :: Developed by <a href='https://amirhp.com/'>Amirhp-com</a></small>");
 use BlackSwan\Ultimate_Integration_Telegram\Notifier;
@@ -47,6 +47,7 @@ class Ultimate_Integration_Telegram_Products extends Notifier {
         "date_modified"   => wp_date('Y-m-d H:i:s', strtotime($product->get_date_modified())),
         "date_jpublished" => pu_jdate('Y/m/d H:i:s', strtotime($product->get_date_created()), "", "local", "en"),
         "date_jmodified"  => pu_jdate('Y/m/d H:i:s', strtotime($product->get_date_modified()), "", "local", "en"),
+        // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
         "product_meta"    => print_r(get_post_meta($product_id, "", true), 1),
       );
       $pairs = array_merge($pairs, $new_macros);

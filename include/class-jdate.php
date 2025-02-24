@@ -1,12 +1,11 @@
 <?php
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
- * @Date Created: 2024/02/22 10:53:39
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/28 02:09:54
+ * @Last modified time: 2025/02/23 22:14:40
  * @info Ultimate_Integration_Telegram__ Prefix means these functions are for Ultimate_Integration_Telegram Project
  */
-
+// phpcs:disable
 if (!function_exists("Ultimate_Integration_Telegram__jdate")) {
     function Ultimate_Integration_Telegram__jdate($format, $timestamp = '', $none = '', $time_zone = 'Asia/Tehran', $tr_num = 'en') {
         (int) $T_sec = 0; // server date bug fix , use + and - following a second number. e.g. +5 -> add five second
@@ -673,3 +672,4 @@ if (!function_exists("Ultimate_Integration_Telegram__jalali_to_gregorian")) {
         return ($mod === '') ? array($gy, $gm, $gd) : $gy . $mod . $gm . $mod . $gd;
     }
 }
+// phpcs:enable

@@ -1,6 +1,6 @@
 === Ultimate Integration for Telegram ===
-Version: 1.0.5
-Stable tag: 1.0.5
+Version: 1.0.6
+Stable tag: 1.0.6
 Author: BlackSwan
 Donate link: https://amirhp.com/contact/
 Author URI: https://amirhp.com/landing
@@ -9,7 +9,7 @@ Contributors: amirhpcom, blackswanlab, pigmentdev
 Tags: woocommerce, telegram, notification, automation
 Tested up to: 6.7
 WC requires at least: 5.0
-WC tested up to: 9.5.2
+WC tested up to: 9.6
 Text Domain: ultimate-integration-for-telegram
 Domain Path: /languages
 Copyright: (c) BlackSwanDev, All rights reserved.
