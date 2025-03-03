@@ -2,16 +2,13 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/02/23 22:14:40
+ * @Last modified time: 2025/03/03 17:21:45
  * @info Ultimate_Integration_Telegram__ Prefix means these functions are for Ultimate_Integration_Telegram Project
  */
 // phpcs:disable
 if (!function_exists("Ultimate_Integration_Telegram__jdate")) {
-    function Ultimate_Integration_Telegram__jdate($format, $timestamp = '', $none = '', $time_zone = 'Asia/Tehran', $tr_num = 'en') {
+    function Ultimate_Integration_Telegram__jdate($format, $timestamp = '', $none = '', $time_zone = 'local', $tr_num = 'en') {
         (int) $T_sec = 0; // server date bug fix , use + and - following a second number. e.g. +5 -> add five second
-        if ($time_zone != 'local') {
-            date_default_timezone_set(($time_zone === '') ? 'Asia/Tehran' : $time_zone);
-        }
         $ts = $T_sec + (($timestamp === '') ? time() : Ultimate_Integration_Telegram__tr_num((int) $timestamp));
         $date = explode('_', date('H_i_j_n_O_P_s_w_Y', $ts));
         list($j_y, $j_m, $j_d) = Ultimate_Integration_Telegram__gregorian_to_jalali($date[8], $date[3], $date[2]);
@@ -227,13 +224,8 @@ if (!function_exists("Ultimate_Integration_Telegram__jdate")) {
     }
 }
 if (!function_exists("Ultimate_Integration_Telegram__jstrftime")) {
-    function Ultimate_Integration_Telegram__jstrftime($format, $timestamp = '', $none = '', $time_zone = 'Asia/Tehran', $tr_num = 'fa') {
-
+    function Ultimate_Integration_Telegram__jstrftime($format, $timestamp = '', $none = '', $time_zone = 'local', $tr_num = 'fa') {
         $T_sec = 0;/* <= رفع خطاي زمان سرور ، با اعداد '+' و '-' بر حسب ثانيه */
-
-        if ($time_zone != 'local') {
-            date_default_timezone_set(($time_zone === '') ? 'Asia/Tehran' : $time_zone);
-        }
         $ts = $T_sec + (($timestamp === '') ? time() : Ultimate_Integration_Telegram__tr_num($timestamp));
         $date = explode('_', date('h_H_i_j_n_s_w_Y', $ts));
         list($j_y, $j_m, $j_d) = Ultimate_Integration_Telegram__gregorian_to_jalali($date[7], $date[4], $date[3]);
@@ -459,10 +451,7 @@ if (!function_exists("Ultimate_Integration_Telegram__jstrftime")) {
     }
 }
 if (!function_exists("Ultimate_Integration_Telegram__jmktime")) {
-    function Ultimate_Integration_Telegram__jmktime($h = '', $m = '', $s = '', $jm = '', $jd = '', $jy = '', $none = '', $timezone = 'Asia/Tehran') {
-        if ($timezone != 'local') {
-            date_default_timezone_set($timezone);
-        }
+    function Ultimate_Integration_Telegram__jmktime($h = '', $m = '', $s = '', $jm = '', $jd = '', $jy = '', $none = '', $timezone = 'local') {
         if ($h === '') {
             return time();
         } else {
