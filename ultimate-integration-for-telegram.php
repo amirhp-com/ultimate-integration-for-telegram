@@ -20,7 +20,7 @@
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/03/03 17:22:23
+ * @Last modified time: 2025/03/08 14:39:30
 */
 
 namespace BlackSwan\Ultimate_Integration_Telegram;
@@ -262,8 +262,8 @@ if (!class_exists("Notifier")) {
                 ["text" => "😍 Developer", "url"  => "https://amirhp.com/landing"],
               ),
               array(
-                ['text' => "💻 Contribute (Github)", "url" => "https://github.com/blackswandevcom/ultimate-integration-for-telegram"],
-                ['text' => "🍺 Buy me a Beer (Donate)", "url" => "https://amirhp.com/contact#payment"],
+                ['text' => "💻 Contribute (Github)", "url" => "https://github.com/pigment-dev/ultimate-integration-for-telegram"],
+                ['text' => "🍺 Buy me a Beer", "url" => "https://amirhp.com/contact#payment"],
               ),
               array(
                 ['text' => "🌏 Ultimate Integration for Telegram", "url" => "https://wordpress.org/plugins/ultimate-integration-for-telegram/"],

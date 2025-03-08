@@ -2,7 +2,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/26 22:11:55
+ * @Last modified time: 2025/03/08 14:38:54
 */
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
@@ -40,7 +40,7 @@ class StartCommand extends SystemCommand {
         ["text" => "😍 Developer", "url"  => "https://amirhp.com/landing"],
       ),
       array(
-        ['text' => "💻 Contribute (Github)", "url" => "https://github.com/blackswandevcom/ultimate-integration-for-telegram"],
+        ['text' => "💻 Contribute (Github)", "url" => "https://github.com/pigment-dev/ultimate-integration-for-telegram"],
         ['text' => "🍺 Buy me a Beer (Donate)", "url" => "https://amirhp.com/contact#payment"],
       ),
       array(

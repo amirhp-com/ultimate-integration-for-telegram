@@ -7,25 +7,24 @@
 
 ---
 
-## Key Features
+## Features
 - **Comprehensive Notifications Panel**: Manage notifications for WordPress, WooCommerce, and supported add-ons with ease.
-- **Built-in Translation Manager**: Dynamically translate and replace strings using the built-in gettext manager.
-- **String Replacement Tool**: Replace placeholders or dynamic text in notifications with ease.
-- **WooCommerce and Add-on Support**: Supports WooCommerce core and popular extensions like:
+- **Send Notifications Anywhere**: Send alerts to Telegram channels, groups, bots, or private chats.
+- **WooCommerce & Add-on Support**: Fully supports WooCommerce and popular extensions, including:
   - WooCommerce Subscriptions
   - WooCommerce Memberships
   - WooCommerce Bookings
   - WooCommerce Points and Rewards
   - WooCommerce Multi-Currency
-- **Telegram Bot Integration**: Seamlessly connect your Telegram bot using webhooks for instant message delivery.
-- **Macros for Dynamic Content**: Use an extensive list of predefined macros to customize notifications and buttons with dynamic values (see "Available Macros" section).
-- **Markdown Validator**: Validate your messages for Markdown formatting to avoid rendering issues in Telegram.
-- **Import/Export Notifications**: Easily migrate or duplicate notifications across multiple websites with JSON import/export.
 - **Built-in Jalali (Shamsi) Date Support**: Automatically convert Gregorian dates to Jalali for Persian-speaking audiences.
+- **Import/Export Notifications**: Easily migrate or duplicate notification settings across websites with JSON import/export.
+- **Macros for Dynamic Content**: Customize notifications and buttons with an extensive list of predefined macros.
+- **Built-in Translation Manager**: Dynamically translate and replace strings using the built-in gettext manager.
+- **String Replacement Tool**: Replace placeholders or dynamic text in notifications effortlessly.
 - **HTML and Markdown Support**: Create visually appealing messages with flexible formatting options.
-- **Developer Hooks and Filters**: Extend functionality or integrate with other plugins using robust developer tools.
-- **Test Mode**: Debug and test notifications without sending real messages.
+- **Markdown Validator**: Validate messages for correct Markdown formatting to prevent rendering issues in Telegram.
 - **Custom Buttons**: Add interactive buttons to your Telegram messages for better user engagement.
+- **Developer-Friendly**: Extend functionality using extensive hooks and filters for full customization.
 
 ---
 
@@ -182,9 +181,9 @@ This plugin is provided "as is" without any warranties, express or implied. Whil
 ---
 
 ## About the Developer
-**Ultimate Integration for Telegram** is developed and maintained by **Pigment.Dev**, a dedicated team of WordPress developers focused on creating powerful tools for automation and communication. For more information, visit us at **[pigment.dev](https://pigment.dev/)** or reach out via **[support@pigment.dev](mailto:support@pigment.dev)**.
+**Ultimate Integration for Telegram** is developed and maintained by [BlackSwanDev](https://blackswandev.com/), in collaboration with [Pigment.Dev](https://pigment.dev/). Together, we have joined forces as a dedicated team of WordPress developers, focused on creating powerful tools for automation and communication.
 
-This project is led by **AmirhpCom**, a senior developer and WordPress expert. Learn more at **[AmirhpCom](https://amirhp.com/)**.
+This project is led by **AmirhpCom**, Learn more at **[amirhp.com](https://amirhp.com/)**.
 
 ---
 
