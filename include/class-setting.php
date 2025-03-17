@@ -547,7 +547,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
           <p class="description">
             <?php
             // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-            echo wp_kses_data(sprintf(
+            echo wp_kses_normalize_entities(sprintf(
               // translators: 1: help link, 2: markdown validator
               __('You can use <b>HTML</b>, <b>Markdown</b>, and <b>Macros</b> in your message (See the %1$s). Ensure your Markdown is valid with the "%2$s".', "ultimate-integration-for-telegram"),
               '<a href="https://core.telegram.org/bots/api#markdown-style" target="_blank">' . esc_html__("Telegram Formatting Guide", "ultimate-integration-for-telegram") . '</a>',
