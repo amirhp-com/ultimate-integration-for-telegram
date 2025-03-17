@@ -37,6 +37,10 @@ class ServerResponse extends Entity
      */
     public function __construct(array $data, string $bot_username = '')
     {
+        // Make sure we don't double-save the raw_data
+        unset($data['raw_data']);
+        $data['raw_data'] = $data;
+
         $is_ok  = (bool) ($data['ok'] ?? false);
         $result = $data['result'] ?? null;
 
@@ -103,29 +107,28 @@ class ServerResponse extends Entity
      * @param array  $result
      * @param string $bot_username
      *
-     * @return BotDescription|BotName|BotShortDescription|Chat|ChatAdministratorRights|ChatMember|File|Message|MenuButton|Poll|SentWebAppMessage|StickerSet|User|UserProfilePhotos|WebhookInfo
+     * @return Chat|ChatMember|File|Message|User|UserProfilePhotos|WebhookInfo
      */
     private function createResultObject(array $result, string $bot_username): Entity
     {
         $result_object_types = [
-            'getWebhookInfo'                  => WebhookInfo::class,
-            'getMe'                           => User::class,
-            'getUserProfilePhotos'            => UserProfilePhotos::class,
-            'getFile'                         => File::class,
-            'getChat'                         => Chat::class,
-            'getChatMember'                   => ChatMemberFactory::class,
-            'getMyName'                       => BotName::class,
-            'getMyDescription'                => BotDescription::class,
-            'getMyShortDescription'           => BotShortDescription::class,
-            'getChatMenuButton'               => MenuButtonFactory::class,
-            'getMyDefaultAdministratorRights' => ChatAdministratorRights::class,
-            'getStickerSet'                   => StickerSet::class,
-            'stopPoll'                        => Poll::class,
             'answerWebAppQuery'               => SentWebAppMessage::class,
+            'getChat'                         => Chat::class,
+            'getMyDefaultAdministratorRights' => ChatAdministratorRights::class,
+            'getChatMember'                   => ChatMemberFactory::class,
+            'getChatMenuButton'               => MenuButtonFactory::class,
+            'getFile'                         => File::class,
+            'getMe'                           => User::class,
+            'getStickerSet'                   => StickerSet::class,
+            'getUserProfilePhotos'            => UserProfilePhotos::class,
+            'getWebhookInfo'                  => WebhookInfo::class,
         ];
 
         $action       = Request::getCurrentAction();
         $object_class = $result_object_types[$action] ?? Message::class;
+
+        // We don't need to save the raw_data of the response object!
+        $result['raw_data'] = null;
 
         return Factory::resolveEntityClass($object_class, $result, $bot_username);
     }
@@ -136,18 +139,15 @@ class ServerResponse extends Entity
      * @param array  $results
      * @param string $bot_username
      *
-     * @return BotCommand[]|ChatMember[]|GameHighScore[]|Message[]|Sticker[]|Update[]
+     * @return BotCommand[]|ChatMember[]|GameHighScore[]|Message[]|Update[]
      */
     private function createResultObjects(array $results, string $bot_username): array
     {
         $result_object_types = [
-            'getUpdates'                => Update::class,
-            'getChatAdministrators'     => ChatMemberFactory::class,
-            'getForumTopicIconStickers' => Sticker::class,
-            'getMyCommands'             => BotCommand::class,
-            'getCustomEmojiStickers'    => Sticker::class,
-            'getGameHighScores'         => GameHighScore::class,
-            'sendMediaGroup'            => Message::class,
+            'getMyCommands'         => BotCommand::class,
+            'getChatAdministrators' => ChatMemberFactory::class,
+            'getGameHighScores'     => GameHighScore::class,
+            'sendMediaGroup'        => Message::class,
         ];
 
         $action       = Request::getCurrentAction();
@@ -156,6 +156,9 @@ class ServerResponse extends Entity
         $objects = [];
 
         foreach ($results as $result) {
+            // We don't need to save the raw_data of the response object!
+            $result['raw_data'] = null;
+
             $objects[] = Factory::resolveEntityClass($object_class, $result, $bot_username);
         }
 

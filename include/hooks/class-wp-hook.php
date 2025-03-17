@@ -2,7 +2,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/02/23 22:16:09
+ * @Last modified time: 2025/03/17 05:19:08
  */
 defined("ABSPATH") or die("<h2>Unauthorized Access!</h2><hr><small>Ultimate Integration for Telegram :: Developed by <a href='https://amirhp.com/'>Amirhp-com</a></small>");
 
@@ -71,7 +71,7 @@ class Ultimate_Integration_Telegram_Hooks extends Notifier {
           "user_archive"    => get_author_posts_url($user_id, $user->nickname),
           "user_site"       => $user->user_url,
           "user_registered" => $user->user_registered,
-          "user_jregistered" => pu_jdate('Y-m-d H:i:s', strtotime($user->user_registered), "", "local", "en"),
+          "user_jregistered" => Ultimate_Integration_Telegram__jdate('Y-m-d H:i:s', strtotime($user->user_registered), "", "local", "en"),
           // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
           "user_meta"       => print_r(get_user_meta($user_id), 1),
         );

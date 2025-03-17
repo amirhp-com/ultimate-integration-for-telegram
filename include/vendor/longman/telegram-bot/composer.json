@@ -29,7 +29,7 @@
         }
     ],
     "require": {
-        "php": "^8.1",
+        "php": "^7.3|^8.0",
         "ext-pdo": "*",
         "ext-curl": "*",
         "ext-json": "*",
@@ -61,10 +61,10 @@
             "\"vendor/bin/phpunit\""
         ],
         "test-cov": [
-            "XDEBUG_MODE=coverage \"vendor/bin/phpunit\" --coverage-clover clover.xml"
+            "\"vendor/bin/phpunit\" --coverage-clover clover.xml"
         ],
         "test-cov-upload": [
-            "@php ocular.phar code-coverage:upload --format=php-clover clover.xml"
+            "wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover clover.xml"
         ]
     },
     "config": {
@@ -72,10 +72,5 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "process-timeout": 3600
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-develop": "0.83.x-dev"
-        }
     }
 }

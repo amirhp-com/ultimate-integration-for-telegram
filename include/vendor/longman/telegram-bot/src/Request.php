@@ -13,7 +13,6 @@ namespace Longman\TelegramBot;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Stream;
 use Longman\TelegramBot\Entities\File;
@@ -35,9 +34,7 @@ use Throwable;
  * @method static ServerResponse logOut()                                     Use this method to log out from the cloud Bot API server before launching the bot locally. Requires no parameters. Returns True on success.
  * @method static ServerResponse close()                                      Use this method to close the bot instance before moving it from one local server to another. Requires no parameters. Returns True on success.
  * @method static ServerResponse forwardMessage(array $data)                  Use this method to forward messages of any kind. On success, the sent Message is returned.
- * @method static ServerResponse forwardMessages(array $data)                 Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album grouping is kept for forwarded messages. On success, an array of MessageId of the sent messages is returned.
  * @method static ServerResponse copyMessage(array $data)                     Use this method to copy messages of any kind. The method is analogous to the method forwardMessages, but the copied message doesn't have a link to the original message. Returns the MessageId of the sent message on success.
- * @method static ServerResponse copyMessages(array $data)                    Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an array of MessageId of the sent messages is returned.
  * @method static ServerResponse sendPhoto(array $data)                       Use this method to send photos. On success, the sent Message is returned.
  * @method static ServerResponse sendAudio(array $data)                       Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .mp3 format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
  * @method static ServerResponse sendDocument(array $data)                    Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future.
@@ -55,7 +52,6 @@ use Throwable;
  * @method static ServerResponse sendPoll(array $data)                        Use this method to send a native poll. A native poll can't be sent to a private chat. On success, the sent Message is returned.
  * @method static ServerResponse sendDice(array $data)                        Use this method to send a dice, which will have a random value from 1 to 6. On success, the sent Message is returned.
  * @method static ServerResponse sendChatAction(array $data)                  Use this method when you need to tell the user that something is happening on the bot's side. The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients clear its typing status). Returns True on success.
- * @method static ServerResponse setMessageReaction(array $data)              Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Returns True on success.
  * @method static ServerResponse getUserProfilePhotos(array $data)            Use this method to get a list of profile pictures for a user. Returns a UserProfilePhotos object.
  * @method static ServerResponse getFile(array $data)                         Use this method to get basic info about a file and prepare it for downloading. For the moment, bots can download files of up to 20MB in size. On success, a File object is returned. The file can then be downloaded via the link https://api.telegram.org/file/bot<token>/<file_path>, where <file_path> is taken from the response. It is guaranteed that the link will be valid for at least 1 hour. When the link expires, a new one can be requested by calling getFile again.
  * @method static ServerResponse banChatMember(array $data)                   Use this method to kick a user from a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the group on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights. Returns True on success.
@@ -86,31 +82,11 @@ use Throwable;
  * @method static ServerResponse getChatMember(array $data)                   Use this method to get information about a member of a chat. Returns a ChatMember object on success.
  * @method static ServerResponse setChatStickerSet(array $data)               Use this method to set a new group sticker set for a supergroup. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights. Use the field can_set_sticker_set optionally returned in getChat requests to check if the bot can use this method. Returns True on success.
  * @method static ServerResponse deleteChatStickerSet(array $data)            Use this method to delete a group sticker set from a supergroup. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights. Use the field can_set_sticker_set optionally returned in getChat requests to check if the bot can use this method. Returns True on success.
- * @method static ServerResponse getForumTopicIconStickers(array $data)       Use this method to get custom emoji stickers, which can be used as a forum topic icon by any user. Requires no parameters. Returns an Array of Sticker objects
- * @method static ServerResponse createForumTopic(array $data)                Use this method to create a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns information about the created topic as a ForumTopic object.
- * @method static ServerResponse editForumTopic(array $data)                  Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success.
- * @method static ServerResponse closeForumTopic(array $data)                 Use this method to close an open topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success.
- * @method static ServerResponse reopenForumTopic(array $data)                Use this method to reopen a closed topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success.
- * @method static ServerResponse deleteForumTopic(array $data)                Use this method to delete a forum topic along with all its messages in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_delete_messages administrator rights. Returns True on success.
- * @method static ServerResponse unpinAllForumTopicMessages(array $data)      Use this method to clear the list of pinned messages in a forum topic. The bot must be an administrator in the chat for this to work and must have the can_pin_messages administrator right in the supergroup. Returns True on success.
- * @method static ServerResponse editGeneralForumTopic(array $data)           Use this method to edit the name of the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have can_manage_topics administrator rights. Returns True on success.
- * @method static ServerResponse closeGeneralForumTopic(array $data)          Use this method to close an open 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.
- * @method static ServerResponse reopenGeneralForumTopic(array $data)         Use this method to reopen a closed 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. The topic will be automatically unhidden if it was hidden. Returns True on success.
- * @method static ServerResponse hideGeneralForumTopic(array $data)           Use this method to hide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. The topic will be automatically closed if it was open. Returns True on success.
- * @method static ServerResponse unhideGeneralForumTopic(array $data)         Use this method to unhide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.
- * @method static ServerResponse unpinAllGeneralForumTopicMessages(array $data) Use this method to clear the list of pinned messages in a General forum topic. The bot must be an administrator in the chat for this to work and must have the can_pin_messages administrator right in the supergroup. Returns True on success.
  * @method static ServerResponse answerCallbackQuery(array $data)             Use this method to send answers to callback queries sent from inline keyboards. The answer will be displayed to the user as a notification at the top of the chat screen or as an alert. On success, True is returned.
  * @method static ServerResponse answerInlineQuery(array $data)               Use this method to send answers to an inline query. On success, True is returned.
- * @method static ServerResponse getUserChatBoosts(array $data)               Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat. Returns a UserChatBoosts object.
  * @method static ServerResponse setMyCommands(array $data)                   Use this method to change the list of the bot's commands. Returns True on success.
  * @method static ServerResponse deleteMyCommands(array $data)                Use this method to delete the list of the bot's commands for the given scope and user language. After deletion, higher level commands will be shown to affected users. Returns True on success.
  * @method static ServerResponse getMyCommands(array $data)                   Use this method to get the current list of the bot's commands. Requires no parameters. Returns Array of BotCommand on success.
- * @method static ServerResponse setMyName(array $data)                       Use this method to change the bot's name. Returns True on success.
- * @method static ServerResponse getMyName(array $data)                       Use this method to get the current bot name for the given user language. Returns BotName on success.
- * @method static ServerResponse setMyDescription(array $data)                Use this method to change the bot's description, which is shown in the chat with the bot if the chat is empty. Returns True on success.
- * @method static ServerResponse getMyDescription(array $data)                Use this method to get the current bot description for the given user language. Returns BotDescription on success.
- * @method static ServerResponse setMyShortDescription(array $data)           Use this method to change the bot's short description, which is shown on the bot's profile page and is sent together with the link when users share the bot. Returns True on success.
- * @method static ServerResponse getMyShortDescription(array $data)           Use this method to get the current bot short description for the given user language. Returns BotShortDescription on success.
  * @method static ServerResponse setChatMenuButton(array $data)               Use this method to change the bot's menu button in a private chat, or the default menu button. Returns True on success.
  * @method static ServerResponse getChatMenuButton(array $data)               Use this method to get the current value of the bot's menu button in a private chat, or the default menu button. Returns MenuButton on success.
  * @method static ServerResponse setMyDefaultAdministratorRights(array $data) Use this method to change the default administrator rights requested by the bot when it's added as an administrator to groups or channels. These rights will be suggested to users, but they are are free to modify the list before adding the bot. Returns True on success.
@@ -121,7 +97,6 @@ use Throwable;
  * @method static ServerResponse editMessageReplyMarkup(array $data)          Use this method to edit only the reply markup of messages sent by the bot or via the bot (for inline bots). On success, if edited message is sent by the bot, the edited Message is returned, otherwise True is returned.
  * @method static ServerResponse stopPoll(array $data)                        Use this method to stop a poll which was sent by the bot. On success, the stopped Poll with the final results is returned.
  * @method static ServerResponse deleteMessage(array $data)                   Use this method to delete a message, including service messages, with certain limitations. Returns True on success.
- * @method static ServerResponse deleteMessages(array $data)                  Use this method to delete multiple messages simultaneously. If some of the specified messages can't be found, they are skipped. Returns True on success.
  * @method static ServerResponse getStickerSet(array $data)                   Use this method to get a sticker set. On success, a StickerSet object is returned.
  * @method static ServerResponse getCustomEmojiStickers(array $data)          Use this method to get information about custom emoji stickers by their identifiers. Returns an Array of Sticker objects.
  * @method static ServerResponse uploadStickerFile(array $data)               Use this method to upload a .png file with a sticker for later use in createNewStickerSet and addStickerToSet methods (can be used multiple times). Returns the uploaded File on success.
@@ -129,13 +104,7 @@ use Throwable;
  * @method static ServerResponse addStickerToSet(array $data)                 Use this method to add a new sticker to a set created by the bot. Returns True on success.
  * @method static ServerResponse setStickerPositionInSet(array $data)         Use this method to move a sticker in a set created by the bot to a specific position. Returns True on success.
  * @method static ServerResponse deleteStickerFromSet(array $data)            Use this method to delete a sticker from a set created by the bot. Returns True on success.
- * @method static ServerResponse setStickerEmojiList(array $data)             Use this method to change the list of emoji assigned to a regular or custom emoji sticker. The sticker must belong to a sticker set created by the bot. Returns True on success.
- * @method static ServerResponse setStickerKeywords(array $data)              Use this method to change search keywords assigned to a regular or custom emoji sticker. The sticker must belong to a sticker set created by the bot. Returns True on success.
- * @method static ServerResponse setStickerMaskPosition(array $data)          Use this method to change the mask position of a mask sticker. The sticker must belong to a sticker set that was created by the bot. Returns True on success.
- * @method static ServerResponse setStickerSetTitle(array $data)              Use this method to set the title of a created sticker set. Returns True on success.
- * @method static ServerResponse setStickerSetThumbnail(array $data)          Use this method to set the thumbnail of a sticker set. Animated thumbnails can be set for animated sticker sets only. Returns True on success.
- * @method static ServerResponse setCustomEmojiStickerSetThumbnail(array $data) Use this method to set the thumbnail of a custom emoji sticker set. Returns True on success.
- * @method static ServerResponse deleteStickerSet(array $data)                Use this method to delete a sticker set that was created by the bot. Returns True on success.
+ * @method static ServerResponse setStickerSetThumb(array $data)              Use this method to set the thumbnail of a sticker set. Animated thumbnails can be set for animated sticker sets only. Returns True on success.
  * @method static ServerResponse answerWebAppQuery(array $data)               Use this method to set the result of an interaction with a Web App and send a corresponding message on behalf of the user to the chat from which the query originated. On success, a SentWebAppMessage object is returned.
  * @method static ServerResponse sendInvoice(array $data)                     Use this method to send invoices. On success, the sent Message is returned.
  * @method static ServerResponse createInvoiceLink(array $data)               Use this method to create a link for an invoice. Returns the created invoice link as String on success.
@@ -216,9 +185,7 @@ class Request
         'close',
         'sendMessage',
         'forwardMessage',
-        'forwardMessages',
         'copyMessage',
-        'copyMessages',
         'sendPhoto',
         'sendAudio',
         'sendDocument',
@@ -236,7 +203,6 @@ class Request
         'sendPoll',
         'sendDice',
         'sendChatAction',
-        'setMessageReaction',
         'getUserProfilePhotos',
         'getFile',
         'banChatMember',
@@ -267,31 +233,11 @@ class Request
         'getChatMember',
         'setChatStickerSet',
         'deleteChatStickerSet',
-        'getForumTopicIconStickers',
-        'createForumTopic',
-        'editForumTopic',
-        'closeForumTopic',
-        'reopenForumTopic',
-        'deleteForumTopic',
-        'unpinAllForumTopicMessages',
-        'editGeneralForumTopic',
-        'closeGeneralForumTopic',
-        'reopenGeneralForumTopic',
-        'hideGeneralForumTopic',
-        'unhideGeneralForumTopic',
-        'unpinAllGeneralForumTopicMessages',
         'answerCallbackQuery',
         'answerInlineQuery',
-        'getUserChatBoosts',
         'setMyCommands',
         'deleteMyCommands',
         'getMyCommands',
-        'setMyName',
-        'getMyName',
-        'setMyDescription',
-        'getMyDescription',
-        'setMyShortDescription',
-        'getMyShortDescription',
         'setChatMenuButton',
         'getChatMenuButton',
         'setMyDefaultAdministratorRights',
@@ -302,7 +248,6 @@ class Request
         'editMessageReplyMarkup',
         'stopPoll',
         'deleteMessage',
-        'deleteMessages',
         'getStickerSet',
         'getCustomEmojiStickers',
         'uploadStickerFile',
@@ -310,13 +255,7 @@ class Request
         'addStickerToSet',
         'setStickerPositionInSet',
         'deleteStickerFromSet',
-        'setStickerEmojiList',
-        'setStickerKeywords',
-        'setStickerMaskPosition',
-        'setStickerSetTitle',
-        'setStickerSetThumbnail',
-        'setCustomEmojiStickerSetThumbnail',
-        'deleteStickerSet',
+        'setStickerSetThumb',
         'answerWebAppQuery',
         'sendInvoice',
         'createInvoiceLink',
@@ -329,7 +268,7 @@ class Request
     ];
 
     /**
-     * Methods that don't require any data need a dummy param due to certain cURL issues.
+     * Some methods need a dummy param due to certain cURL issues.
      *
      * @see Request::addDummyParamIfNecessary()
      *
@@ -343,12 +282,6 @@ class Request
         'close',
         'deleteMyCommands',
         'getMyCommands',
-        'setMyName',
-        'getMyName',
-        'setMyDescription',
-        'getMyDescription',
-        'setMyShortDescription',
-        'getMyShortDescription',
         'setChatMenuButton',
         'getChatMenuButton',
         'setMyDefaultAdministratorRights',
@@ -359,26 +292,25 @@ class Request
      * Available fields for InputFile helper
      *
      * This is basically the list of all fields that allow InputFile objects
-     * for which input can be simplified by providing local path directly as string.
+     * for which input can be simplified by providing local path directly  as string.
      *
      * @var array
      */
     private static $input_file_fields = [
         'setWebhook'          => ['certificate'],
         'sendPhoto'           => ['photo'],
-        'sendAudio'           => ['audio', 'thumbnail'],
-        'sendDocument'        => ['document', 'thumbnail'],
-        'sendVideo'           => ['video', 'thumbnail'],
-        'sendAnimation'       => ['animation', 'thumbnail'],
-        'sendVoice'           => ['voice'],
-        'sendVideoNote'       => ['video_note', 'thumbnail'],
+        'sendAudio'           => ['audio', 'thumb'],
+        'sendDocument'        => ['document', 'thumb'],
+        'sendVideo'           => ['video', 'thumb'],
+        'sendAnimation'       => ['animation', 'thumb'],
+        'sendVoice'           => ['voice', 'thumb'],
+        'sendVideoNote'       => ['video_note', 'thumb'],
         'setChatPhoto'        => ['photo'],
         'sendSticker'         => ['sticker'],
-        'uploadStickerFile'   => ['sticker'],
-        // @todo Look into new InputSticker field and see if we can do the same there.
-        // 'createNewStickerSet' => ['png_sticker', 'tgs_sticker', 'webm_sticker'],
-        // 'addStickerToSet'     => ['png_sticker', 'tgs_sticker', 'webm_sticker'],
-        'setStickerSetThumbnail' => ['thumbnail'],
+        'uploadStickerFile'   => ['png_sticker'],
+        'createNewStickerSet' => ['png_sticker', 'tgs_sticker', 'webm_sticker'],
+        'addStickerToSet'     => ['png_sticker', 'tgs_sticker', 'webm_sticker'],
+        'setStickerSetThumb'  => ['thumb'],
     ];
 
     /**
@@ -410,10 +342,6 @@ class Request
      */
     public static function setCustomBotApiUri(string $api_base_uri, string $api_base_download_uri = ''): void
     {
-        if (self::$client) {
-            throw new TelegramException('setCustomBotApiUri() needs to be called before the Telegram object gets instantiated.');
-        }
-
         self::$api_base_uri = $api_base_uri;
         if ($api_base_download_uri !== '') {
             self::$api_base_download_uri = $api_base_download_uri;
@@ -561,8 +489,8 @@ class Request
 
             // Make a list of all possible media that can be handled by the helper.
             $possible_medias = array_filter([
-                'media'     => $media_item->getMedia(),
-                'thumbnail' => $media_item->getThumbnail(),
+                'media' => $media_item->getMedia(),
+                'thumb' => $media_item->getThumb(),
             ]);
 
             foreach ($possible_medias as $type => $media) {
@@ -618,9 +546,6 @@ class Request
                 $request_params
             );
             $result   = (string) $response->getBody();
-        } catch (ConnectException $e) {
-            $response = null;
-            $result   = $e->getMessage();
         } catch (RequestException $e) {
             $response = null;
             $result   = $e->getResponse() ? (string) $e->getResponse()->getBody() : '';
@@ -951,9 +876,7 @@ class Request
             $limited_methods = [
                 'sendMessage',
                 'forwardMessage',
-                'forwardMessages',
                 'copyMessage',
-                'copyMessages',
                 'sendPhoto',
                 'sendAudio',
                 'sendDocument',
@@ -970,7 +893,6 @@ class Request
                 'sendContact',
                 'sendPoll',
                 'sendDice',
-                'setMessageReaction',
                 'sendInvoice',
                 'sendGame',
                 'setGameScore',
@@ -981,8 +903,6 @@ class Request
                 'editMessageMedia',
                 'editMessageReplyMarkup',
                 'stopPoll',
-                'deleteMessage',
-                'deleteMessages',
                 'setChatTitle',
                 'setChatDescription',
                 'setChatStickerSet',

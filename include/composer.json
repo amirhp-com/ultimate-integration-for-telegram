@@ -17,12 +17,12 @@
     }
   },
   "require": {
-    "php": "^8.1",
+    "php": ">=7.4",
     "longman/telegram-bot": "^0.83"
   },
   "config": {
     "platform": {
-      "php": "8.1.0"
+      "php": "7.4.0"
     },
     "optimize-autoloader": true,
     "preferred-install": "dist",

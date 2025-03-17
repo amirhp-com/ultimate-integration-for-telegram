@@ -2,8 +2,8 @@
 /*
  * Plugin Name: Ultimate Integration for Telegram
  * Description: Integrate Telegram with WordPress, WooCommerce, and a wide range of plugins. Send customized notifications to channels, groups, bots, or private chats with built-in advanced translation and string replacement tools.
- * Version: 1.0.7
- * Stable tag: 1.0.7
+ * Version: 1.1.0
+ * Stable tag: 1.1.0
  * Author: BlackSwan
  * Author URI: https://amirhp.com/landing
  * Plugin URI: https://wordpress.org/plugins/ultimate-integration-for-telegram/
@@ -20,7 +20,7 @@
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/03/08 14:39:30
+ * @Last modified time: 2025/03/17 05:19:24
 */
 
 namespace BlackSwan\Ultimate_Integration_Telegram;
@@ -32,7 +32,7 @@ if (!class_exists("Notifier")) {
     protected $td = "ultimate-integration-for-telegram";
     protected $title = "Ultimate Integration for Telegram";
     protected $db_slug = "ultimate-integration-for-telegram";
-    protected $version = "1.0.7";
+    protected $version = "1.1.0";
     protected $title_small = "Telegram";
     protected $assets_url;
     protected $hook_url;
@@ -221,7 +221,7 @@ if (!class_exists("Notifier")) {
               ">*Your Site Information:*\n" .
               ">Host URL: {$site_host}\n" .
               ">Server Date: " . wp_date("Y/m/d H:i:s", current_time("timestamp")) . "\n" .
-              ">Server jDate: " . pu_jdate("Y/m/d H:i:s", current_time("timestamp"), "", "local", "en") . "\n" .
+              ">Server jDate: " . Ultimate_Integration_Telegram__jdate("Y/m/d H:i:s", current_time("timestamp"), "", "local", "en") . "\n" .
               ">Plugin Version: {$this->version}\n" .
               ">WordPress: {$wp_version}\n" .
               ">WooCommerce: {$wc_version}\n" .
@@ -676,8 +676,8 @@ if (!class_exists("Notifier")) {
         "current_time"       => wp_date(get_option("time_format"), current_time("timestamp")),
         "current_date"       => wp_date(get_option("date_format"), current_time("timestamp")),
         "current_date_time"  => wp_date(get_option("date_format") . " " . get_option("time_format"), current_time("timestamp")),
-        "current_jdate"      => pu_jdate("Y/m/d", current_time("timestamp"), "", "local", "en"),
-        "current_jdate_time" => pu_jdate("Y/m/d H:i:s", current_time("timestamp"), "", "local", "en"),
+        "current_jdate"      => Ultimate_Integration_Telegram__jdate("Y/m/d", current_time("timestamp"), "", "local", "en"),
+        "current_jdate_time" => Ultimate_Integration_Telegram__jdate("Y/m/d H:i:s", current_time("timestamp"), "", "local", "en"),
         "current_user_id"    => get_current_user_id(),
         "current_user_name"  => $this->display_user(get_current_user_id(), false, false),
         "site_name"          => get_bloginfo("name"),

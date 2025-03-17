@@ -156,13 +156,13 @@ class Ultimate_Integration_Telegram_Orders extends Notifier {
         "order_payment_method_title" => $order->get_payment_method_title(), // Payment Method Title
         "transaction_id"             => $order->get_transaction_id(), // Transaction ID
         "order_date"                 => $order->get_date_created() ? $order->get_date_created()->date('Y-m-d H:i:s') : '', // Order Creation Date
-        "order_jalali_date"          => pu_jdate('Y/m/d H:i:s', strtotime($order->get_date_created()), "", "local", "en"), // Order Creation Date (Jalali)
+        "order_jalali_date"          => Ultimate_Integration_Telegram__jdate('Y/m/d H:i:s', strtotime($order->get_date_created()), "", "local", "en"), // Order Creation Date (Jalali)
         "order_modified_date"        => $order->get_date_modified() ? $order->get_date_modified()->date('Y-m-d H:i:s') : '', // Order Last Modified Date
-        "order_jalali_modified"      => pu_jdate('Y/m/d H:i:s', strtotime($order->get_date_modified()), "", "local", "en"), // Order Last Modified Date (Jalali)
+        "order_jalali_modified"      => Ultimate_Integration_Telegram__jdate('Y/m/d H:i:s', strtotime($order->get_date_modified()), "", "local", "en"), // Order Last Modified Date (Jalali)
         "order_date_completed"       => $order->get_date_completed() ? $order->get_date_completed()->date('Y-m-d H:i:s') : '', // Order Completed Date
-        "order_jalali_completed"     => pu_jdate('Y/m/d H:i:s', strtotime($order->get_date_completed()), "", "local", "en"), // Order Completed Date (Jalali)
+        "order_jalali_completed"     => Ultimate_Integration_Telegram__jdate('Y/m/d H:i:s', strtotime($order->get_date_completed()), "", "local", "en"), // Order Completed Date (Jalali)
         "order_date_paid"            => $order->get_date_paid() ? $order->get_date_paid()->date('Y-m-d H:i:s') : '', // Order Paid Date
-        "order_jalali_paid"          => pu_jdate('Y/m/d H:i:s', strtotime($order->get_date_paid()), "", "local", "en"), // Order Paid Date (Jalali)
+        "order_jalali_paid"          => Ultimate_Integration_Telegram__jdate('Y/m/d H:i:s', strtotime($order->get_date_paid()), "", "local", "en"), // Order Paid Date (Jalali)
         "order_customer_ip"          => $order->get_customer_ip_address(), // Customer IP Address
         "order_user_agent"           => $order->get_customer_user_agent(), // Customer User Agent
         "order_meta_data"            => wp_json_encode($order->get_meta_data()), // Order Meta Data

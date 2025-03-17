@@ -52,7 +52,7 @@ class DebugCommand extends AdminCommand
     public function execute(): ServerResponse
     {
         $pdo     = DB::getPdo();
-        $message = $this->getMessage() ?: $this->getEditedMessage() ?: $this->getChannelPost() ?: $this->getEditedChannelPost();
+        $message = $this->getMessage();
         $chat    = $message->getChat();
         $text    = strtolower($message->getText(true));
 

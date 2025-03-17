@@ -26,12 +26,7 @@ use Longman\TelegramBot\Entities\InputMedia\InputMedia;
  */
 abstract class Entity implements \JsonSerializable
 {
-    public static $fixThumbnailRename = true;
 
-    public $bot_username = '';
-    public $raw_data = [];
-
-    private $fields = [];
 
     /**
      * Entity constructor.
@@ -43,34 +38,18 @@ abstract class Entity implements \JsonSerializable
      */
     public function __construct(array $data, string $bot_username = '')
     {
-        $this->bot_username = $bot_username;
-        $this->raw_data     = $data;
+        //Make sure we're not raw_data inception-ing
+        if (array_key_exists('raw_data', $data)) {
+            if ($data['raw_data'] === null) {
+                unset($data['raw_data']);
+            }
+        } else {
+            $data['raw_data'] = $data;
+        }
 
+        $data['bot_username'] = $bot_username;
         $this->assignMemberVariables($data);
         $this->validate();
-    }
-
-    /**
-     * Dynamically set a field.
-     *
-     * @param string $name
-     * @param mixed  $value
-     * @return void
-     */
-    public function __set(string $name, $value): void
-    {
-        $this->fields[$name] = $value;
-    }
-
-    /**
-     * Gets a dynamic field.
-     *
-     * @param string $name
-     * @return mixed|null
-     */
-    public function __get(string $name)
-    {
-        return $this->fields[$name] ?? null;
     }
 
     /**
@@ -80,7 +59,13 @@ abstract class Entity implements \JsonSerializable
      */
     public function jsonSerialize(): array
     {
-        return $this->fields;
+        $data = get_object_vars($this);
+
+        // Delete unnecessary data
+        unset($data['raw_data']);
+        unset($data['bot_username']);
+
+        return $data;
     }
 
     /**
@@ -111,7 +96,6 @@ abstract class Entity implements \JsonSerializable
     protected function assignMemberVariables(array $data): void
     {
         foreach ($data as $key => $value) {
-            $key = $this->fixThumbnailRename($key);
             $this->$key = $value;
         }
     }
@@ -156,11 +140,8 @@ abstract class Entity implements \JsonSerializable
      */
     public function __call($method, $args)
     {
-        $method = $this->fixThumbnailRename($method);
-
         //Convert method to snake_case (which is the name of the property)
         $property_name = mb_strtolower(ltrim(preg_replace('/[A-Z]/', '_$0', substr($method, 3)), '_'));
-        $property_name = $this->fixThumbnailRename($property_name);
 
         $action = substr($method, 0, 3);
         if ($action === 'get') {
@@ -193,23 +174,6 @@ abstract class Entity implements \JsonSerializable
         }
 
         return null;
-    }
-
-    /**
-     * BC for renamed thumb -> thumbnail methods and fields
-     *
-     * @todo Remove after a few versions.
-     *
-     * @param string $name
-     * @return string
-     */
-    protected function fixThumbnailRename(string $name): string
-    {
-        return self::$fixThumbnailRename ? preg_replace('/([Tt])humb(nail)?/', '$1humbnail', $name, -1, $count) : $name;
-
-        /*if ($count) {
-            // Notify user that there are still outdated method calls?
-        }*/
     }
 
     /**

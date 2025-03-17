@@ -1,6 +1,6 @@
 === Ultimate Integration for Telegram ===
-Version: 1.0.7
-Stable tag: 1.0.7
+Version: 1.1.0
+Stable tag: 1.1.0
 Author: BlackSwan
 Donate link: https://amirhp.com/contact/
 Author URI: https://amirhp.com/landing
@@ -104,7 +104,7 @@ Here are some examples of how you can use macros in your notifications:
 
 === Example 1: New Order Notification ===
 **Message:**
-```
+`
 🎉 New Order Received! 🎉
 
 Order ID: {order_id}
@@ -112,28 +112,28 @@ Customer: {customer_name}
 Total: {order_total}
 
 View Order: {edit_url}
-```
+`
 
 === Example 2: Subscription Renewal Reminder ===
 **Message:**
-```
+`
 🔔 Subscription Renewal Alert 🔔
 
 Subscription ID: {subscription_id}
 Plan: {membership_plan}
 Next Payment Date: {subscription_end_date}
-```
+`
 
 === Example 3: Booking Confirmation ===
 **Message:**
-```
+`
 ✅ Booking Confirmed ✅
 
 Booking ID: {booking_id}
 Date: {booking_date}
 Start Time: {booking_start_time}
 End Time: {booking_end_time}
-```
+`
 
 
 === Supported Add-ons and Plugins ===
@@ -238,11 +238,19 @@ Developed at: [BlackSwanDev](https://blackswandev.com/) & [Pigment.Dev](https://
 Lead Developer: [AmirhpCom](https://amirhp.com/)
 
 == Upgrade Notice ==
-= v1.0.7 | 2025-01-20 | 1403-11-01 =
 Upgrade to enjoy the latest features and stability improvements.
+
+= v1.1.0 | 2025-03-17 | 1403-12-27 =
+* Set minimum PHP required to 7.4
+* Fixed Markdown Validator
 
 == Changelog ==
 For full changelog please view [Github Repository (github.com/pigment-dev/ultimate-integration-for-telegram)](https://github.com/pigment-dev/ultimate-integration-for-telegram)
+
+= v1.1.0 | 2025-03-17 | 1403-12-27 =
+* Set minimum PHP required to 7.4
+* Fixed Markdown Validator
+
 = v1.0.0 | 2025-01-20 | 1403-11-01 =
 * Initial release of Ultimate Integration for Telegram.
 * Telegram bot integration with webhook support.
