@@ -2,7 +2,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/03/08 14:38:54
+ * @Last modified time: 2025/06/11 18:42:55
  */
 
 namespace Longman\TelegramBot\Commands\UserCommands;
@@ -19,26 +19,41 @@ class AboutCommand extends UserCommand {
   public function execute(): ServerResponse {
     $message = $this->getMessage();
     $chat_id = $message->getChat()->getId();
-    $msg = "Hi there! 👋\n\n*Welcome to Ultimate Integration for Telegrams*\n" .
-      "Seamlessly connect your WordPress site & WooCommerce store to Telegram.\n\n" .
-      "With our Plugin, you’ll receive instant, real-time notifications for important events like new WooCommerce orders, user registrations, and WordPress emails. Replace traditional email notifications with fast and customizable Telegram messages tailored to your needs.\n\n".
-      "\[ Developed by Amirhossein Hosseinpour [(amirhp.com)](https://amirhp.com/) ]";
-    $markup = array(
-      array(
-        ['text' => "💻 Contribute (Github)", "url" => "https://github.com/pigment-dev/ultimate-integration-for-telegram"],
-        ['text' => "🍺 Buy me a Beer (Donate)", "url" => "https://amirhp.com/contact#payment"],
-      ),
-      array(
-        ['text' => "🌏 Ultimate Integration for Telegram", "url" => "https://wordpress.org/plugins/ultimate-integration-for-telegram/"],
-      ),
-    );
+    $msg =
+"*Hi there! 👋*
+*Welcome to Ultimate Integration for Telegram*
+
+Take your WordPress & WooCommerce experience to the next level with *instant, real-time Telegram notifications* — faster and more reliable than emails!
+
+*You'll get notified instantly when:*
+👤 A new user registers
+🛒 A new WooCommerce order is placed
+📧 A contact form is submitted
+🔔 A new comment is posted
+📦 An order status is updated
+💰 A payment is completed or fails
+✅ A product goes out of stock or comes back
+➕ And much more...
+
+*Why you'll love it:*
+✨ Super fast and customizable alerts
+🔗 Works with channels, groups, or private chats
+🔐 Secure — Everything is Open-source
+🗂️ Supports macros and smart message templates
+🌐 Multi-site compatible
+📚 Developer-friendly with tons of hooks & filters
+🧪 Test message system included
+🕓 24/7 support and documentation available
+
+No more refreshing dashboards or missing emails — just clear, instant messages where you already spend time: *Telegram* 🚀";
+
 
     return $this->replyToChat($msg, array(
       "parse_mode"               => "markdown",
       "reply_to_message_id"      => $message->getMessageId(),
       "protect_content"          => true,
       "disable_web_page_preview" => true,
-      "reply_markup" => ["inline_keyboard" => $markup],
+      "reply_markup" => ["inline_keyboard" => [[["text"=>"🛟 Need Help? Get Instant Support", "url"=>"https://t.me/pigment_dev"]]]],
     ));
   }
 }

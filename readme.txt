@@ -1,15 +1,15 @@
 === Ultimate Integration for Telegram ===
-Version: 1.1.0
-Stable tag: 1.1.0
+Version: 1.2.0
+Stable tag: 1.2.0
 Author: BlackSwan
 Donate link: https://amirhp.com/contact/
 Author URI: https://amirhp.com/landing
 Plugin URI: https://wordpress.org/plugins/ultimate-integration-for-telegram/
 Contributors: amirhpcom, blackswanlab, pigmentdev
 Tags: woocommerce, telegram, notification, automation
-Tested up to: 6.7
+Tested up to: 6.8
 WC requires at least: 5.0
-WC tested up to: 9.7
+WC tested up to: 9.9.3
 Text Domain: ultimate-integration-for-telegram
 Domain Path: /languages
 Copyright: (c) BlackSwanDev, All rights reserved.
@@ -187,10 +187,12 @@ The plugin is also open to integration with other plugins via hooks and filters.
 == Disclaimer and Warranty ==
 This plugin is provided "as is" without any warranties, express or implied. While every effort has been made to ensure reliability and security, the developers are not responsible for any issues arising from its use. Always test in a staging environment before deploying to production.
 
+== Contribution and Support ==
+We welcome contributions to improve the plugin! If you have feature requests, bug reports, or suggestions, please create a GitHub issue or pull request.
 
-== About the Developer ==
-**Ultimate Integration for Telegram** is developed and maintained by [BlackSwanDev](https://blackswandev.com/), in collaboration with [Pigment.Dev](https://pigment.dev/). Together, we have joined forces as a dedicated team of WordPress developers, focused on creating powerful tools for automation and communication.
-This project is led by **AmirhpCom**, Learn more at **[amirhp.com](https://amirhp.com/)**.
+Github Repository: [https://github.com/pigment-dev/ultimate-integration-for-telegram](https://github.com/pigment-dev/ultimate-integration-for-telegram)
+
+For support, contact us at **[support (at) pigment (dot) dev](mailto:support@pigment.dev)**.
 
 
 == Third-Party & External Resources Used ==
@@ -233,26 +235,17 @@ You can help us improve our works by committing your changes to [pigment-dev/ult
 = Does the plugin support WooCommerce add-ons? =
 Yes, it supports major WooCommerce add-ons like WooCommerce Subscription, WooCommerce Membership, and WooCommerce Booking.
 
-== Credits ==
-Developed at: [BlackSwanDev](https://blackswandev.com/) & [Pigment.Dev](https://pigment.dev/)
-Lead Developer: [AmirhpCom](https://amirhp.com/)
-
 == Upgrade Notice ==
 Upgrade to enjoy the latest features and stability improvements.
 
-= v1.1.0 | 2025-03-17 | 1403-12-27 =
-* Set minimum PHP required to 7.4
-* Fixed Markdown Validator
+= v1.2.0 | 2025-06-07 | 1404-03-17 =
+* Added New Integration: WordPress Comments
+* Added New Integration: WooCommerce Comments
+* Added Pre-defined Notification Text
+* Added Pre-defined Notifications List on first setup
+* Added Setup Wizard & Enhanced Setup UIX
+* Changed Telegram Bot Response Messages
+
 
 == Changelog ==
-For full changelog please view [Github Repository (github.com/pigment-dev/ultimate-integration-for-telegram)](https://github.com/pigment-dev/ultimate-integration-for-telegram)
-
-= v1.1.0 | 2025-03-17 | 1403-12-27 =
-* Set minimum PHP required to 7.4
-* Fixed Markdown Validator
-
-= v1.0.0 | 2025-01-20 | 1403-11-01 =
-* Initial release of Ultimate Integration for Telegram.
-* Telegram bot integration with webhook support.
-* Notification macros and string replacement features.
-* Full WooCommerce integration.
+For full changelog please view [Github Repository (github.com/pigment-dev/ultimate-integration-for-telegram)](https://github.com/pigment-dev/ultimate-integration-for-telegram#?tab=readme-ov-file#changelog)

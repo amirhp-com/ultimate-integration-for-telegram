@@ -2,7 +2,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/03/17 05:19:08
+ * @Last modified time: 2025/06/11 17:49:09
  */
 defined("ABSPATH") or die("<h2>Unauthorized Access!</h2><hr><small>Ultimate Integration for Telegram :: Developed by <a href='https://amirhp.com/'>Amirhp-com</a></small>");
 use BlackSwan\Ultimate_Integration_Telegram\Notifier;
@@ -10,7 +10,7 @@ class Ultimate_Integration_Telegram_Products extends Notifier {
   public $notif = [];
   public $notif_id = "wc_product_updated";
   public function __construct() {
-    parent::__construct();
+    parent::__construct(false);
     $this->notif = $this->get_notifications_by_type($this->notif_id);
     // add_action("ultimate-integration-for-telegram/init", array($this, "handle_wc_updated"));
     if (!empty($this->notif)) {

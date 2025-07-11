@@ -2,7 +2,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/01/26 22:08:24
+ * @Last modified time: 2025/06/11 18:48:44
  */
 
 namespace Longman\TelegramBot\Commands\UserCommands;
@@ -19,24 +19,27 @@ class SetupCommand extends UserCommand {
   public function execute(): ServerResponse {
     $message = $this->getMessage();
     $chat_id = $message->getChat()->getId();
-    $msg = "Hi there! 👋\n\n*Welcome to Ultimate Integration for Telegrams*\n" .
-      "Seamlessly connect your WordPress site & WooCommerce store to Telegram.\n\n" .
-      "To get started:\n" .
-      "1️⃣ Add me as an *Administrator* to your group or channel.\n" .
-      "2️⃣ Go to the *Settings* on your site & add Chat ID to the list.\n" .
-      "🆔 *Your Chat ID:* `{$chat_id}` _(specific to this chat)_";
+    $msg = "👋 Hi there!
 
-      $markup = array(array(
-        ["text" => "👨‍🔧 Support", "url"  => "https://t.me/amirhp_com"],
-        ['text' => "🍺 Buy me a Beer (Donate)", "url" => "https://amirhp.com/contact#payment"],
-      ));
+***Welcome to Ultimate Integration for Telegram***
+_Easily connect your WordPress site to Telegram_
+
+*To get started:*
+1️⃣ Add this bot as an *Administrator* to your group or channel.
+2️⃣ Send the /setup command, or simply *forward a message* from the group/channel to this bot to get the Chat ID.
+3️⃣ Go to your website’s *Settings*, and add the Chat ID to the list.
+
+🆔 *Current Chat ID:* `{$chat_id}`
+_this chat id is unique and private, tap and copy it._
+
+🚫 _Do not share *Chat ID* with anyone — it may receive sensitive site data and notifications._";
 
     return $this->replyToChat($msg, array(
       "parse_mode"               => "markdown",
       "reply_to_message_id"      => $message->getMessageId(),
       "protect_content"          => true,
       "disable_web_page_preview" => true,
-      "reply_markup" => ["inline_keyboard" => $markup],
+      "reply_markup" => ["inline_keyboard" => [[["text"=>"🛟 Need Help? Get Instant Support", "url"=>"https://t.me/pigment_dev"]]]],
     ));
   }
 }

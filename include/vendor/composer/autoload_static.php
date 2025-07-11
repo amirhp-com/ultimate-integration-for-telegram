@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit5c2e454fb56dce26d1c395f5cb9875a7
+class ComposerStaticInit5c2e454fb56dce26d1c395f5cb9875
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -14,17 +14,17 @@ class ComposerStaticInit5c2e454fb56dce26d1c395f5cb9875a7
     );
 
     public static $prefixLengthsPsr4 = array (
-        'P' => 
+        'P' =>
         array (
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Http\\Client\\' => 16,
         ),
-        'L' => 
+        'L' =>
         array (
             'Longman\\TelegramBot\\' => 20,
         ),
-        'G' => 
+        'G' =>
         array (
             'GuzzleHttp\\Psr7\\' => 16,
             'GuzzleHttp\\Promise\\' => 19,
@@ -33,32 +33,32 @@ class ComposerStaticInit5c2e454fb56dce26d1c395f5cb9875a7
     );
 
     public static $prefixDirsPsr4 = array (
-        'Psr\\Log\\' => 
+        'Psr\\Log\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
-        'Psr\\Http\\Message\\' => 
+        'Psr\\Http\\Message\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
             1 => __DIR__ . '/..' . '/psr/http-factory/src',
         ),
-        'Psr\\Http\\Client\\' => 
+        'Psr\\Http\\Client\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/http-client/src',
         ),
-        'Longman\\TelegramBot\\' => 
+        'Longman\\TelegramBot\\' =>
         array (
             0 => __DIR__ . '/..' . '/longman/telegram-bot/src',
         ),
-        'GuzzleHttp\\Psr7\\' => 
+        'GuzzleHttp\\Psr7\\' =>
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
         ),
-        'GuzzleHttp\\Promise\\' => 
+        'GuzzleHttp\\Promise\\' =>
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/promises/src',
         ),
-        'GuzzleHttp\\' => 
+        'GuzzleHttp\\' =>
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
         ),
@@ -71,9 +71,9 @@ class ComposerStaticInit5c2e454fb56dce26d1c395f5cb9875a7
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit5c2e454fb56dce26d1c395f5cb9875a7::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit5c2e454fb56dce26d1c395f5cb9875a7::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit5c2e454fb56dce26d1c395f5cb9875a7::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit5c2e454fb56dce26d1c395f5cb9875::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit5c2e454fb56dce26d1c395f5cb9875::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit5c2e454fb56dce26d1c395f5cb9875::$classMap;
 
         }, null, ClassLoader::class);
     }

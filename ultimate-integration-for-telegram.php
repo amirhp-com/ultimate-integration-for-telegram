@@ -2,8 +2,8 @@
 /*
  * Plugin Name: Ultimate Integration for Telegram
  * Description: Integrate Telegram with WordPress, WooCommerce, and a wide range of plugins. Send customized notifications to channels, groups, bots, or private chats with built-in advanced translation and string replacement tools.
- * Version: 1.1.0
- * Stable tag: 1.1.0
+ * Version: 1.4.0
+ * Stable tag: 1.4.0
  * Author: BlackSwan
  * Author URI: https://amirhp.com/landing
  * Plugin URI: https://wordpress.org/plugins/ultimate-integration-for-telegram/
@@ -11,19 +11,26 @@
  * Tags: woocommerce, telegram, notification
  * Requires PHP: 7.4
  * Requires at least: 5.0
- * Tested up to: 6.7
+ * Tested up to: 6.8
  * WC requires at least: 5.0
- * WC tested up to: 9.7
+ * WC tested up to: 9.9.3
  * Text Domain: ultimate-integration-for-telegram
  * Domain Path: /languages
  * Copyright: (c) BlackSwanDev, All rights reserved.
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/03/17 05:19:24
+ * @Last modified time: 2025/07/12 01:45:58
 */
 
 namespace BlackSwan\Ultimate_Integration_Telegram;
+
+use Longman\TelegramBot\Telegram;
+use Longman\TelegramBot\Request;
+use Longman\TelegramBot\TelegramLog;
+use Longman\TelegramBot\Exception\TelegramLogException;
+use Longman\TelegramBot\Exception\TelegramException;
+use Longman\TelegramBot\Entities\Entity;
 
 defined("ABSPATH") or die("<h2>Unauthorized Access!</h2><hr><small>Ultimate Integration for Telegram :: Developed by <a href='https://amirhp.com/'>Amirhp-com</a></small>");
 
@@ -32,7 +39,7 @@ if (!class_exists("Notifier")) {
     protected $td = "ultimate-integration-for-telegram";
     protected $title = "Ultimate Integration for Telegram";
     protected $db_slug = "ultimate-integration-for-telegram";
-    protected $version = "1.1.0";
+    protected $version = "1.2.0";
     protected $title_small = "Telegram";
     protected $assets_url;
     protected $hook_url;
@@ -42,20 +49,23 @@ if (!class_exists("Notifier")) {
     protected $gettext_replace;
     protected $include_dir;
     protected $debug = false;
-    public function __construct() {
+    public function __construct($full_load = true) {
       $this->setup_variables();
-      #region hooks >>>>>>>>>>>>>
-      add_action("init", array($this, "init_plugin"));
-      add_action("template_redirect", array($this, "handle_bot_webhook"));
-      add_action("wp_ajax_{$this->td}", array($this, "handel_ajax_req"));
-      add_filter("plugin_action_links_" . plugin_basename(__FILE__), array($this, "add_plugin_settings_link"));
-      #endregion
-      #region string-replace and translate-replace >>>>>>>>>>>>>
-      add_filter("gettext", array($this, "gettext_translate"), 999999, 3);
-      add_filter("the_content", array($this, "str_replace_translate"), 999999);
-      add_action("template_redirect", array($this, "buffer_start_replace_translate"));
-      add_action("shutdown", array($this, "buffer_finish_replace_translate"));
-      #endregion
+      if ($full_load) {
+        #region hooks >>>>>>>>>>>>>
+        add_action("init", array($this, "init_plugin"));
+        add_action("template_redirect", array($this, "handle_bot_webhook"));
+        add_action("wp_ajax_{$this->td}", array($this, "handel_ajax_req"));
+        add_filter("plugin_row_meta", array($this, "add_plugin_row_meta"), 10, 2);
+        add_filter("plugin_action_links_" . plugin_basename(__FILE__), array($this, "add_plugin_settings_link"));
+        #endregion
+        #region string-replace and translate-replace >>>>>>>>>>>>>
+        add_filter("gettext", array($this, "gettext_translate"), 999999, 3);
+        add_filter("the_content", array($this, "str_replace_translate"), 999999);
+        add_action("template_redirect", array($this, "buffer_start_replace_translate"));
+        add_action("shutdown", array($this, "buffer_finish_replace_translate"));
+        #endregion
+      }
     }
     private function setup_variables() {
       $this->cog_url = admin_url("options-general.php?page={$this->td}#tab_general");
@@ -81,13 +91,14 @@ if (!class_exists("Notifier")) {
           "upload"   => "{$this->include_dir}/temp/upload",
         ],
       );
+      // (new Request)::setCustomBotApiUri('https://my-worker.amirhp.workers.dev');
       add_action("before_woocommerce_init", [$this, "add_hpos_support"]);
     }
     public function handle_bot_webhook() {
       // phpcs:ignore  WordPress.Security.NonceVerification.Recommended
       if (isset($_REQUEST["ultimate-integration-for-telegram"]) && !empty($_REQUEST["ultimate-integration-for-telegram"]) && "webhook" == $_REQUEST["ultimate-integration-for-telegram"]) {
         try {
-          $telegram = new \Longman\TelegramBot\Telegram($this->config["api_key"], $this->config["bot_username"]);
+          $telegram = new Telegram($this->config["api_key"], $this->config["bot_username"]);
           $telegram->addCommandsPaths($this->config["commands"]["paths"]);
           $telegram->setDownloadPath($this->config["paths"]["download"]);
           $telegram->setUploadPath($this->config["paths"]["upload"]);
@@ -96,13 +107,13 @@ if (!class_exists("Notifier")) {
           }
           $telegram->enableLimiter($this->config['limiter']);
           $telegram->handle();
-        } catch (\Longman\TelegramBot\Exception\TelegramException $e) {
-          \Longman\TelegramBot\TelegramLog::error($e);
+        } catch (TelegramException $e) {
+          TelegramLog::error($e);
           if ($this->debug) {
             // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r, WordPress.PHP.DevelopmentFunctions.error_log_error_log
             error_log("Ultimate Integration for Telegram :: debugging ~> " . PHP_EOL . print_r($e, 1));
           }
-        } catch (\Longman\TelegramBot\Exception\TelegramLogException $e) {
+        } catch (TelegramLogException $e) {
           if ($this->debug) {
             // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r, WordPress.PHP.DevelopmentFunctions.error_log_error_log
             error_log("Ultimate Integration for Telegram :: debugging ~> " . PHP_EOL . print_r($e, 1));
@@ -141,16 +152,41 @@ if (!class_exists("Notifier")) {
           add_filter("date_i18n", array($this, "jdate"), 10, 4);
         });
       }
-      add_action("admin_bar_menu", array($this, "add_link_to_admin_bar"), 100);
+      if ($this->enabled("admin_bar_link")) {
+        add_action("admin_bar_menu", array($this, "add_link_to_admin_bar"), 100);
+        add_action("admin_head", function () {
+          echo '<style>
+          #wp-admin-bar-ultimate-integration-for-telegram {
+            background-color: #52c2f04f !important;
+          }
+          </style>';
+        });
+      }
       do_action("ultimate-integration-for-telegram/init");
     }
     public function add_link_to_admin_bar($wp_admin_bar) {
-      if ($this->enabled("admin_bar_link")) {
-        $wp_admin_bar->add_node(array("id" => $this->td, "title" => $this->title_small, "href" => $this->cog_url,));
-      }
+      $wp_admin_bar->add_node(array(
+        "id" => $this->td,
+        "title" => $this->title_small,
+        "href" => $this->cog_url,
+        "meta" => array(
+          "title" => $this->title,
+          "class" => "ultimate-integration-for-telegram",
+        ),
+      ));
     }
     public function add_plugin_settings_link($links) {
-      $links[$this->td] = '<a href="' . esc_attr(admin_url("options-general.php?page={$this->td}#tab_general")) . '">' . _x("Settings", "action-row", "ultimate-integration-for-telegram") . '</a>';
+      $new_links = ['<a href="' . esc_attr(admin_url("options-general.php?page={$this->td}#tab_general")) . '">' . _x("Settings", "action-row", "ultimate-integration-for-telegram") . '</a>',];
+      return array_merge($new_links, $links);
+    }
+    public function add_plugin_row_meta($links, $file) {
+      if ($file === plugin_basename(__FILE__)) {
+        $meta_links = [
+          '<a href="https://github.com/pigment-dev/ultimate-integration-for-telegram/wiki" target="_blank">' . _x("Docs", "plugin-meta", "ultimate-integration-for-telegram") . '</a>',
+          '<a href="https://wordpress.org/support/plugin/ultimate-integration-for-telegram/" target="_blank">' . _x("Community Support", "plugin-meta", "ultimate-integration-for-telegram") . '</a>',
+        ];
+        return array_merge($links, $meta_links);
+      }
       return $links;
     }
     public function jdate($date, $format, $timestamp, $gmt) {
@@ -188,20 +224,20 @@ if (!class_exists("Notifier")) {
 
           case "connect":
             try {
-              $telegram = new \Longman\TelegramBot\Telegram($this->read("token"), $this->read("username"));
+              $telegram = new Telegram($this->read("token"), $this->read("username"));
               $result = $telegram->setWebhook($this->hook_url);
               if ($result->isOk()) wp_send_json_success(array("msg" => $result->getDescription()));
-            } catch (\Longman\TelegramBot\Exception\TelegramException $e) {
+            } catch (TelegramException $e) {
               wp_send_json_error(array("msg" => $e->getMessage()));
             }
             break;
 
           case "disconnect":
             try {
-              $telegram = new \Longman\TelegramBot\Telegram($this->read("token"), $this->read("username"));
+              $telegram = new Telegram($this->read("token"), $this->read("username"));
               $result = $telegram->deleteWebhook();
               if ($result->isOk()) wp_send_json_success(array("msg" => $result->getDescription()));
-            } catch (\Longman\TelegramBot\Exception\TelegramException $e) {
+            } catch (TelegramException $e) {
               wp_send_json_error(array("msg" => $e->getMessage()));
             }
             break;
@@ -209,66 +245,32 @@ if (!class_exists("Notifier")) {
 
           case 'send_test':
             global $wp_version;
-            $wc_version = defined('WC_VERSION') ? WC_VERSION : "Not Found";
+            $wc_version = defined('WC_VERSION') ? WC_VERSION : "0.0.0";
             $site_host = wp_parse_url(home_url(), PHP_URL_HOST);
-
-            $message = "Hi there! 👋\n\n*Welcome to Ultimate Integration for Telegrams*\n" .
-              "Seamlessly connect your WordPress site & WooCommerce store to Telegram.\n\n" .
-              "With our Plugin, you’ll receive instant, real-time notifications for important events like new WooCommerce orders, user registrations, and WordPress emails. Replace traditional email notifications with fast and customizable Telegram messages tailored to your needs.\n\n" .
-              "Receive notifications wherever you want:\n" .
-              "- In *groups* or *channels* by adding this bot as an Administrator.\n" .
-              "- Directly in this *private chat* with the bot for instant updates.\n\n" .
-              ">*Your Site Information:*\n" .
-              ">Host URL: {$site_host}\n" .
-              ">Server Date: " . wp_date("Y/m/d H:i:s", current_time("timestamp")) . "\n" .
-              ">Server jDate: " . Ultimate_Integration_Telegram__jdate("Y/m/d H:i:s", current_time("timestamp"), "", "local", "en") . "\n" .
-              ">Plugin Version: {$this->version}\n" .
-              ">WordPress: {$wp_version}\n" .
-              ">WooCommerce: {$wc_version}\n" .
-              ">PHP Version: " . PHP_VERSION . "" .
-              "\n
-            " . "\nTo get started:\n" .
-              "1️⃣ Add me as an *Administrator* to your group or channel.\n" .
-              "2️⃣ Send the command /setup to get the *Chat ID*.\n" .
-              "3️⃣ Go to the *Settings* on your site & add it to the list.\n\n" .
-              "🆔 *Your Chat ID:* `{chat_id}` _(specific to this chat)_\n\n" .
-              "👨‍🔧 For support or questions, contact: @amirhp\\_com";
+            $icon = get_site_icon_url();
+            $site_name = Entity::escapeMarkdownV2(get_bloginfo("name"));
+            $bot_name = Entity::escapeMarkdownV2($this->read("username"));
+            $message = "***Hi from [Ultimate Integration for Telegram](https://wordpress.org/plugins/ultimate-integration-for-telegram/)***👋\n\n" .
+              "Great news — your site \"***{$site_name}***\" is now successfully connected to Telegram via {$bot_name} and ready to send notifications! 😍🎉\n\n" .
+              ">||→ ***site host:*** " . $site_host . "||\n" .
+              ">||→ ***server time:*** " . wp_date("Y-m-d H:i:s", current_time("timestamp")) . "||\n" .
+              ">||→ ***wordpress:*** " . $wp_version . "||\n" .
+              ">||→ ***woocommerce:*** " . $wc_version . "||\n" .
+              ">||→ ***php version:*** " . PHP_VERSION . "||";
             $message = str_replace(
-              [
-                "(",
-                ")",
-                "[",
-                "]",
-                ".",
-                "!",
-                "-",
-              ],
-              [
-                "\\(",
-                "\\)",
-                "\\[",
-                "\\]",
-                "\\.",
-                "\\!",
-                "\\-",
-              ],
+              ["@", ".", "!", "-", "=",],
+              ["\\@", "\\.", "\\!", "\\-", "\\=",],
               $message
             );
-
-            $markup = array(
-              array(
-                ["text" => "🏠 Home", "url"  => home_url()],
-                ["text" => "⚙️ Config", "url"  => admin_url("options-general.php?page={$this->td}")],
-                ["text" => "😍 Developer", "url"  => "https://amirhp.com/landing"],
-              ),
-              array(
-                ['text' => "💻 Contribute (Github)", "url" => "https://github.com/pigment-dev/ultimate-integration-for-telegram"],
-                ['text' => "🍺 Buy me a Beer", "url" => "https://amirhp.com/contact#payment"],
-              ),
-              array(
-                ['text' => "🌏 Ultimate Integration for Telegram", "url" => "https://wordpress.org/plugins/ultimate-integration-for-telegram/"],
-              ),
-            );
+            $markup = [
+              [
+                ["text" => "🛟 Need Help? Get Instant Support", "url" => "https://t.me/pigment_dev"],
+              ],
+              [
+                ["text" => "⚙️ Setting", "url" => admin_url("options-general.php?page=" . $this->td)],
+                ["text" => "👨‍💻 Docs", "url" => "https://github.com/pigment-dev/ultimate-integration-for-telegram/wiki"],
+              ],
+            ];
 
             $chat_ids  = $this->read("chat_ids");
             if (empty(trim($chat_ids))) wp_send_json_error(["msg" => __("No Chat ID found. Please add a Chat ID to send a test message.", "ultimate-integration-for-telegram")]);
@@ -281,27 +283,35 @@ if (!class_exists("Notifier")) {
             $errors3 = [];
             if (empty($chat_ids)) wp_send_json_error(["msg" => __("No Chat ID found. Please add a Chat ID to send a test message.", "ultimate-integration-for-telegram")]);
             try {
-              $telegram  = new \Longman\TelegramBot\Telegram($this->read("token"), $this->read("username"));
+              $telegram  = new Telegram($this->read("token"), $this->read("username"));
               /* sample send document
-                $result = (new \Longman\TelegramBot\Request)::sendDocument(array(
+                $result = (new Request)::sendDocument(array(
                   "chat_id" => $chat,
                   "caption" => $message,
-                  "document" => (new \Longman\TelegramBot\Request)::encodeFile($pdf_temp),
+                  "document" => (new Request)::encodeFile($pdf_temp),
                   "reply_markup" => ["inline_keyboard"=>$markup],
                   "parse_mode" => "MarkdownV2",
                 ));
                */
+              /* $result = (new Request)::sendPhoto([
+                  "chat_id" => $chat,
+                  "photo" => $icon,
+                  "caption" => $msg,
+                  "protect_content" => true,
+                  "reply_markup" => ["inline_keyboard" => $markup],
+                  "parse_mode" => "markdownv2",
+                ]); */
               foreach ($chat_ids as $chat) {
                 $msg = str_replace("{chat_id}", $chat, $message);
-                $result = (new \Longman\TelegramBot\Request)::sendMessage([
-                  "chat_id"                  => $chat,
-                  "text"                     => $msg,
-                  "protect_content"          => true,
-                  "quote"                    => "Host URL",
-                  "disable_web_page_preview" => true,
-                  "reply_markup"             => ["inline_keyboard" => $markup],
-                  "parse_mode"               => "MarkdownV2",
+                $result = (new Request)::sendMessage([
+                  "text" => $msg,
+                  "chat_id" => $chat,
+                  "protect_content" => true,
+                  // "disable_web_page_preview" => false,
+                  "reply_markup" => ["inline_keyboard" => $markup],
+                  "parse_mode" => "markdownv2",
                 ]);
+
                 if ($result->isOk()) {
                   /* translators: 1: Chat ID */
                   $res_array[] = sprintf(__("Test Message sent successfully to ChatID: %s", "ultimate-integration-for-telegram"), $chat);
@@ -320,7 +330,7 @@ if (!class_exists("Notifier")) {
                   $failed = true;
                 }
               }
-            } catch (\Longman\TelegramBot\Exception\TelegramException $e) {
+            } catch (TelegramException $e) {
               $failed = true;
               // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r,WordPress.PHP.DevelopmentFunctions.error_log_error_log,WordPress.PHP.DevelopmentFunctions.error_log_var_export
               $errors2[] = print_r([$e->getMessage(), $e], 1);
@@ -346,6 +356,32 @@ if (!class_exists("Notifier")) {
         }
         wp_send_json_error(["msg" => __("An unknown error occured.", "ultimate-integration-for-telegram"), "err" => "out-of-loop",]);
       }
+    }
+    public function get_default_list() {
+      return json_encode([
+        "notifications" => [
+          (object) [
+        "type" => "order",
+        "config" => (object) [
+          "_enabled" => "no",
+          "_title" => __("Order Notification", "ultimate-integration-for-telegram"),
+          "_description" => __("Send a notification when a new order is placed.", "ultimate-integration-for-telegram"),
+          "_chat_ids" => "",
+          "_message" => __("A new order has been placed on your site.", "ultimate-integration-for-telegram"),
+        ],
+          ],
+          (object) [
+        "type" => "product",
+        "config" => (object) [
+          "_enabled" => "no",
+          "_title" => __("Product Notification", "ultimate-integration-for-telegram"),
+          "_description" => __("Send a notification when a new product is added.", "ultimate-integration-for-telegram"),
+          "_chat_ids" => "",
+          "_message" => __("A new product has been added to your site.", "ultimate-integration-for-telegram"),
+        ],
+          ],
+        ],
+      ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     }
     #endregion
     #region string-replace and translate-replace >>>>>>>>>>>>>
@@ -466,7 +502,7 @@ if (!class_exists("Notifier")) {
     public function get_real_IP_address() {
       // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
       if (!empty($_SERVER["GEOIP_ADDR"])) {
-        $ip = sanitize_text_field(stripslashes_deep($_SERVER["GEOIP_ADDR"] ) );
+        $ip = sanitize_text_field(stripslashes_deep($_SERVER["GEOIP_ADDR"]));
       } elseif (!empty($_SERVER["HTTP_X_REAL_IP"])) {
         $ip = sanitize_text_field(stripslashes_deep($_SERVER["HTTP_X_REAL_IP"]));
       } elseif (!empty($_SERVER["HTTP_CLIENT_IP"])) {
@@ -555,9 +591,9 @@ if (!class_exists("Notifier")) {
         $markup = [[['text' => "🌏 Ultimate Integration for Telegram", "url" => "https://wordpress.org/plugins/ultimate-integration-for-telegram/"],]];
       }
       try {
-        $telegram  = new \Longman\TelegramBot\Telegram($this->read("token"), $this->read("username"));
+        $telegram  = new Telegram($this->read("token"), $this->read("username"));
         foreach ($chat_ids as $chat) {
-          $tg = (new \Longman\TelegramBot\Request);
+          $tg = (new Request);
           $method = apply_filters("ultimate-integration-for-telegram/helper/send-message-method", "sendMessage", func_get_args());
           $site_host = wp_parse_url(home_url(), PHP_URL_HOST);
           $host_ip = isset($_SERVER['SERVER_ADDR']) ? sanitize_text_field(stripslashes_deep($_SERVER['SERVER_ADDR'])) : $this->get_real_IP_address();
@@ -583,8 +619,9 @@ if (!class_exists("Notifier")) {
               // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r,WordPress.PHP.DevelopmentFunctions.error_log_error_log,WordPress.PHP.DevelopmentFunctions.error_log_var_export
               error_log("Ultimate Integration for Telegram :: debugging send msg ~> REF:" . $reference . " - " . sprintf(
                 /* translators: 1: Chat ID */
-                __("Test Message sent successfully to ChatID: %s", "ultimate-integration-for-telegram")
-                , $chat) . PHP_EOL .
+                __("Test Message sent successfully to ChatID: %s", "ultimate-integration-for-telegram"),
+                $chat
+              ) . PHP_EOL .
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r,WordPress.PHP.DevelopmentFunctions.error_log_error_log,WordPress.PHP.DevelopmentFunctions.error_log_var_export
                 var_export($result, 1));
             }
@@ -602,7 +639,7 @@ if (!class_exists("Notifier")) {
             $failed = true;
           }
         }
-      } catch (\Longman\TelegramBot\Exception\TelegramException $e) {
+      } catch (TelegramException $e) {
         $failed = true;
         // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r,WordPress.PHP.DevelopmentFunctions.error_log_error_log,WordPress.PHP.DevelopmentFunctions.error_log_var_export
         $errors2[] = print_r([$e->getMessage(), $e], 1);

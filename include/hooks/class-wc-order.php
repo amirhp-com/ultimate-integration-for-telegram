@@ -11,7 +11,7 @@ class Ultimate_Integration_Telegram_Orders extends Notifier {
   public $wc_emails = [];
   public $wc_statuses = [];
   public function __construct() {
-    parent::__construct();
+    parent::__construct(false);
     $this->wc_emails = wp_list_pluck(WC()->mailer()->get_emails(), "title", "id");
     $this->wc_statuses = wc_get_order_statuses();
 

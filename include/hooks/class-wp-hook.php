@@ -2,7 +2,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/03/17 05:19:08
+ * @Last modified time: 2025/06/11 17:49:14
  */
 defined("ABSPATH") or die("<h2>Unauthorized Access!</h2><hr><small>Ultimate Integration for Telegram :: Developed by <a href='https://amirhp.com/'>Amirhp-com</a></small>");
 
@@ -14,7 +14,7 @@ class Ultimate_Integration_Telegram_Hooks extends Notifier {
   public $notif_id = "wp_user_registered";
   public $notif_id2 = "wp_user_edited";
   public function __construct() {
-    parent::__construct();
+    parent::__construct(false);
     $this->notif = $this->get_notifications_by_type($this->notif_id);
     $this->notif2 = $this->get_notifications_by_type($this->notif_id2);
     add_filter("ultimate-integration-for-telegram/notif-panel/notif-macro-list", array($this, "add_custom_macros"), 2, 2);

@@ -180,19 +180,34 @@ This plugin is provided "as is" without any warranties, express or implied. Whil
 
 ---
 
-## About the Developer
-**Ultimate Integration for Telegram** is developed and maintained by [BlackSwanDev](https://blackswandev.com/), in collaboration with [Pigment.Dev](https://pigment.dev/). Together, we have joined forces as a dedicated team of WordPress developers, focused on creating powerful tools for automation and communication.
-
-This project is led by **AmirhpCom**, Learn more at **[amirhp.com](https://amirhp.com/)**.
-
----
-
 ## Contribution and Support
 We welcome contributions to improve the plugin! If you have feature requests, bug reports, or suggestions, please create a GitHub issue or pull request.
 
-For support, contact us at **[support@pigment.dev](mailto:support@pigment.dev)**.
+For support, contact us at **[support (@) pigment (.) dev](mailto:support@pigment.dev)**.
 
 ---
 
 ## License
 This plugin is licensed under the **GPL v2.0 or later**. You are free to use, modify, and distribute the plugin under these terms.
+
+---
+
+## Changelog
+```md
+= v1.2.0 | 2025-06-07 | 1404-03-17 =
+* Added New Integration: WordPress Comments
+* Added New Integration: WooCommerce Comments
+* Added Pre-defined Notification Text
+* Added Pre-defined Notifications List on first setup
+* Added Setup Wizard & Enhanced Setup UIX
+
+= v1.1.0 | 2025-03-17 | 1403-12-27 =
+* Set minimum PHP required to 7.4
+* Fixed Markdown Validator
+
+= v1.0.0 | 2025-01-20 | 1403-11-01 =
+* Initial release of Ultimate Integration for Telegram.
+* Telegram bot integration with webhook support.
+* Notification macros and string replacement features.
+* Full WooCommerce integration.
+```
