@@ -3,7 +3,7 @@
  * Plugin Name: Ultimate Integration for Telegram
  * Description: Integrate Telegram with WordPress, WooCommerce, and a wide range of plugins. Send customized notifications to channels, groups, bots, or private chats with built-in advanced translation and string replacement tools.
  * Version: 1.4.0
- * Stable tag: 1.4.0
+ * Stable tag: 1.2.0
  * Author: BlackSwan
  * Author URI: https://amirhp.com/landing
  * Plugin URI: https://wordpress.org/plugins/ultimate-integration-for-telegram/
@@ -20,7 +20,7 @@
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/07/12 01:45:58
+ * @Last modified time: 2025/07/12 01:46:49
 */
 
 namespace BlackSwan\Ultimate_Integration_Telegram;
