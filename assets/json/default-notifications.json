@@ -1,0 +1,62 @@
+[
+  {
+    "type": "wp_user_registered",
+    "config": {
+      "_enabled": "yes",
+      "message": "👤 *New user joined* {site_name}!\nName: {first_name} {last_name} ({user_email})\nUsername: {user_login} | Registered on: {user_registered}",
+      "html_parser": "no",
+      "buttons": "Edit User | {edit_url}",
+      "recipients": ""
+    }
+  },
+  {
+    "type": "wc_new_order",
+    "config": {
+      "_enabled": "yes",
+      "message": "🎉 *New Order Received* on {site_name}!\nOrder #{order_number} for {order_total} {order_currency} by {customer_first_name} {customer_last_name} ({customer_email})\nStatus: {order_status} | Date: {order_date}\nItems: {order_items_count}\n{order_items_quantity_list}",
+      "html_parser": "no",
+      "buttons": "View Order | {view_url}\nEdit Order | {edit_url}",
+      "recipients": ""
+    }
+  },
+  {
+    "type": "wc_payment_complete",
+    "config": {
+      "_enabled": "yes",
+      "message": "💰 *Payment Confirmed* for Order #{order_number}!\nTotal: {order_total} {order_currency} via {order_payment_method_title}\nCustomer: {customer_first_name} {customer_last_name} ({customer_email})\nTransaction ID: {transaction_id}\nPaid on: {order_date_paid}",
+      "html_parser": "no",
+      "buttons": "View Order | {view_url}\nEdit Order | {edit_url}",
+      "recipients": ""
+    }
+  },
+  {
+    "type": "wc_order_status_to_completed",
+    "config": {
+      "_enabled": "yes",
+      "message": "✅ Order #{order_number} is now *Completed*!\nTotal: {order_total} {order_currency} for {customer_first_name} {customer_last_name}\nCompleted on: {order_date_completed}\nItems: {order_items_count}\n{order_items_quantity_list}",
+      "html_parser": "no",
+      "buttons": "View Order | {view_url}\nEdit Order | {edit_url}",
+      "recipients": ""
+    }
+  },
+  {
+    "type": "wc_product_stock_low_stock",
+    "config": {
+      "_enabled": "yes",
+      "message": "📊 *Low Stock Alert!*\nProduct *{name}* has reached *{stock_quantity}* units in stock.",
+      "html_parser": "no",
+      "buttons": "Restock Now | {edit_url}",
+      "recipients": ""
+    }
+  },
+  {
+    "type": "wc_product_stock_outofstock",
+    "config": {
+      "_enabled": "yes",
+      "message": "🚨 *Out of Stock Alert!*\nProduct *{name}* is now *out of stock* (0 units).",
+      "html_parser": "no",
+      "buttons": "Restock Now | {edit_url}",
+      "recipients": ""
+    }
+  }
+]

@@ -5,7 +5,9 @@
 * @Last modified time: 2025/01/19 22:52:03
 */
 defined("ABSPATH") or die("<h2>Unauthorized Access!</h2><hr><small>Ultimate Integration for Telegram :: Developed by <a href='https://amirhp.com/'>Amirhp-com</a></small>");
+
 use BlackSwan\Ultimate_Integration_Telegram\Notifier;
+
 class Ultimate_Integration_Telegram_Orders extends Notifier {
   public $notif_id = [];
   public $wc_emails = [];
@@ -61,15 +63,25 @@ class Ultimate_Integration_Telegram_Orders extends Notifier {
       $slug = $this->remove_status_prefix($slug);
       $list_notif = $this->get_notifications_by_type("wc_order_status_to_{$slug}");
       if ($list_notif && !empty($list_notif)) {
-        add_action("woocommerce_order_status_{$slug}", function($order_id, $order, $status_transition) use ($list_notif){
+        add_action("woocommerce_order_status_{$slug}", function ($order_id, $order, $status_transition) use ($list_notif) {
           $status_from = isset($status_transition['from']) ? $status_transition['from'] : "";
           $status_to = isset($status_transition['to']) ? $status_transition['to'] : "";
-          foreach ((array) $list_notif as $notif) @$this->send_telegram_msg($notif->config->message, $notif->config->btn_row1, __CLASS__, [
-            "current_hook" => current_action(),
-            "order_status_prev" => $status_from,
-            "order_status_new" => $status_to,
-            "order_id" => $order_id,
-          ], $notif->config->html_parser, false);
+          foreach ((array) $list_notif as $notif) {
+            @$this->send_telegram_msg(
+              $notif->config->message,
+              $notif->config->btn_row1,
+              __CLASS__,
+              [
+                "current_hook" => current_action(),
+                "order_status_prev" => $status_from,
+                "order_status_new" => $status_to,
+                "order_id" => $order_id,
+              ],
+              $notif->config->html_parser,
+              false,
+              $notif->config->recipients
+            );
+          }
         }, 10, 3);
       }
     }
@@ -89,7 +101,9 @@ class Ultimate_Integration_Telegram_Orders extends Notifier {
     add_filter("ultimate-integration-for-telegram/helper/translate-pairs", array($this, "translate_params_custom"), 10, 5);
   }
   public function send_notification_on_email_send($wp_mail_return, $email_id, $email_obj) {
-    if (!is_object($email_obj)) { return; }  // Ensure $email_obj is an object before accessing it.
+    if (!is_object($email_obj)) {
+      return;
+    }  // Ensure $email_obj is an object before accessing it.
     $list_notif = [];
     foreach ($this->wc_emails as $slug => $name) {
       if ($email_id == $slug) {
@@ -126,7 +140,8 @@ class Ultimate_Integration_Telegram_Orders extends Notifier {
           ),
         ),
         $notif->config->html_parser,
-        false
+        false,
+        $notif->config->recipients
       );
     }
   }
@@ -142,8 +157,8 @@ class Ultimate_Integration_Telegram_Orders extends Notifier {
         "order_number"               => $order->get_order_number(), // Order Number
         "order_key"                  => $order->get_order_key(), // Order Key
         "order_status_raw"           => $order->get_status(), // Order Status
-        "order_status_prev"          => isset($ex["order_status_prev"]) ? wc_get_order_status_name( $ex["order_status_prev"] ) : "",
-        "order_status_new"           => isset($ex["order_status_new"]) ? wc_get_order_status_name( $ex["order_status_new"] ) : "",
+        "order_status_prev"          => isset($ex["order_status_prev"]) ? wc_get_order_status_name($ex["order_status_prev"]) : "",
+        "order_status_new"           => isset($ex["order_status_new"]) ? wc_get_order_status_name($ex["order_status_new"]) : "",
         "order_status"               => wc_get_order_status_name($order->get_status()), // Order Status
         "order_total"                => $order->get_total(), // Order Total Amount
         "order_subtotal"             => $order->get_subtotal(), // Order Subtotal Amount
@@ -204,14 +219,30 @@ class Ultimate_Integration_Telegram_Orders extends Notifier {
         "shipping_method"         => implode(', ', wp_list_pluck($order->get_shipping_methods(), 'name')), // Shipping Method
         // Order Items
         "order_items_count"                   => $order->get_item_count(), // Number of Items in Order
-        "order_items_list"                    => implode("\n", array_map(function ($item) { return $item->get_name(); }, $order->get_items())), // List of Items in Order
-        "order_items_sku_list"                => implode("\n", array_map(function ($item) { return $item->get_name() . ($item->get_product() ? " (".$item->get_product()->get_sku().")" : ""); }, $order->get_items())), // List of Items SKU
-        "order_items_price_list"              => implode("\n", array_map(function ($item) { return $item->get_name() . " - " . number_format($item->get_subtotal()); }, $order->get_items())), // List of Items with Prices
-        "order_items_quantity_list"           => implode("\n", array_map(function ($item) { return $item->get_quantity(); }, $order->get_items())), // List of Items with Quantity
-        "order_items_price_quantity_list"     => implode("\n", array_map(function ($item) { return $item->get_name() . " - " . number_format($item->get_subtotal()) . ' x ' . $item->get_quantity(); }, $order->get_items())), // List of Items with Prices & Quantity
-        "order_items_sku_price_list"          => implode("\n", array_map(function ($item) { return $item->get_name() . ($item->get_product() ? " (".$item->get_product()->get_sku().")" : "") . ' - ' .number_format($item->get_subtotal()); }, $order->get_items())), // List of Items with SKU & Price
-        "order_items_sku_quantity_list"       => implode("\n", array_map(function ($item) { return $item->get_name() . ($item->get_product() ? " (".$item->get_product()->get_sku().")" : "") . ' x ' . $item->get_quantity(); }, $order->get_items())), // List of Items with SKU & Quantity
-        "order_items_sku_price_quantity_list" => implode("\n", array_map(function ($item) { return $item->get_name() . ($item->get_product() ? " (".$item->get_product()->get_sku().")" : "") . ' x ' . $item->get_quantity() . ' = ' . number_format($item->get_subtotal()); }, $order->get_items())), // List of Items with SKU, Price & Quantity
+        "order_items_list"                    => implode("\n", array_map(function ($item) {
+          return $item->get_name();
+        }, $order->get_items())), // List of Items in Order
+        "order_items_sku_list"                => implode("\n", array_map(function ($item) {
+          return $item->get_name() . ($item->get_product() ? " (" . $item->get_product()->get_sku() . ")" : "");
+        }, $order->get_items())), // List of Items SKU
+        "order_items_price_list"              => implode("\n", array_map(function ($item) {
+          return $item->get_name() . " - " . number_format($item->get_subtotal());
+        }, $order->get_items())), // List of Items with Prices
+        "order_items_quantity_list"           => implode("\n", array_map(function ($item) {
+          return $item->get_quantity();
+        }, $order->get_items())), // List of Items with Quantity
+        "order_items_price_quantity_list"     => implode("\n", array_map(function ($item) {
+          return $item->get_name() . " - " . number_format($item->get_subtotal()) . ' x ' . $item->get_quantity();
+        }, $order->get_items())), // List of Items with Prices & Quantity
+        "order_items_sku_price_list"          => implode("\n", array_map(function ($item) {
+          return $item->get_name() . ($item->get_product() ? " (" . $item->get_product()->get_sku() . ")" : "") . ' - ' . number_format($item->get_subtotal());
+        }, $order->get_items())), // List of Items with SKU & Price
+        "order_items_sku_quantity_list"       => implode("\n", array_map(function ($item) {
+          return $item->get_name() . ($item->get_product() ? " (" . $item->get_product()->get_sku() . ")" : "") . ' x ' . $item->get_quantity();
+        }, $order->get_items())), // List of Items with SKU & Quantity
+        "order_items_sku_price_quantity_list" => implode("\n", array_map(function ($item) {
+          return $item->get_name() . ($item->get_product() ? " (" . $item->get_product()->get_sku() . ")" : "") . ' x ' . $item->get_quantity() . ' = ' . number_format($item->get_subtotal());
+        }, $order->get_items())), // List of Items with SKU, Price & Quantity
         "order_items_total_qty"               => array_sum(wp_list_pluck($order->get_items(), 'quantity')), // Total Quantity of Items
         // Taxes, Discounts, Fees, and Refunds
         "tax_lines"               => implode(', ', array_map(function ($tax) {
@@ -348,11 +379,11 @@ class Ultimate_Integration_Telegram_Orders extends Notifier {
             "email_from_name"          => _x("Email From name", "macro", "ultimate-integration-for-telegram"),
             "email_from_address"       => _x("Email From address", "macro", "ultimate-integration-for-telegram"),
             /* translators: 1: notice */
-            "email_body_text"          => sprintf(_x("Email Body TEXT %s", "macro", "ultimate-integration-for-telegram"), "<span style='color:white; background: red; display: block;'>&nbsp;".__("Only use when HTML Formatting is set to 'ENABLED' or within preformatted blocks (`code`, ```code```, &amp;lt;pre&amp;gt;code&amp;lt;/pre&amp;gt;) for proper rendering.", "ultimate-integration-for-telegram")."&nbsp;</span>"),
+            "email_body_text"          => sprintf(_x("Email Body TEXT %s", "macro", "ultimate-integration-for-telegram"), "<span style='color:white; background: red; display: block;'>&nbsp;" . __("Only use when HTML Formatting is set to 'ENABLED' or within preformatted blocks (`code`, ```code```, &amp;lt;pre&amp;gt;code&amp;lt;/pre&amp;gt;) for proper rendering.", "ultimate-integration-for-telegram") . "&nbsp;</span>"),
             /* translators: 1: notice */
-            "email_body_html"          => sprintf(_x("Email Body HTML %s", "macro", "ultimate-integration-for-telegram"), "<span style='color:white; background: red; display: block;'>&nbsp;".__("Only use when HTML Formatting is set to 'ENABLED' or within preformatted blocks (`code`, ```code```, &amp;lt;pre&amp;gt;code&amp;lt;/pre&amp;gt;) for proper rendering.", "ultimate-integration-for-telegram")."&nbsp;</span>"),
+            "email_body_html"          => sprintf(_x("Email Body HTML %s", "macro", "ultimate-integration-for-telegram"), "<span style='color:white; background: red; display: block;'>&nbsp;" . __("Only use when HTML Formatting is set to 'ENABLED' or within preformatted blocks (`code`, ```code```, &amp;lt;pre&amp;gt;code&amp;lt;/pre&amp;gt;) for proper rendering.", "ultimate-integration-for-telegram") . "&nbsp;</span>"),
             /* translators: 1: notice */
-            "email_body_html_stripped" => sprintf(_x("Email Body HTML (tags stripped) %s", "macro", "ultimate-integration-for-telegram"), "<span style='color:white; background: red; display: block;'>&nbsp;".__("Only use when HTML Formatting is set to 'ENABLED' or within preformatted blocks (`code`, ```code```, &amp;lt;pre&amp;gt;code&amp;lt;/pre&amp;gt;) for proper rendering.", "ultimate-integration-for-telegram")."&nbsp;</span>"),
+            "email_body_html_stripped" => sprintf(_x("Email Body HTML (tags stripped) %s", "macro", "ultimate-integration-for-telegram"), "<span style='color:white; background: red; display: block;'>&nbsp;" . __("Only use when HTML Formatting is set to 'ENABLED' or within preformatted blocks (`code`, ```code```, &amp;lt;pre&amp;gt;code&amp;lt;/pre&amp;gt;) for proper rendering.", "ultimate-integration-for-telegram") . "&nbsp;</span>"),
           ),
         ),
       );
@@ -361,7 +392,9 @@ class Ultimate_Integration_Telegram_Orders extends Notifier {
           $macros = array_merge($macros, $wc_email_notif);
         }
       }
-      if ($notif_id == "wc_mail_sent") { $macros = array_merge($macros, $wc_email_notif); }
+      if ($notif_id == "wc_mail_sent") {
+        $macros = array_merge($macros, $wc_email_notif);
+      }
 
       $new_macros = array(
         "wc_order_general_details" => array(
@@ -571,46 +604,136 @@ class Ultimate_Integration_Telegram_Orders extends Notifier {
   #region hooked functions >>>>>>>>>>>>>
   public function wc_new_order($order_id) {
     $list_notif = $this->get_notifications_by_type("wc_new_order");
-    foreach ((array) $list_notif as $notif) @$this->send_telegram_msg($notif->config->message, $notif->config->btn_row1, __CLASS__, ["current_hook" => current_action(), "order_id" => $order_id], $notif->config->html_parser, false);
+    foreach ((array) $list_notif as $notif) {
+      @$this->send_telegram_msg(
+        $notif->config->message,
+        $notif->config->btn_row1,
+        __CLASS__,
+        ["current_hook" => current_action(), "order_id" => $order_id],
+        $notif->config->html_parser,
+        false,
+        $notif->config->recipients
+      );
+    }
   }
   public function wc_order_saved($order_id) {
     remove_action("woocommerce_update_order", array($this, "wc_order_saved"), 10, 1);
     $list_notif = $this->get_notifications_by_type("wc_order_saved");
-    foreach ((array) $list_notif as $notif) @$this->send_telegram_msg($notif->config->message, $notif->config->btn_row1, __CLASS__, ["current_hook" => current_action(), "order_id" => $order_id], $notif->config->html_parser, false);
+    foreach ((array) $list_notif as $notif) {
+      @$this->send_telegram_msg(
+        $notif->config->message,
+        $notif->config->btn_row1,
+        __CLASS__,
+        ["current_hook" => current_action(), "order_id" => $order_id],
+        $notif->config->html_parser,
+        false,
+        $notif->config->recipients
+      );
+    }
   }
   public function wc_payment_complete($order_id) {
     $list_notif = $this->get_notifications_by_type("wc_payment_complete");
-    foreach ((array) $list_notif as $notif) @$this->send_telegram_msg($notif->config->message, $notif->config->btn_row1, __CLASS__, ["current_hook" => current_action(), "order_id" => $order_id], $notif->config->html_parser, false);
+    foreach ((array) $list_notif as $notif) {
+      @$this->send_telegram_msg(
+        $notif->config->message,
+        $notif->config->btn_row1,
+        __CLASS__,
+        ["current_hook" => current_action(), "order_id" => $order_id],
+        $notif->config->html_parser,
+        false,
+        $notif->config->recipients
+      );
+    }
   }
   public function wc_checkout_processed($order_id, $posted_data, $order) {
     $list_notif = $this->get_notifications_by_type("wc_checkout_processed");
-    foreach ((array) $list_notif as $notif) @$this->send_telegram_msg($notif->config->message, $notif->config->btn_row1, __CLASS__, ["current_hook" => current_action(), "order_id" => $order_id], $notif->config->html_parser, false);
+    foreach ((array) $list_notif as $notif) {
+      @$this->send_telegram_msg(
+        $notif->config->message,
+        $notif->config->btn_row1,
+        __CLASS__,
+        ["current_hook" => current_action(), "order_id" => $order_id],
+        $notif->config->html_parser,
+        false,
+        $notif->config->recipients
+      );
+    }
   }
   public function wc_checkout_api_processed($order) {
     $order = is_a($order, 'WC_Order') ? $order : wc_get_order($order);
     $list_notif = $this->get_notifications_by_type("wc_checkout_api_processed");
-    foreach ((array) $list_notif as $notif) @$this->send_telegram_msg($notif->config->message, $notif->config->btn_row1, __CLASS__, ["current_hook" => current_action(), "order_id" => $order->get_id()], $notif->config->html_parser, false);
+    foreach ((array) $list_notif as $notif) {
+      @$this->send_telegram_msg(
+        $notif->config->message,
+        $notif->config->btn_row1,
+        __CLASS__,
+        ["current_hook" => current_action(), "order_id" => $order->get_id()],
+        $notif->config->html_parser,
+        false,
+        $notif->config->recipients
+      );
+    }
   }
   public function wc_order_status_changed($order_id, $status_from, $status_to, $order) {
     $list_notif = $this->get_notifications_by_type("wc_order_status_changed");
-    foreach ((array) $list_notif as $notif) @$this->send_telegram_msg($notif->config->message, $notif->config->btn_row1, __CLASS__, [
-      "current_hook" => current_action(),
-      "order_id" => $order_id,
-      "order_status_prev" => $status_from,
-      "order_status_new" => $status_to,
-    ], $notif->config->html_parser, false);
+    foreach ((array) $list_notif as $notif) {
+      @$this->send_telegram_msg(
+        $notif->config->message,
+        $notif->config->btn_row1,
+        __CLASS__,
+        [
+          "current_hook" => current_action(),
+          "order_id" => $order_id,
+          "order_status_prev" => $status_from,
+          "order_status_new" => $status_to,
+        ],
+        $notif->config->html_parser,
+        false,
+        $notif->config->recipients
+      );
+    }
   }
   public function wc_order_refunded($order_id) {
     $list_notif = $this->get_notifications_by_type("wc_delete_order");
-    foreach ((array) $list_notif as $notif) @$this->send_telegram_msg($notif->config->message, $notif->config->btn_row1, __CLASS__, ["current_hook" => current_action(), "order_id" => $order_id], $notif->config->html_parser, false);
+    foreach ((array) $list_notif as $notif) {
+      @$this->send_telegram_msg(
+        $notif->config->message,
+        $notif->config->btn_row1,
+        __CLASS__,
+        ["current_hook" => current_action(), "order_id" => $order_id],
+        $notif->config->html_parser,
+        false,
+        $notif->config->recipients
+      );
+    }
   }
   public function wc_trash_order($order_id) {
     $list_notif = $this->get_notifications_by_type("wc_trash_order");
-    foreach ((array) $list_notif as $notif) @$this->send_telegram_msg($notif->config->message, $notif->config->btn_row1, __CLASS__, ["current_hook" => current_action(), "order_id" => $order_id], $notif->config->html_parser, false);
+    foreach ((array) $list_notif as $notif) {
+      @$this->send_telegram_msg(
+        $notif->config->message,
+        $notif->config->btn_row1,
+        __CLASS__,
+        ["current_hook" => current_action(), "order_id" => $order_id],
+        $notif->config->html_parser,
+        false,
+        $notif->config->recipients
+      );
+    }
   }
   public function wc_delete_order($order_id) {
     $list_notif = $this->get_notifications_by_type("wc_delete_order");
-    foreach ((array) $list_notif as $notif) @$this->send_telegram_msg($notif->config->message, $notif->config->btn_row1, __CLASS__, ["current_hook" => current_action(), "order_id" => $order_id], $notif->config->html_parser, false);
+    foreach ((array) $list_notif as $notif) {
+      @$this->send_telegram_msg(
+        $notif->config->message,
+        $notif->config->btn_row1,
+        __CLASS__,
+        ["current_hook" => current_action(), "order_id" => $order_id],
+        $notif->config->html_parser,
+        false,
+        $notif->config->recipients
+      );
+    }
   }
   #endregion
 }

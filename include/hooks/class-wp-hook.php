@@ -2,7 +2,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/06/11 17:49:14
+ * @Last modified time: 2025/07/29 19:10:31
  */
 defined("ABSPATH") or die("<h2>Unauthorized Access!</h2><hr><small>Ultimate Integration for Telegram :: Developed by <a href='https://amirhp.com/'>Amirhp-com</a></small>");
 
@@ -43,6 +43,7 @@ class Ultimate_Integration_Telegram_Hooks extends Notifier {
             "user_registered"  => _x("User Registered Date", "macro", "ultimate-integration-for-telegram"),
             "user_jregistered" => _x("User Registered Jalali Date", "macro", "ultimate-integration-for-telegram"),
             "user_meta"        => _x("User Meta Array", "macro", "ultimate-integration-for-telegram"),
+            "edit_url"         => _x("User Edit Profile URL", "macro", "ultimate-integration-for-telegram"),
           ),
         ),
       );
@@ -89,7 +90,15 @@ class Ultimate_Integration_Telegram_Hooks extends Notifier {
         // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
         "user_data" => print_r($userdata, 1),
       ]);
-      $this->send_telegram_msg($message, $notif->config->btn_row1, __CLASS__, ["user_id" => $user_id], $notif->config->html_parser, false);
+      $this->send_telegram_msg(
+        $message,
+        $notif->config->btn_row1,
+        __CLASS__,
+        ["user_id" => $user_id],
+        $notif->config->html_parser,
+        false,
+        $notif->config->recipients
+      );
     }
   }
   public function send_edit_user_msg($user_id = 0, $userdata = [], $userdata_raw = []) {
@@ -100,7 +109,15 @@ class Ultimate_Integration_Telegram_Hooks extends Notifier {
         // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
         "user_data_raw" => print_r($userdata_raw, 1),
       ]);
-      $this->send_telegram_msg($message, $notif->config->btn_row1, __CLASS__, ["user_id" => $user_id], $notif->config->html_parser, false);
+      $this->send_telegram_msg(
+        $message,
+        $notif->config->btn_row1,
+        __CLASS__,
+        ["user_id" => $user_id],
+        $notif->config->html_parser,
+        false,
+        $notif->config->recipients
+      );
     }
   }
 }

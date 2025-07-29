@@ -1,7 +1,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/07/12 01:45:42
+ * @Last modified time: 2025/07/29 16:19:37
  */
 @font-face {
   font-family: bodyfont;
@@ -609,6 +609,7 @@ tr[data-type^="wc_"] .macro-list copy:hover::after {
   max-height: 500px;
   overflow: auto;
   flex: 1 1;
+  scrollbar-width: thin;
 }
 
 .list-notif-types {
@@ -660,6 +661,11 @@ tr[data-type^="wc_"] .macro-list copy:hover::after {
   display: block;
   text-align: center;
   color: #ccc;
+}
+
+#wpbody-content .nav-tab:is(:active,:focus),
+#wpbody-content .tab-content a:is(:active,:focus) {
+  box-shadow: none !important;
 }
 
 .setting-row>.heading {
@@ -721,9 +727,16 @@ tr[data-type^="wc_"] .macro-list copy:hover::after {
 
 .panel-heading {
   padding-bottom: 1rem;
-  display: block;
   font-size: 1.2rem;
   font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.clear-all-notif {
+  font-size: small;
+  font-weight: bold;
 }
 
 .notif-panel-side {

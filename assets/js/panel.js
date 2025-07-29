@@ -1,7 +1,7 @@
 /*
  * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/07/12 01:40:55
+ * @Last modified time: 2025/07/29 18:40:07
  */
 
 (function ($) {
@@ -130,8 +130,12 @@
     $(document).on("click tap", ".edit--entry, h3.entry-name", function (e) {
       e.preventDefault(); var me = $(this);
       me.parents(".setting-row").find(".sub-setting").toggleClass("hide");
-      me.parents(".setting-row").toggleClass("highlight");
       me.parents(".setting-row").find(".chevron").toggleClass("fa-chevron-down");
+      if (me.parents(".setting-row").find(".sub-setting").hasClass("hide")) {
+        me.parents(".setting-row").removeClass("highlight");
+      }else{
+        me.parents(".setting-row").addClass("highlight");
+      }
     });
     $(document).on("click tap", "a.nav-tab", function (e) {
       e.preventDefault();

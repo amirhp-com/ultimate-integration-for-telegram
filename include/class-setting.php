@@ -31,7 +31,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
             "token"           => "",
             "username"        => "",
             "chat_ids"        => "",
-            "notifications"   => "",
+            "notifications"   => $this->get_default_list(),
           ),
         ),
       );
@@ -465,9 +465,6 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
     public function render_workspace_tools() {
     ?>
       <div class="render_workspace_tools">
-        <!-- <a href="#" class="button button-secondary add-new-notif"><?php esc_html_e("Add New", "ultimate-integration-for-telegram"); ?></a>
-        <a href="#" class="button button-secondary clear-all-notif"><?php esc_html_e("Clear All", "ultimate-integration-for-telegram"); ?></a>
-        <a href="#" class="button button-secondary export-import-notif"><?php esc_html_e("Import / Export", "ultimate-integration-for-telegram"); ?></a> -->
         <div class="template-wrapper">
           <?php
           foreach ($this->print_notif_types(true) as $category => $items) {
@@ -477,7 +474,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
               echo "<!-- Notif Setting / " . esc_attr($items["title"]) . " / " . esc_attr($label) . " -->";
               echo "<template id='" . esc_attr($key) . "' data-cat-slug='" . esc_attr($category) . "' data-category='" . esc_attr($items["title"]) . "' data-title='" . esc_attr($label) . "'>";
               // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-              echo $this->print_notif_setting($key);
+              echo $this->print_notif_setting($key, $category, $items);
               echo "</template>";
             }
           }
@@ -502,7 +499,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
             </div>
           </div>
           <div class="notif-panel-side side-right">
-            <div class="panel-heading"><?= esc_html__("Notifications List", $this->td); ?></div>
+            <div class="panel-heading"><?= esc_html__("Notifications List", $this->td); ?> <a href="#" class="clear-all-notif"><?php esc_html_e("Clear All", "ultimate-integration-for-telegram"); ?></a></div>
             <div class="workplace" data-empty="<?php echo esc_attr(__("No notif added to panel, you toolbar above to add your first notif.", "ultimate-integration-for-telegram")); ?>"></div>
           </div>
         </div>
@@ -517,7 +514,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
         "options" => array(
           "wp_user_registered" => [
             "label" => __("New User Registered", "ultimate-integration-for-telegram"),
-            "desc" => __("WHen a new user is registered either via admin panel or wordpress front-end", $this->td),
+            "desc" => __("When a new user is registered either via admin panel or wordpress front-end", $this->td),
           ],
           "wp_user_edited" => __("User Profile Updated", "ultimate-integration-for-telegram"),
         ),
@@ -566,10 +563,12 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
           "title" => __("WooCommerce / Product", "ultimate-integration-for-telegram"),
           "desc" => __("This notif will be triggered when a WooCommerce Product is created, updated, or deleted.", "ultimate-integration-for-telegram"),
           "options" => array(
-            "wc_product_updated" => __("Product Updated or Saved", "ultimate-integration-for-telegram"),
-            "--wc_product_purchased" => __("Product Purchased on New Order", "ultimate-integration-for-telegram"),
-            "--wc_product_stock_increased" => __("Product Stock Quantity Increased", "ultimate-integration-for-telegram"),
-            "--wc_product_stock_decreased" => __("Product Stock Quantity Decreased", "ultimate-integration-for-telegram"),
+            "wc_product_updated"          => __("Product Updated or Saved", "ultimate-integration-for-telegram"),
+            "wc_product_purchased"        => __("Product Purchased on New Order", "ultimate-integration-for-telegram"),
+            "wc_product_stock_increased"  => __("Stock Quantity Increased", "ultimate-integration-for-telegram"),
+            "wc_product_stock_decreased"  => __("Stock Quantity Decreased", "ultimate-integration-for-telegram"),
+            "wc_product_stock_outofstock" => __("Stock Quantity Reached Zero (Outofstock)", "ultimate-integration-for-telegram"),
+            "wc_product_stock_low_stock"   => __("Stock Quantity Reached Low Stock Level", "ultimate-integration-for-telegram"),
           ),
         );
         $mail_options["wc_mail_sent"] = sprintf(__("Mail Sent: All Emails", "ultimate-integration-for-telegram"), $name);
@@ -620,13 +619,65 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
         }
       }
     }
-    public function print_notif_setting($slug) {
+    public function get_default_message($slug = "", $category = "", $items = []) {
+      $msg = "";
+      switch ($slug) {
+        case 'wc_new_order':
+          $msg = _x("🎉 *New Order Received* on {site_name}!\nOrder #{order_number} for {order_total} {order_currency} by {customer_first_name} {customer_last_name} ({customer_email})\nStatus: {order_status} | Date: {order_date}\nItems: {order_items_count}\n{order_items_quantity_list}", "tg-default-msg", $this->td);
+          break;
+        case 'wc_payment_complete':
+          $msg = _x("💰 *Payment Confirmed* for Order #{order_number}!\nTotal: {order_total} {order_currency} via {order_payment_method_title}\nCustomer: {customer_first_name} {customer_last_name} ({customer_email})\nTransaction ID: {transaction_id}\nPaid on: {order_date_paid}", "tg-default-msg", $this->td);
+        break;
+        case 'wc_order_status_to_completed':
+          $msg = _x("✅ Order #{order_number} is now *Completed*!\nTotal: {order_total} {order_currency} for {customer_first_name} {customer_last_name}\nCompleted on: {order_date_completed}\nItems: {order_items_count}\n{order_items_quantity_list}", "tg-default-msg", $this->td);
+        break;
+        case 'wp_user_registered':
+          $msg = _x("👤 *New user joined* {site_name}!\nName: {first_name} {last_name} ({user_email})\nUsername: {user_login} | Registered on: {user_registered}", "tg-default-msg", $this->td);
+        break;
+        case 'wc_product_stock_outofstock':
+          $msg = _x("🚨 *Out of Stock Alert!*\nProduct *{name}* is now *out of stock* (0 units).", "tg-default-msg", $this->td);
+        break;
+        case 'wc_product_stock_low_stock':
+          $msg = _x("📊 *Low Stock Alert!*\nProduct *{name}* has reached *{stock_quantity}* units in stock.", "tg-default-msg", $this->td);
+        break;
+
+        default:
+          $msg = "";
+          break;
+      }
+      return $msg;
+    }
+    public function get_default_button($slug = "", $category = "", $items = []) {
+      $btns = "";
+      switch ($slug) {
+        case 'wc_new_order':
+        case 'wc_payment_complete':
+        case 'wc_order_status_to_completed':
+          $btns = _x("View Order | {view_url}\nEdit Order | {edit_url}", "tg-default-btn", $this->td);
+        break;
+        case 'wp_user_registered':
+          $btns = _x("Edit User | {edit_url}", "tg-default-btn", $this->td);
+        break;
+        case 'wc_product_stock_outofstock':
+        case 'wc_product_stock_low_stock':
+          $btns = _x("Restock Now | {edit_url}", "tg-default-btn", $this->td);
+        break;
+
+        default:
+          $btns = "";
+          break;
+      }
+      return $btns;
+    }
+    public function print_notif_setting($slug, $category, $items) {
       ob_start();
+      do_action("ultimate-integration-for-telegram/notif-panel/before-notif-setting", $slug, $category, $items);
       $btn_placeholder = "Button label | Button URL";
-      do_action("ultimate-integration-for-telegram/notif-panel/before-notif-setting", $slug);
-      $default_message = apply_filters("ultimate-integration-for-telegram/notif-panel/notif-default-message", "", $slug);
-      $default_parser = apply_filters("ultimate-integration-for-telegram/notif-panel/notif-default-parser", false, $slug);
-      $default_buttons = apply_filters("ultimate-integration-for-telegram/notif-panel/notif-default-buttons", "", $slug);
+      $msg = $this->get_default_message($slug, $category, $items);
+      $btn = $this->get_default_button($slug, $category, $items);
+      $default_message = apply_filters("ultimate-integration-for-telegram/notif-panel/notif-default-message", $msg, $slug, $category, $items);
+      $default_parser = apply_filters("ultimate-integration-for-telegram/notif-panel/notif-default-parser", false, $slug, $category, $items);
+      $default_buttons = apply_filters("ultimate-integration-for-telegram/notif-panel/notif-default-buttons", $btn, $slug, $category, $items);
     ?>
       <table class="sub-setting form-table wp-list-table widefat striped table-view-list fixed hide">
         <tbody>
@@ -635,10 +686,9 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
             <td>
               <textarea rows="5"
                 placeholder="<?php esc_attr_e("Write your message here ...", "ultimate-integration-for-telegram"); ?>"
-                data-slug="message"
-                ><?php
-                // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-                echo $default_message; ?></textarea>
+                data-slug="message"><?php
+                                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                                    echo $default_message; ?></textarea>
               <p class="description">
                 <?php
                 // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -692,8 +742,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
             </th>
             <td>
               <textarea rows="3" data-slug="recipients"
-                placeholder="<?php esc_attr_e("Leave Empty to use Default Recipients.", "ultimate-integration-for-telegram"); ?>"
-              ></textarea>
+                placeholder="<?php esc_attr_e("Leave Empty to use Default Recipients.", "ultimate-integration-for-telegram"); ?>"></textarea>
             </td>
           </tr>
           <tr class="description">
