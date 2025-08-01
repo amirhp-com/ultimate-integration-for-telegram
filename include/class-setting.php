@@ -92,7 +92,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
         "ajax" => admin_url("admin-ajax.php"),
         "action" => $this->td,
         "notif_json" => htmlentities($data),
-        "nonce" => wp_create_nonce($this->td),
+        "nonce" => wp_create_nonce("ultimate-integration-for-telegram"),
         "reset_confirm" => esc_html__("Are you sure you want to reset the notifications list to default? This will overwrite your current notifications. You cannot undo this action.", "ultimate-integration-for-telegram"),
         "default_list" => $this->get_default_list(),
         "default_applied" => esc_html__("Default notifications list has been applied (but not saved yet). To apply changes, please save settings.", "ultimate-integration-for-telegram"),
@@ -182,7 +182,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
               </thead>
               <tbody>
                 <tr>
-                  <th><?php echo esc_html__("Step 1: Create a Bot", $this->td); ?></th>
+                  <th><?php echo esc_html__("Step 1: Create a Bot", "ultimate-integration-for-telegram"); ?></th>
                   <td><?php printf(
                         /* translators: 1: bot father link, 2: connect btn, 3: break */
                         __('Open %1$s in Telegram and send the command /newbot. Follow the instructions to name your bot and choose a username (e.g., my_notifier_bot).', "ultimate-integration-for-telegram"),
@@ -190,8 +190,8 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
                       ); ?></td>
                 </tr>
                 <tr>
-                  <th><?php echo esc_html__("Step 2: Get the Token", $this->td); ?></th>
-                  <td><?php echo sprintf(__("Once your bot is created, BotFather will send you a Token — a long string like this: %s. Tap to copy that token, You’ll need it in the next step.", $this->td), "<code>123456789:ABCDefghIJKlmNoPQRstuVWXyz12345678</code>"); ?></td>
+                  <th><?php echo esc_html__("Step 2: Get the Token", "ultimate-integration-for-telegram"); ?></th>
+                  <td><?php echo sprintf(__("Once your bot is created, BotFather will send you a Token — a long string like this: %s. Tap to copy that token, You’ll need it in the next step.", "ultimate-integration-for-telegram"), "<code>123456789:ABCDefghIJKlmNoPQRstuVWXyz12345678</code>"); ?></td>
                 </tr>
                 <?php
                 /* translators: 1: @BotFather hyperlinked, 2: validate token link, 3: line break <br> */
@@ -552,7 +552,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
         </div>
         <div class="workspace-notifications-list">
           <div class="notif-panel-side side-left">
-            <div class="panel-heading"><?= esc_html__("Available Events", $this->td); ?></div>
+            <div class="panel-heading"><?= esc_html__("Available Events", "ultimate-integration-for-telegram"); ?></div>
             <div class="list-notif-types">
               <?php
               do_action("ultimate-integration-for-telegram/notif-panel/after-general-notif-dropdown");
@@ -562,7 +562,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
             </div>
           </div>
           <div class="notif-panel-side side-right">
-            <div class="panel-heading"><?= esc_html__("Notifications List", $this->td); ?> <a href="#" class="clear-all-notif"><?php esc_html_e("Clear All", "ultimate-integration-for-telegram"); ?></a></div>
+            <div class="panel-heading"><?= esc_html__("Notifications List", "ultimate-integration-for-telegram"); ?> <a href="#" class="clear-all-notif"><?php esc_html_e("Clear All", "ultimate-integration-for-telegram"); ?></a></div>
             <div class="workplace" data-empty="<?php echo esc_attr(__("No notif added to panel, you toolbar above to add your first notif.", "ultimate-integration-for-telegram")); ?>"></div>
           </div>
         </div>
@@ -577,7 +577,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
         "options" => array(
           "wp_user_registered" => [
             "label" => __("New User Registered", "ultimate-integration-for-telegram"),
-            // "desc" => __("When a new user is registered either via admin panel or wordpress front-end", $this->td),
+            // "desc" => __("When a new user is registered either via admin panel or wordpress front-end", "ultimate-integration-for-telegram"),
           ],
           "wp_user_edited" => __("User Profile Updated", "ultimate-integration-for-telegram"),
         ),
@@ -676,7 +676,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
               $class .= " disabled ";
             }
             $info = isset($value["desc"]) && !empty($value["desc"]) ? "<span class='fas fa-question-circle help-event-span' data-tippy-content='" . esc_attr($value["desc"]) . "'></span>" : "";
-            $add = "<span class='fas fa-plus add-current-item' data-tippy-content='" . __("Add Notification for this event", $this->td) . "'></span>";
+            $add = "<span class='fas fa-plus add-current-item' data-tippy-content='" . __("Add Notification for this event", "ultimate-integration-for-telegram") . "'></span>";
             echo "<li class='" . esc_attr($class) . "' " . esc_attr($attr) . " data-category='" . esc_attr($category) . "' data-key='" . esc_attr($key) . "'>" . esc_attr($label) . $info . $add . "</li>";
           }
         }
@@ -686,22 +686,22 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
       $msg = "";
       switch ($slug) {
         case 'wc_new_order':
-          $msg = _x("🎉 *New Order Received* on {site_name}!\nOrder #{order_number} for {order_total} {order_currency} by {customer_first_name} {customer_last_name} ({customer_email})\nStatus: {order_status} | Date: {order_date}\nItems: {order_items_count}\n{order_items_quantity_list}", "tg-default-msg", $this->td);
+          $msg = _x("🎉 *New Order Received* on {site_name}!\nOrder #{order_number} for {order_total} {order_currency} by {customer_first_name} {customer_last_name} ({customer_email})\nStatus: {order_status} | Date: {order_date}\nItems: {order_items_count}\n{order_items_quantity_list}", "tg-default-msg", "ultimate-integration-for-telegram");
           break;
         case 'wc_payment_complete':
-          $msg = _x("💰 *Payment Confirmed* for Order #{order_number}!\nTotal: {order_total} {order_currency} via {order_payment_method_title}\nCustomer: {customer_first_name} {customer_last_name} ({customer_email})\nTransaction ID: {transaction_id}\nPaid on: {order_date_paid}", "tg-default-msg", $this->td);
+          $msg = _x("💰 *Payment Confirmed* for Order #{order_number}!\nTotal: {order_total} {order_currency} via {order_payment_method_title}\nCustomer: {customer_first_name} {customer_last_name} ({customer_email})\nTransaction ID: {transaction_id}\nPaid on: {order_date_paid}", "tg-default-msg", "ultimate-integration-for-telegram");
           break;
         case 'wc_order_status_to_completed':
-          $msg = _x("✅ Order #{order_number} is now *Completed*!\nTotal: {order_total} {order_currency} for {customer_first_name} {customer_last_name}\nCompleted on: {order_date_completed}\nItems: {order_items_count}\n{order_items_quantity_list}", "tg-default-msg", $this->td);
+          $msg = _x("✅ Order #{order_number} is now *Completed*!\nTotal: {order_total} {order_currency} for {customer_first_name} {customer_last_name}\nCompleted on: {order_date_completed}\nItems: {order_items_count}\n{order_items_quantity_list}", "tg-default-msg", "ultimate-integration-for-telegram");
           break;
         case 'wp_user_registered':
-          $msg = _x("👤 *New user joined* {site_name}!\nName: {first_name} {last_name} ({user_email})\nUsername: {user_login} | Registered on: {user_registered}", "tg-default-msg", $this->td);
+          $msg = _x("👤 *New user joined* {site_name}!\nName: {first_name} {last_name} ({user_email})\nUsername: {user_login} | Registered on: {user_registered}", "tg-default-msg", "ultimate-integration-for-telegram");
           break;
         case 'wc_product_stock_outofstock':
-          $msg = _x("🚨 *Out of Stock Alert!*\nProduct *{name}* is now *out of stock* (0 units).", "tg-default-msg", $this->td);
+          $msg = _x("🚨 *Out of Stock Alert!*\nProduct *{name}* is now *out of stock* (0 units).", "tg-default-msg", "ultimate-integration-for-telegram");
           break;
         case 'wc_product_stock_low_stock':
-          $msg = _x("📊 *Low Stock Alert!*\nProduct *{name}* has reached *{stock_quantity}* units in stock.", "tg-default-msg", $this->td);
+          $msg = _x("📊 *Low Stock Alert!*\nProduct *{name}* has reached *{stock_quantity}* units in stock.", "tg-default-msg", "ultimate-integration-for-telegram");
           break;
 
         default:
@@ -716,14 +716,14 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
         case 'wc_new_order':
         case 'wc_payment_complete':
         case 'wc_order_status_to_completed':
-          $btns = _x("View Order | {view_url}\nEdit Order | {edit_url}", "tg-default-btn", $this->td);
+          $btns = _x("View Order | {view_url}\nEdit Order | {edit_url}", "tg-default-btn", "ultimate-integration-for-telegram");
           break;
         case 'wp_user_registered':
-          $btns = _x("Edit User | {edit_url}", "tg-default-btn", $this->td);
+          $btns = _x("Edit User | {edit_url}", "tg-default-btn", "ultimate-integration-for-telegram");
           break;
         case 'wc_product_stock_outofstock':
         case 'wc_product_stock_low_stock':
-          $btns = _x("Restock Now | {edit_url}", "tg-default-btn", $this->td);
+          $btns = _x("Restock Now | {edit_url}", "tg-default-btn", "ultimate-integration-for-telegram");
           break;
 
         default:
@@ -878,7 +878,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
                       id='" . esc_attr($slug) . "'
                       type='" . esc_attr($type) . "'
                       placeholder='" . esc_attr($caption) . "'
-                      title='" . esc_attr(sprintf(_x("Enter %s", "setting-page", $this->td), $caption)) . "'
+                      title='" . esc_attr(sprintf(_x("Enter %s", "setting-page", "ultimate-integration-for-telegram"), $caption)) . "'
                       value='" . esc_attr($this->read($slug)) . "'
                       class='regular-text " . esc_attr($extra_class) . "' " . esc_attr($extra_html) . " />
               <p class='description'>" . ($desc) . "</p></td></tr>";
@@ -897,7 +897,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
               <td><input name='{$this->setting_key}[$slug]'
                       id='" . esc_attr($slug) . "'
                       type='checkbox'
-                      title='" . esc_attr(sprintf(_x("Enter %s", "setting-page", $this->td), $caption)) . "'
+                      title='" . esc_attr(sprintf(_x("Enter %s", "setting-page", "ultimate-integration-for-telegram"), $caption)) . "'
                       value='" . esc_attr($value) . "' " . checked($this->read($slug, NULL), $value, false) . "
                       class='regular-text " . esc_attr($extra_class) . "' " . esc_attr($extra_html) . " />
               <p class='description'>" . ($desc) . "</p></td></tr>";
@@ -913,7 +913,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
       )));
       echo "<tr class='type-select $extra_class " . sanitize_title($slug) . "'>
               <th scope='row'><label for='$slug'>$caption</label></th>
-              <td><select name='{$this->setting_key}[$slug]' id='" . esc_attr($slug) . "' title='" . esc_attr(sprintf(_x("Choose %s", "setting-page", $this->td), $caption)) . "' class='regular-text " . esc_attr($extra_class) . "' " . esc_attr($extra_html) . ">";
+              <td><select name='{$this->setting_key}[$slug]' id='" . esc_attr($slug) . "' title='" . esc_attr(sprintf(_x("Choose %s", "setting-page", "ultimate-integration-for-telegram"), $caption)) . "' class='regular-text " . esc_attr($extra_class) . "' " . esc_attr($extra_html) . ">";
       foreach ($options as $key => $value) {
         if ($key == "EMPTY") {
           $key = "";
@@ -951,7 +951,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
       }
 
       echo "<textarea name='" . esc_attr($this->setting_key . "[{$slug}]") . "' id='" . esc_attr($slug) . "' placeholder='" . esc_attr($caption) . "'
-                      title='" . esc_attr(sprintf(_x("Enter %s", "setting-page", $this->td), $caption)) . "'
+                      title='" . esc_attr(sprintf(_x("Enter %s", "setting-page", "ultimate-integration-for-telegram"), $caption)) . "'
                       rows='" . esc_attr($rows) . "'
                       style='" . esc_attr($style) . "'
                       class='regular-text " . esc_attr($extra_class) . "' " . esc_attr($extra_html) . " >" . ($this->read($slug, $default) ?: $default) . "</textarea>

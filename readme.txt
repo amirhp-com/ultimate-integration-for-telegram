@@ -239,7 +239,21 @@ Yes, it supports major WooCommerce add-ons like WooCommerce Subscription, WooCom
 Upgrade to enjoy the latest features and stability improvements.
 
 = v1.5.0 | 2025-08-02 | 1404-05-11 =
+* New UI and improved user experience throughout the plugin.
+* Added import/export feature for notifications and settings.
+* Added default message content and a list of default messages.
+* Changed the method for saving settings in the database for better reliability.
+* Added support for custom Telegram bot servers.
+* Added channel agent feature for advanced channel management.
+* Introduced a step-by-step setup wizard on the plugin settings page.
+* Added support for notification and notification categories to have descriptions.
+* Added ability to customize recipients per message.
+* Enhanced Markdown validator for more robust message formatting.
+* Merged translations and string replacement panels into a single translation tool.
+* Improved stability and minor bug fixes.
+* Enhanced security checks for safer operation.
 
+For the full changelog, please view the [Github Repository](https://github.com/pigment-dev/ultimate-integration-for-telegram#changelog)
 
 
 == Changelog ==
