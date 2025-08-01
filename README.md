@@ -206,6 +206,7 @@ This plugin is licensed under the **GPL v2.0 or later**. You are free to use, mo
 * Added ability to customize recipients per message.
 * Enhanced Markdown validator for more robust message formatting.
 * Merged translations and string replacement panels into a single translation tool.
+* Switched to offloaded Font Awesome v7 for improved performance and up-to-date icon support.
 * Improved stability and minor bug fixes.
 * Enhanced security checks for safer operation.
 

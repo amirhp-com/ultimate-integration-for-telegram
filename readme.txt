@@ -250,6 +250,7 @@ Upgrade to enjoy the latest features and stability improvements.
 * Added ability to customize recipients per message.
 * Enhanced Markdown validator for more robust message formatting.
 * Merged translations and string replacement panels into a single translation tool.
+* Switched to offloaded Font Awesome v7 for improved performance and up-to-date icon support.
 * Improved stability and minor bug fixes.
 * Enhanced security checks for safer operation.
 
