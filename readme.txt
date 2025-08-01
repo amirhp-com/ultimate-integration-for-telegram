@@ -218,7 +218,9 @@ This plugin utilizes the following third-party libraries to enhance functionalit
 
 1. Setting > General
 2. Setting > Notifications
-3. Setting > Translation Panel
+3. Setting > Channel Agent
+4. Setting > Translation Tool
+5. Setting > Migration Panel
 
 == Installation ==
 1. Upload the plugin files to the `/wp-content/plugins/` directory, or install the plugin through the WordPress plugins screen directly.
