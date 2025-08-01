@@ -20,7 +20,7 @@
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/08/02 02:20:32
+ * @Last modified time: 2025/08/02 02:59:05
  * https://packagist.org/packages/longman/telegram-bot#user-content-using-a-custom-bot-api-server
 */
 
@@ -41,7 +41,7 @@ if (!class_exists("Notifier")) {
     protected $title = "Ultimate Integration for Telegram";
     protected $db_slug = "ultimate-integration-for-telegram";
     protected $setting_key = "ultimate_integrations_telegram__settings";
-    protected $version = "1.4.0";
+    protected $version = "1.5.0";
     protected $title_small = "Telegram";
     protected $assets_url;
     protected $hook_url;
