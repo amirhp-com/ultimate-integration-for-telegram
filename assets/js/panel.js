@@ -1,7 +1,6 @@
 /*
- * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/07/29 18:40:07
+ * @Last modified time: 2025/08/02 02:20:49
  */
 
 (function ($) {
@@ -144,6 +143,11 @@
       me.addClass("nav-tab-active");
       $(".tab-content.tab-active").removeClass("tab-active");
       $(`.tab-content[data-tab=${me.data("tab")}]`).addClass("tab-active");
+      if ($(`.tab-content[data-tab=${me.data("tab")}]`).hasClass("no-save")) {
+        $(".submit_wrapper").addClass("hide");
+      }else{
+        $(".submit_wrapper").removeClass("hide");
+      }
       window.location.hash = me.data("tab");
       localStorage.setItem("bsdev-tg", me.data("tab"));
       tippy('[data-tippy-content]:not([data-tippy-content=""])', { allowHTML: true, });
@@ -182,6 +186,31 @@
           action: _panel.action,
           nonce: _panel.nonce,
           wparam: "send_test",
+        },
+        success: function (e) {
+          if (e.success === true) { show_toast(e.data.msg, $success_color); }
+          else { show_toast(e.data.msg, $error_color); }
+        },
+        error: function (e) { show_toast(_panel.unknown, $error_color); console.error(e); },
+        complete: function (e) { },
+      });
+    });
+    $(document).on("click tap", ".send-channel-message", function (e) {
+      e.preventDefault();
+      if (_request != null) { _request.abort(); }
+      show_toast(_panel.wait, $info_color);
+      _request = $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: _panel.ajax,
+        data: {
+          action     : _panel.action,
+          nonce      : _panel.nonce,
+          message    : $(".builtin_channel_agent textarea[data-slug='message']").val(),
+          html_parser: $(".builtin_channel_agent input[data-slug='html_parser']").prop("checked") ? "html": "markdown",
+          button     : $(".builtin_channel_agent textarea[data-slug='buttons']").val(),
+          recipients : $(".builtin_channel_agent textarea[data-slug='recipients']").val(),
+          wparam     : "send_channel_message",
         },
         success: function (e) {
           if (e.success === true) { show_toast(e.data.msg, $success_color); }
@@ -436,7 +465,7 @@
           });
           gettext["gettext"][i] = item;
         });
-        var jsonData = JSON.stringify(gettext);
+        var jsonData = JSON.stringify(gettext, " ", 2);
         $(data_inp).val(jsonData).trigger("change");
       } catch (e) { }
     }

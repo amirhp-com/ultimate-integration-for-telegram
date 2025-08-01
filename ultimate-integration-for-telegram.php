@@ -1,30 +1,30 @@
 <?php
 /*
- * Plugin Name: Pigment Agent Bot
+ * Plugin Name: Ultimate Integration for Telegram
  * Description: Integrate Telegram with WordPress, WooCommerce, and a wide range of plugins. Send customized notifications to channels, groups, bots, or private chats with built-in advanced translation and string replacement tools.
- * Version: 1.4.0
- * Stable tag: 1.2.0
- * Author: BlackSwan
- * Author URI: https://amirhp.com/landing
+ * Version: 1.5.0
+ * Stable tag: 1.5.0
+ * Author: pigmentdev
+ * Author URI: https://pigment.dev/
  * Plugin URI: https://wordpress.org/plugins/ultimate-integration-for-telegram/
- * Contributors: amirhpcom, blackswanlab, pigmentdev
+ * Contributors: amirhpcom, pigmentdev
  * Tags: woocommerce, telegram, notification
  * Requires PHP: 7.4
  * Requires at least: 5.0
  * Tested up to: 6.8
  * WC requires at least: 5.0
- * WC tested up to: 9.9.3
+ * WC tested up to: 10.0
  * Text Domain: ultimate-integration-for-telegram
  * Domain Path: /languages
- * Copyright: (c) BlackSwanDev, All rights reserved.
+ * Copyright: (c) Pigment.Dev, All rights reserved.
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/07/29 19:05:48
+ * @Last modified time: 2025/08/02 02:20:32
  * https://packagist.org/packages/longman/telegram-bot#user-content-using-a-custom-bot-api-server
 */
 
-namespace BlackSwan\Ultimate_Integration_Telegram;
+namespace PigmentDev\Ultimate_Integration_Telegram;
 
 use Longman\TelegramBot\Telegram;
 use Longman\TelegramBot\Request;
@@ -33,13 +33,14 @@ use Longman\TelegramBot\Exception\TelegramLogException;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Entities\Entity;
 
-defined("ABSPATH") or die("<h2>Unauthorized Access!</h2><hr><small>Pigment Agent Bot :: Developed by <a href='https://amirhp.com/'>Amirhp-com</a></small>");
+defined("ABSPATH") or die("<h2>Unauthorized Access!</h2><hr><small>Ultimate Integration for Telegram :: Developed by <a href='https://pigment.dev/'>Pigment.Dev</a></small>");
 
 if (!class_exists("Notifier")) {
   class Notifier {
     protected $td = "ultimate-integration-for-telegram";
-    protected $title = "Pigment Agent Bot";
+    protected $title = "Ultimate Integration for Telegram";
     protected $db_slug = "ultimate-integration-for-telegram";
+    protected $setting_key = "ultimate_integrations_telegram__settings";
     protected $version = "1.4.0";
     protected $title_small = "Telegram";
     protected $assets_url;
@@ -92,7 +93,10 @@ if (!class_exists("Notifier")) {
           "upload"   => "{$this->include_dir}/temp/upload",
         ],
       );
-      // (new Request)::setCustomBotApiUri('https://my-worker.amirhp.workers.dev');
+      // Default: https://api.telegram.org
+      if (!empty($this->read("api_base_uri"))) {
+        Request::setCustomBotApiUri($api_base_uri = $this->read("api_base_uri", "https://api.telegram.org"));
+      }
       add_action("before_woocommerce_init", [$this, "add_hpos_support"]);
     }
     public function handle_bot_webhook() {
@@ -112,15 +116,15 @@ if (!class_exists("Notifier")) {
           TelegramLog::error($e);
           if ($this->debug) {
             // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r, WordPress.PHP.DevelopmentFunctions.error_log_error_log
-            error_log("Pigment Agent Bot :: debugging ~> " . PHP_EOL . print_r($e, 1));
+            error_log("Ultimate Integration for Telegram :: debugging ~> " . PHP_EOL . print_r($e, 1));
           }
         } catch (TelegramLogException $e) {
           if ($this->debug) {
             // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r, WordPress.PHP.DevelopmentFunctions.error_log_error_log
-            error_log("Pigment Agent Bot :: debugging ~> " . PHP_EOL . print_r($e, 1));
+            error_log("Ultimate Integration for Telegram :: debugging ~> " . PHP_EOL . print_r($e, 1));
           }
         }
-        die("<!-- Pigment Agent Bot :: Webhook done ./ -->");
+        die("<!-- Ultimate Integration for Telegram :: Webhook done ./ -->");
       }
     }
     public function get_notifications_by_type($type = []) {
@@ -138,7 +142,7 @@ if (!class_exists("Notifier")) {
     #region hooked-functions >>>>>>>>>>>>>
     public function init_plugin() {
       load_plugin_textdomain("ultimate-integration-for-telegram", false, dirname(plugin_basename(__FILE__)) . "/languages/");
-      $this->title = __("Pigment Agent Bot", "ultimate-integration-for-telegram");
+      $this->title = __("Ultimate Integration for Telegram", "ultimate-integration-for-telegram");
       $this->title_small = __("Telegram", "ultimate-integration-for-telegram");
       $this->include_class();
       if ($this->enabled("jdate")) {
@@ -231,7 +235,7 @@ if (!class_exists("Notifier")) {
             } catch (TelegramException $e) {
               wp_send_json_error(array("msg" => $e->getMessage()));
             }
-            break;
+          break;
 
           case "disconnect":
             try {
@@ -241,7 +245,7 @@ if (!class_exists("Notifier")) {
             } catch (TelegramException $e) {
               wp_send_json_error(array("msg" => $e->getMessage()));
             }
-            break;
+          break;
 
 
           case 'send_test':
@@ -251,7 +255,7 @@ if (!class_exists("Notifier")) {
             $icon = get_site_icon_url();
             $site_name = Entity::escapeMarkdownV2(get_bloginfo("name"));
             $bot_name = Entity::escapeMarkdownV2($this->read("username"));
-            $message = "***Hi from [Pigment Agent Bot](https://wordpress.org/plugins/ultimate-integration-for-telegram/)***👋\n\n" .
+            $message = "***Hi from [Ultimate Integration for Telegram](https://wordpress.org/plugins/ultimate-integration-for-telegram/)***👋\n\n" .
               "Great news — your site \"***{$site_name}***\" is now successfully connected to Telegram via {$bot_name} and ready to send notifications! 😍🎉\n\n" .
               ">||→ ***site host:*** " . $site_host . "||\n" .
               ">||→ ***server time:*** " . wp_date("Y-m-d H:i:s", current_time("timestamp")) . "||\n" .
@@ -277,11 +281,12 @@ if (!class_exists("Notifier")) {
             if (empty(trim($chat_ids))) wp_send_json_error(["msg" => __("No Chat ID found. Please add a Chat ID to send a test message.", "ultimate-integration-for-telegram")]);
             $chat_ids  = explode("\n", $chat_ids);
             $chat_ids  = array_map("trim", $chat_ids);
+            $chat_ids  = array_unique($chat_ids);
             $res_array = [];
-            $failed = false;
-            $errors = [];
-            $errors2 = [];
-            $errors3 = [];
+            $failed    = false;
+            $errors    = [];
+            $errors2   = [];
+            $errors3   = [];
             if (empty($chat_ids)) wp_send_json_error(["msg" => __("No Chat ID found. Please add a Chat ID to send a test message.", "ultimate-integration-for-telegram")]);
             try {
               $telegram  = new Telegram($this->read("token"), $this->read("username"));
@@ -324,7 +329,7 @@ if (!class_exists("Notifier")) {
                   $errors3[] = $result->getDescription();
                   if ($this->debug) {
                     // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log,WordPress.PHP.DevelopmentFunctions.error_log_var_export
-                    error_log("Pigment Agent Bot :: debugging send test msg ~> " . PHP_EOL . var_export($result, 1));
+                    error_log("Ultimate Integration for Telegram :: debugging send test msg ~> " . PHP_EOL . var_export($result, 1));
                   }
                   /* translators: 1: Chat ID */
                   $res_array[] = sprintf(__("Error sending test message to ChatID: %s", "ultimate-integration-for-telegram") . "<br>" . $result->getDescription(), $chat);
@@ -341,7 +346,7 @@ if (!class_exists("Notifier")) {
               $res_array[] = sprintf(__("Error Occured: %s", "ultimate-integration-for-telegram"), $e->getMessage());
               if ($this->debug) {
                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log,WordPress.PHP.DevelopmentFunctions.error_log_var_export
-                error_log("Pigment Agent Bot :: debugging send test msg ~> " . PHP_EOL . var_export($e, 1));
+                error_log("Ultimate Integration for Telegram :: debugging send test msg ~> " . PHP_EOL . var_export($e, 1));
               }
             }
             if ($failed) {
@@ -349,11 +354,33 @@ if (!class_exists("Notifier")) {
             } else {
               wp_send_json_success(["msg" => implode(PHP_EOL, $res_array)]);
             }
-            break;
+          break;
+
+
+          case 'send_channel_message':
+            $site_host = wp_parse_url(home_url(), PHP_URL_HOST);
+            $site_name = Entity::escapeMarkdownV2(get_bloginfo("name"));
+            $bot_name = Entity::escapeMarkdownV2($this->read("username"));
+            $message     = sanitize_textarea_field($_POST["message"]??"");
+            $html_parser = sanitize_text_field($_POST["html_parser"]??"");
+            $button      = sanitize_textarea_field($_POST["button"]??"");
+            $recipients  = sanitize_textarea_field($_POST["recipients"]??"");
+
+            $res = @$this->send_telegram_msg(
+              $message,
+              $button,
+              __CLASS__,
+              ["site_host" => $site_host, "site_name" => $site_name, "bot_name" => $bot_name],
+              $html_parser == "html",
+              true,
+              $recipients
+            );
+          break;
 
           default:
             wp_send_json_error(["msg" => __("An unknown error occured.", "ultimate-integration-for-telegram"), "err" => "loop-default",]);
-            break;
+          break;
+
         }
         wp_send_json_error(["msg" => __("An unknown error occured.", "ultimate-integration-for-telegram"), "err" => "out-of-loop",]);
       }
@@ -450,11 +477,20 @@ if (!class_exists("Notifier")) {
     }
     #endregion
     #region setting-related functions >>>>>>>>>>>>>
-    protected function read($slug = "debug", $default = "") {
-      return (string) get_option("{$this->db_slug}__{$slug}", $default);
-    }
     protected function enabled($slug = "debug", $default = "no", $compare = "yes") {
       return $compare === (string) $this->read($slug, $default);
+    }
+    public function is_active($slug = "debug", $default = "no", $compare = "yes") {
+      return $compare === (string) $this->read($slug, $default);
+    }
+    public function read($slug = "", $default = NULL) {
+      $opt = get_option($this->setting_key, $default);
+      return isset($opt[$slug]) ? $opt[$slug] : $default;
+    }
+    public function set($slug = "", $value = "") {
+      $options = (array) get_option($this->setting_key);
+      $options[$slug] = $value;
+      update_option($this->setting_key, $options, "no");
     }
     #endregion
     #region display-user, sanitize-number, get user ip >>>>>>>>>>>>>
@@ -517,7 +553,7 @@ if (!class_exists("Notifier")) {
         $debug = ["msg" => __("No Chat ID found. Please add a Chat ID to send a test message.", "ultimate-integration-for-telegram")];
         if ($this->debug) {
           // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r,WordPress.PHP.DevelopmentFunctions.error_log_error_log,WordPress.PHP.DevelopmentFunctions.error_log_var_export
-          error_log("Pigment Agent Bot :: debugging " . current_action() . ": " . __METHOD__ . PHP_EOL . var_export($debug, 1));
+          error_log("Ultimate Integration for Telegram :: debugging " . current_action() . ": " . __METHOD__ . PHP_EOL . var_export($debug, 1));
         }
         if ($json) {
           wp_send_json_error($debug);
@@ -536,7 +572,7 @@ if (!class_exists("Notifier")) {
         $debug = ["msg" => __("No Chat ID found. Please add a Chat ID to send a test message.", "ultimate-integration-for-telegram")];
         if ($this->debug) {
           // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r,WordPress.PHP.DevelopmentFunctions.error_log_error_log,WordPress.PHP.DevelopmentFunctions.error_log_var_export
-          error_log("Pigment Agent Bot :: debugging " . current_action() . ": " . __METHOD__ . PHP_EOL . var_export($debug, 1));
+          error_log("Ultimate Integration for Telegram :: debugging " . current_action() . ": " . __METHOD__ . PHP_EOL . var_export($debug, 1));
         }
         if ($json) {
           wp_send_json_error($debug);
@@ -564,25 +600,25 @@ if (!class_exists("Notifier")) {
       } else {
         $html_parser = false;
       }
-      $message = $this->translate_param($message_text, $reference, $extra_data, []);
 
       if ($buttons && !empty($buttons)) {
         $buttons = apply_filters("ultimate-integration-for-telegram/helper/send-message-buttons", array_slice($buttons, 0, 4), $buttons, $reference, func_get_args());
-        $markup = array($buttons, [['text' => "🌏 Pigment Agent Bot", "url" => "https://wordpress.org/plugins/ultimate-integration-for-telegram/"],]);
+        $markup = array($buttons, [['text' => "🌏 {$this->title}", "url" => "https://wordpress.org/plugins/ultimate-integration-for-telegram/"],]);
       } else {
-        $markup = [[['text' => "🌏 Pigment Agent Bot", "url" => "https://wordpress.org/plugins/ultimate-integration-for-telegram/"],]];
+        $markup = [[['text' => "🌏 {$this->title}", "url" => "https://wordpress.org/plugins/ultimate-integration-for-telegram/"],]];
       }
       try {
         $telegram  = new Telegram($this->read("token"), $this->read("username"));
         foreach ($chat_ids as $chat) {
           $tg = (new Request);
+          $message = $this->translate_param($message_text, $reference, $extra_data, []);
           $method = apply_filters("ultimate-integration-for-telegram/helper/send-message-method", "sendMessage", func_get_args());
           $site_host = wp_parse_url(home_url(), PHP_URL_HOST);
           $host_ip = isset($_SERVER['SERVER_ADDR']) ? sanitize_text_field(stripslashes_deep($_SERVER['SERVER_ADDR'])) : $this->get_real_IP_address();
           if ($html_parser) {
-            $message .= "\n\n<blockquote>Disclaimer: sent via Pigment Agent Bot Plugin for WordPress from Host: $site_host ($host_ip)</blockquote>";
+            $message .= "\n\n<blockquote>Disclaimer: {$this->title} is not responsible for this message content.</blockquote>";
           } else {
-            $message .= "\n\n-----------\n_Disclaimer: sent via Pigment Agent Bot Plugin for WordPress from Host: $site_host ($host_ip)_";
+            $message .= "\n\n-----------\n_Disclaimer: {$this->title} is not responsible for this message content._";
           }
           $tg_arguments = apply_filters("ultimate-integration-for-telegram/helper/send-message-arguments", array(
             "chat_id"                  => $chat,
@@ -599,7 +635,7 @@ if (!class_exists("Notifier")) {
             $res_array[] = sprintf(__("Test Message sent successfully to ChatID: %s", "ultimate-integration-for-telegram"), $chat);
             if ($this->debug) {
               // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r,WordPress.PHP.DevelopmentFunctions.error_log_error_log,WordPress.PHP.DevelopmentFunctions.error_log_var_export
-              error_log("Pigment Agent Bot :: debugging send msg ~> REF:" . $reference . " - " . sprintf(
+              error_log("Ultimate Integration for Telegram :: debugging send msg ~> REF:" . $reference . " - " . sprintf(
                 /* translators: 1: Chat ID */
                 __("Test Message sent successfully to ChatID: %s", "ultimate-integration-for-telegram"),
                 $chat
@@ -614,7 +650,7 @@ if (!class_exists("Notifier")) {
             $errors2[] = print_r($result, 1);
             if ($this->debug) {
               // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r,WordPress.PHP.DevelopmentFunctions.error_log_error_log,WordPress.PHP.DevelopmentFunctions.error_log_var_export
-              error_log("Pigment Agent Bot :: debugging send msg ~> " . PHP_EOL . var_export($result, 1));
+              error_log("Ultimate Integration for Telegram :: debugging send msg ~> " . PHP_EOL . var_export($result, 1));
             }
             /* translators: 1: Chat ID */
             $res_array[] = sprintf(__("Error sending test message to ChatID: %s", "ultimate-integration-for-telegram"), $chat);
@@ -631,7 +667,7 @@ if (!class_exists("Notifier")) {
         $res_array[] = sprintf(__("Error Occured: %s", "ultimate-integration-for-telegram"), $e->getMessage());
         if ($this->debug) {
           // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r,WordPress.PHP.DevelopmentFunctions.error_log_error_log,WordPress.PHP.DevelopmentFunctions.error_log_var_export
-          error_log("Pigment Agent Bot :: debugging send msg ~> " . PHP_EOL . var_export($e, 1));
+          error_log("Ultimate Integration for Telegram :: debugging send msg ~> " . PHP_EOL . var_export($e, 1));
         }
       }
       if ($failed) {
@@ -639,7 +675,7 @@ if (!class_exists("Notifier")) {
         do_action("ultimate-integration-for-telegram/helper/send-message-result/failed", $debug, func_get_args());
         if ($this->debug) {
           // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r,WordPress.PHP.DevelopmentFunctions.error_log_error_log,WordPress.PHP.DevelopmentFunctions.error_log_var_export
-          error_log("Pigment Agent Bot :: debugging " . current_action() . ": " . __METHOD__ . PHP_EOL . var_export($debug, 1));
+          error_log("Ultimate Integration for Telegram :: debugging " . current_action() . ": " . __METHOD__ . PHP_EOL . var_export($debug, 1));
         }
         if ($json) {
           wp_send_json_error($debug);
@@ -649,7 +685,7 @@ if (!class_exists("Notifier")) {
         do_action("ultimate-integration-for-telegram/helper/send-message-result/success", $res_array, func_get_args());
         if ($this->debug) {
           // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r,WordPress.PHP.DevelopmentFunctions.error_log_error_log,WordPress.PHP.DevelopmentFunctions.error_log_var_export
-          error_log("Pigment Agent Bot :: SUCCESS " . current_action() . ": " . __METHOD__ . PHP_EOL . var_export(implode(PHP_EOL, $res_array), 1));
+          error_log("Ultimate Integration for Telegram :: SUCCESS " . current_action() . ": " . __METHOD__ . PHP_EOL . var_export(implode(PHP_EOL, $res_array), 1));
         }
         if ($json) {
           wp_send_json_success(["msg" => implode(PHP_EOL, $res_array)]);

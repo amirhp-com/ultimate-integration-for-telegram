@@ -1,6 +1,5 @@
 <?php
 /*
-* @Author: Amirhossein Hosseinpour <https://amirhp.com>
 * @Last modified by: amirhp-com <its@amirhp.com>
 * @Last modified time: 2024/09/11 23:05:24
 */

@@ -1,8 +1,7 @@
 <?php
 /*
- * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/06/11 18:42:55
+ * @Last modified time: 2025/08/02 02:21:20
  */
 
 namespace Longman\TelegramBot\Commands\UserCommands;

@@ -1,18 +1,18 @@
 === Ultimate Integration for Telegram ===
-Version: 1.2.0
-Stable tag: 1.2.0
-Author: BlackSwan
-Donate link: https://amirhp.com/contact/
-Author URI: https://amirhp.com/landing
+Version: 1.5.0
+Stable tag: 1.5.0
+Author: pigmentdev
+Donate link: https://pigment.dev/contact/
+Author URI: https://pigment.dev/
 Plugin URI: https://wordpress.org/plugins/ultimate-integration-for-telegram/
-Contributors: amirhpcom, blackswanlab, pigmentdev
+Contributors: amirhpcom, pigmentdev
 Tags: woocommerce, telegram, notification, automation
 Tested up to: 6.8
 WC requires at least: 5.0
-WC tested up to: 9.9.3
+WC tested up to: 10.0
 Text Domain: ultimate-integration-for-telegram
 Domain Path: /languages
-Copyright: (c) BlackSwanDev, All rights reserved.
+Copyright: (c) Pigment.Dev, All rights reserved.
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -238,13 +238,8 @@ Yes, it supports major WooCommerce add-ons like WooCommerce Subscription, WooCom
 == Upgrade Notice ==
 Upgrade to enjoy the latest features and stability improvements.
 
-= v1.2.0 | 2025-06-07 | 1404-03-17 =
-* Added New Integration: WordPress Comments
-* Added New Integration: WooCommerce Comments
-* Added Pre-defined Notification Text
-* Added Pre-defined Notifications List on first setup
-* Added Setup Wizard & Enhanced Setup UIX
-* Changed Telegram Bot Response Messages
+= v1.5.0 | 2025-08-02 | 1404-05-11 =
+
 
 
 == Changelog ==

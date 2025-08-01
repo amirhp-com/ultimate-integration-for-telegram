@@ -1,8 +1,7 @@
 <?php
 /*
- * @Author: Amirhossein Hosseinpour <https://amirhp.com>
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/03/03 17:21:45
+ * @Last modified time: 2025/08/02 02:20:57
  * @info Ultimate_Integration_Telegram__ Prefix means these functions are for Ultimate_Integration_Telegram Project
  */
 // phpcs:disable

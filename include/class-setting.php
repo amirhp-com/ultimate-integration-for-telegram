@@ -1,15 +1,13 @@
 <?php
 /*
-* @Author: Amirhossein Hosseinpour <https://amirhp.com>
 * @Last modified by: amirhp-com <its@amirhp.com>
 * @Last modified time: 2025/02/23 21:25:11
 */
-defined("ABSPATH") or die("<h2>Unauthorized Access!</h2><hr><small>Ultimate Integration for Telegram :: Developed by <a href='https://amirhp.com/'>Amirhp-com</a></small>");
-
-use BlackSwan\Ultimate_Integration_Telegram\Notifier;
-
+use PigmentDev\Ultimate_Integration_Telegram\Notifier;
+defined("ABSPATH") or die("<h2>Unauthorized Access!</h2><hr><small>Ultimate Integration for Telegram :: Developed by <a href='https://pigment.dev/'>Pigment.Dev</a></small>");
 if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
   class Ultimate_Integration_Telegram_Setting extends Notifier {
+    protected $setting_key = "ultimate_integrations_telegram__settings";
     public function __construct() {
       parent::__construct(false);
       add_action("admin_init", array($this, "register_settings"), 1);
@@ -20,31 +18,54 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
     }
     protected function get_setting_options_list() {
       return array(
-        array(
-          "name" => "general",
-          "data" => array(
-            "debug"           => "no",
-            "jdate"           => "no",
-            "admin_bar_link"  => "yes",
-            "gettext_replace" => "",
-            "str_replace"     => "",
-            "token"           => "",
-            "username"        => "",
-            "chat_ids"        => "",
-            "notifications"   => $this->get_default_list(),
-          ),
-        ),
+        "cur_version"     => $this->version,
+        "debug"           => "no",
+        "jdate"           => "no",
+        "admin_bar_link"  => "yes",
+        "gettext_replace" => "",
+        "str_replace"     => "",
+        "token"           => "",
+        "username"        => "",
+        "chat_ids"        => "",
+        "api_base_uri"    => "https://api.telegram.org",
+        "notifications"   => $this->get_default_list(),
       );
     }
     public function register_settings() {
-      foreach ($this->get_setting_options_list() as $sections) {
-        foreach ($sections["data"] as $id => $def) {
-          $slug = $this->db_slug . "__" . $id;
-          $section = $this->db_slug . "__" . $sections["name"];
-          add_option($slug, $def, "", "no");
-          // phpcs:ignore PluginCheck.CodeAnalysis.SettingSanitization.register_settingDynamic
-          register_setting($section, $slug, array('type' => 'string', 'sanitize_callback' => 'sanitize_textarea_field'));
+      $defaults = $this->get_setting_options_list();
+      if (!is_null($this->version) && version_compare($this->version, "1.4", "ge")) {
+        if ($this->read("v2_setting") != $this->version) {
+          $this->set("v2_setting", $this->version);
+          foreach ($defaults as $new => $prev) {
+            $prev = "{$this->db_slug}__{$new}";
+            if (get_option($prev, NULL) !== NULL && $this->read($new, NULL) === NULL) {
+              $this->set($new, get_option($prev, ""));
+              delete_option($prev);
+            }
+          }
         }
+      }
+      // Ensure all checkbox fields are set to "no" if not present in $_POST
+      if (is_admin() && isset($_POST[$this->setting_key]) && is_array($_POST[$this->setting_key])) {
+        foreach ($defaults as $slug => $val) {
+          // Detect checkboxes by default value "yes" or "no"
+          if ($val === "yes" || $val === "no") {
+            if (!array_key_exists($slug, $_POST[$this->setting_key])) {
+              $_POST[$this->setting_key][$slug] = "no";
+            }
+          }
+        }
+      }
+      add_option($this->setting_key, $defaults, "", "no");
+      register_setting($this->setting_key, $this->setting_key);
+      if ($this->read("v2_setting") != $this->version) {
+        foreach ($defaults as $slug => $val) {
+          if ($this->read($slug, NULL) === NULL) {
+            $this->set($slug, $val);
+          }
+        }
+        foreach ($defaults as $slug => $val) delete_option("{$this->db_slug}__{$slug}");
+        $this->set("v2_setting", $this->version);
       }
     }
     public function setting_page() {
@@ -96,7 +117,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
       ));
       wp_localize_script($this->db_slug . "-panel", "_panel", $localized);
       is_rtl() and wp_add_inline_style($this->db_slug, "#wpbody-content { font-family: bodyfont, roboto, Tahoma; }");
-?>
+      ?>
       <div class="wrap">
         <!-- region head and success message -->
         <h1 class="page-title-heading">
@@ -108,21 +129,24 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
           <nav class="nav-tab-wrapper woo-nav-tab-wrapper">
             <a href="#" data-tab="tab_general" class="nav-tab nav-tab-active"><?php esc_html_e("General", "ultimate-integration-for-telegram"); ?></a>
             <a href="#" data-tab="tab_workspace" class="nav-tab"><?php esc_html_e("Notifications", "ultimate-integration-for-telegram"); ?></a>
-            <a href="#" data-tab="tab_translate" class="nav-tab"><?php esc_html_e("Translate", "ultimate-integration-for-telegram"); ?></a>
-            <a href="#" data-tab="tab_str_replace" class="nav-tab"><?php esc_html_e("String Replace", "ultimate-integration-for-telegram"); ?></a>
+            <a href="#" data-tab="tab_channel_agent" class="nav-tab"><?php esc_html_e("Channel Agent", "ultimate-integration-for-telegram"); ?></a>
+            <a href="#" data-tab="tab_translate" class="nav-tab"><?php esc_html_e("Translate Tool", "ultimate-integration-for-telegram"); ?></a>
             <a href="#" data-tab="tab_export" class="nav-tab"><?php esc_html_e("Migrate", "ultimate-integration-for-telegram"); ?></a>
             <a href="#" data-tab="tab_documentation" class="nav-tab"><?php esc_html_e("Documentation", "ultimate-integration-for-telegram"); ?></a>
           </nav>
           <!-- region tab content -->
-          <?php settings_fields("{$this->db_slug}__general"); ?>
+          <?php settings_fields($this->setting_key); ?>
           <div class="tab-content tab-active" data-tab="tab_general">
             <br>
             <table class="form-table wp-list-table widefat striped table-view-list posts">
               <thead>
-                <?php
-                echo "<tr class='sync_site_tr border-top'><th colspan=2>
-                    <h2 style='display: inline-block; margin:0;'><i class='fas fa-cog'></i>&nbsp;" . esc_html__("General Configuration", "ultimate-integration-for-telegram") . "</h2></th></tr>";
-                ?>
+                <tr>
+                  <th colspan=2>
+                    <h2 style='display: inline-block; margin:0;'>
+                      <i class='fas fa-cog'></i>&nbsp;<?php echo esc_html__("General Configuration", "ultimate-integration-for-telegram"); ?>
+                    </h2>
+                  </th>
+                </tr>
               </thead>
               <tbody>
                 <?php
@@ -147,7 +171,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
             <br>
             <table class="form-table wp-list-table widefat striped table-view-list posts">
               <thead>
-                <tr class='sync_site_tr border-top'>
+                <tr>
                   <th colspan=2>
                     <h2 style='display: inline-block; margin:0;'>
                       <i class="fab fa-telegram"></i>
@@ -181,7 +205,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
                   "slug" => "username",
                   // "extra_html" => "readonly",
                   "caption" => esc_html__("Step 4: Enter the Bot Username", "ultimate-integration-for-telegram"),
-                  "desc" => __('Type the username of your bot (with @ at the start), exactly as you created it — for example: @my_notifier_bot.', "ultimate-integration-for-telegram"),
+                  "desc" => esc_html__('Type the username of your bot (with @ at the start), exactly as you created it — for example: @my_notifier_bot.', "ultimate-integration-for-telegram"),
                 ]);
                 ?>
                 <tr>
@@ -206,6 +230,11 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
                   "slug" => "chat_ids",
                   "caption" => esc_html__("Step 6: Add Default Recipients", "ultimate-integration-for-telegram"),
                   "desc" => __("Paste the Chat ID or, if it's a public channel/group, the username with @ — e.g., @mychannel.<br>➡️ One Chat ID or username per line.", "ultimate-integration-for-telegram"),
+                ]);
+                $this->print_setting_input([
+                  "slug" => "api_base_uri",
+                  "caption" => esc_html__("Advanced: Custom API Base URI", "ultimate-integration-for-telegram"),
+                  "desc" => sprintf(__('Paste the API Base URI you want to use for Telegram API requests (e.g. when you are using a self-hosted Telegram server or Cloudflare Worker). Default: <code>https://api.telegram.org</code><br>%s', "ultimate-integration-for-telegram"), "<a href='https://github.com/pigment-dev/ultimate-integration-for-telegram/wiki/Bypass-Telegram-API-Restrictions' target='_blank'>Learn how to Bypass Telegram API Restrictions/Censorship via Cloudflare Worker</a>"),
                 ]);
                 ?>
               </tbody>
@@ -315,7 +344,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
           </div>
           <div class="tab-content" data-tab="tab_translate">
             <br>
-            <div class="desc repeater translation-panel">
+            <div class="desc repeater notif-panel-side translation-panel">
               <table class="wp-list-table widefat striped table-view-list posts">
                 <thead>
                   <tr>
@@ -343,50 +372,10 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
                 </tbody>
               </table>
               <br>
-              <a data-repeater-create class="button button-secondary button-hero"><span style="margin: 12px 8px;" class="dashicons dashicons-insert"></span><?php esc_html_e("Add New Row", "ultimate-integration-for-telegram"); ?></a>&nbsp;&nbsp;
+              <a data-repeater-create class="button button-secondary"><span style="margin: 4px;" class="dashicons dashicons-insert"></span><?php esc_html_e("Add New Row", "ultimate-integration-for-telegram"); ?></a>&nbsp;&nbsp;
             </div>
-            <br><br>
-            <table class="form-table wp-list-table widefat striped table-view-list posts">
-              <thead>
-                <?php
-                echo "<tr class='sync_site_tr border-top'><th colspan=2><strong style='display: inline-block;'>" . esc_html__("Migrate Translation", "ultimate-integration-for-telegram") . "</strong></th></tr>";
-                ?>
-              </thead>
-              <tbody>
-                <?php
-                $this->print_setting_textarea(["slug" => "gettext_replace", "caption" => esc_html__("Translation Data", "ultimate-integration-for-telegram"), "style" => "width: 100%; direction: ltr; min-height: 300px; font-family: monospace; font-size: 0.8rem;",]);
-                ?>
-              </tbody>
-            </table>
-          </div>
-          <div class="tab-content" data-tab="tab_export">
             <br>
-            <table class="form-table wp-list-table widefat striped table-view-list posts">
-              <thead>
-                <?php
-                echo "<tr class='sync_site_tr border-top'><th colspan=2><strong style='display: inline-block;'>" . esc_html__("Export / Import Setting", "ultimate-integration-for-telegram") . "</strong></th></tr>";
-                ?>
-              </thead>
-              <tbody>
-                <tr class="type-textarea notifications data-textarea toggle-export-import">
-                  <th scope="row" colspan="2">
-                    <h3 style="margin-top: 0;">
-                      <label for="notifications"><?php esc_html_e("Migrate Notifications List and Settings", "ultimate-integration-for-telegram"); ?></label>
-                    </h3>
-                    <p>
-                      <a href="#" class="button button-secondary copy-code"><?php esc_html_e("Copy to Clipboard", "ultimate-integration-for-telegram"); ?></a>
-                      <a href="#" class="button button-secondary reset-default-list"><?php esc_html_e("Reset to Default Notifications List", "ultimate-integration-for-telegram"); ?></a>
-                    </p>
-                    <textarea rows="20" name="ultimate-integration-for-telegram__notifications" id="notifications" rows="4" style="width: 100%; direction: ltr; font-family: monospace; font-size: smaller;" class="regular-text"><?php echo esc_textarea($this->read("notifications")); ?></textarea>
-                    <p class="description"><?php esc_html_e("you can use the json data to migrate settings across multiple sites. Enter JSON Data and Save page to reload Workspace.", "ultimate-integration-for-telegram"); ?></p>
-                  </th>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="tab-content" data-tab="tab_str_replace">
-            <br>
-            <div class="desc repeater str_replace-panel">
+            <div class="desc repeater notif-panel-side str_replace-panel">
               <table class="wp-list-table widefat striped table-view-list posts">
                 <thead>
                   <tr>
@@ -411,19 +400,93 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
                 </tbody>
               </table>
               <br>
-              <a data-repeater-create class="button button-secondary button-hero"><span style="margin: 12px 8px;" class="dashicons dashicons-insert"></span><?php esc_html_e("Add New Row", "ultimate-integration-for-telegram"); ?></a>&nbsp;&nbsp;
+              <a data-repeater-create class="button button-secondary"><span style="margin: 4px;" class="dashicons dashicons-insert"></span><?php esc_html_e("Add New Row", "ultimate-integration-for-telegram"); ?></a>&nbsp;&nbsp;
             </div>
-            <br><br>
+          </div>
+          <div class="tab-content" data-tab="tab_export">
+            <br>
             <table class="form-table wp-list-table widefat striped table-view-list posts">
               <thead>
-                <?php
-                echo "<tr class='sync_site_tr border-top'><th colspan=2><strong style='display: inline-block;'>" . esc_html__("Migrate String Replace", "ultimate-integration-for-telegram") . "</strong></th></tr>";
-                ?>
+                <tr>
+                  <th colspan=2>
+                    <strong style='display: inline-block;'><?php esc_html_e("Export / Import Notifications List and Settings", "ultimate-integration-for-telegram"); ?></strong>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="type-textarea notifications data-textarea toggle-export-import">
+                  <th scope="row" colspan="2">
+                    <p style="margin-top: 0;">
+                      <a href="#" class="button button-secondary copy-code"><?php esc_html_e("Copy to Clipboard", "ultimate-integration-for-telegram"); ?></a>
+                      <a href="#" class="button button-secondary reset-default-list"><?php esc_html_e("Reset to Default Notifications List", "ultimate-integration-for-telegram"); ?></a>
+                    </p>
+                    <textarea rows="20" name="ultimate_integrations_telegram__settings[notifications]" id="notifications" rows="4" style="width: 100%; direction: ltr; font-family: monospace; font-size: smaller;" class="regular-text"><?php echo esc_textarea($this->read("notifications")); ?></textarea>
+                    <p class="description"><?php esc_html_e("you can use the json data to migrate settings across multiple sites. Enter JSON Data and Save page to reload Workspace.", "ultimate-integration-for-telegram"); ?></p>
+                  </th>
+                </tr>
+              </tbody>
+            </table>
+            <br>
+            <table class="form-table wp-list-table widefat striped table-view-list posts">
+              <thead>
+                <tr>
+                  <th colspan=2>
+                    <strong style='display: inline-block;'><?php esc_html_e("Export / Import Translation Data", "ultimate-integration-for-telegram"); ?></strong>
+                  </th>
+                </tr>
               </thead>
               <tbody>
                 <?php
-                $this->print_setting_textarea(["slug" => "str_replace", "caption" => esc_html__("String Replace Data", "ultimate-integration-for-telegram"), "style" => "width: 100%; direction: ltr; min-height: 300px; font-family: monospace; font-size: 0.8rem;",]);
+                $this->print_setting_textarea(["slug" => "gettext_replace", "caption" => null, "style" => "width: 100%; direction: ltr; min-height: 300px; font-family: monospace; font-size: 0.8rem;",]);
                 ?>
+              </tbody>
+            </table>
+            <br>
+            <table class="form-table wp-list-table widefat striped table-view-list posts">
+              <thead>
+                <th colspan=2>
+                  <strong style='display: inline-block;'><?php esc_html_e("Export / Import String Replace Data", "ultimate-integration-for-telegram"); ?></strong>
+                </th>
+              </thead>
+              <tbody>
+                <?php
+                $this->print_setting_textarea(["slug" => "str_replace", "caption" => null, "style" => "width: 100%; direction: ltr; min-height: 300px; font-family: monospace; font-size: 0.8rem;",]);
+                ?>
+              </tbody>
+            </table>
+          </div>
+          <div class="tab-content no-save" data-tab="tab_channel_agent">
+            <br>
+            <table class="form-table wp-list-table widefat striped table-view-list posts">
+              <thead>
+                <tr>
+                  <th colspan=2>
+                    <strong style='display: inline-block;'><?php esc_html_e("Channel Agent / Sent Message to Channel", "ultimate-integration-for-telegram"); ?></strong>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="2">
+                    <p><?php esc_html_e("This feature allows you to send messages to a Telegram channel or group using your bot. You can use this to post updates, announcements, or any other content directly to your channel.", "ultimate-integration-for-telegram"); ?></p>
+                    <p>
+                      <?php esc_html_e("Currently, only text messages are supported. Sending images, videos, files, or other types of messages is not available.", "ultimate-integration-for-telegram"); ?>
+                    </p>
+                    <p>
+                      <?php esc_html_e("To use this feature, simply enter the channel username (with @) or chat ID in the field below, then type your message in the textarea and click 'Send Message'.", "ultimate-integration-for-telegram"); ?>
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <th colspan="2">
+                    <?php echo $this->print_notif_setting("builtin_channel_agent", "builtin_channel_agent", [], "builtin_channel_agent"); ?>
+                  </th>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                    <button class="button button-primary button-hero send-channel-message"><?php esc_html_e("Send Message to Channel", "ultimate-integration-for-telegram"); ?></button>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -434,7 +497,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
         </form>
       </div>
       <!-- region tab switch script and js-repeater -->
-    <?php
+      <?php
       $html = ob_get_contents();
       ob_end_clean();
       // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -445,7 +508,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
     }
     public function sample_setting_row_wrapper() {
       ob_start();
-    ?>
+      ?>
       <div class="setting-row newly-added" data-type="{slug}">
         <div class="heading">
           <h3 class="entry-name">{category} / {title}</h3>
@@ -457,7 +520,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
         </div>
         <div class="event-setting">{row_details}</div>
       </div>
-    <?php
+      <?php
       $htmloutput = ob_get_contents();
       ob_end_clean();
       return apply_filters("ultimate-integration-for-telegram/notif-panel/sample_setting_row_wrapper", $htmloutput);
@@ -514,7 +577,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
         "options" => array(
           "wp_user_registered" => [
             "label" => __("New User Registered", "ultimate-integration-for-telegram"),
-            "desc" => __("When a new user is registered either via admin panel or wordpress front-end", $this->td),
+            // "desc" => __("When a new user is registered either via admin panel or wordpress front-end", $this->td),
           ],
           "wp_user_edited" => __("User Profile Updated", "ultimate-integration-for-telegram"),
         ),
@@ -627,19 +690,19 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
           break;
         case 'wc_payment_complete':
           $msg = _x("💰 *Payment Confirmed* for Order #{order_number}!\nTotal: {order_total} {order_currency} via {order_payment_method_title}\nCustomer: {customer_first_name} {customer_last_name} ({customer_email})\nTransaction ID: {transaction_id}\nPaid on: {order_date_paid}", "tg-default-msg", $this->td);
-        break;
+          break;
         case 'wc_order_status_to_completed':
           $msg = _x("✅ Order #{order_number} is now *Completed*!\nTotal: {order_total} {order_currency} for {customer_first_name} {customer_last_name}\nCompleted on: {order_date_completed}\nItems: {order_items_count}\n{order_items_quantity_list}", "tg-default-msg", $this->td);
-        break;
+          break;
         case 'wp_user_registered':
           $msg = _x("👤 *New user joined* {site_name}!\nName: {first_name} {last_name} ({user_email})\nUsername: {user_login} | Registered on: {user_registered}", "tg-default-msg", $this->td);
-        break;
+          break;
         case 'wc_product_stock_outofstock':
           $msg = _x("🚨 *Out of Stock Alert!*\nProduct *{name}* is now *out of stock* (0 units).", "tg-default-msg", $this->td);
-        break;
+          break;
         case 'wc_product_stock_low_stock':
           $msg = _x("📊 *Low Stock Alert!*\nProduct *{name}* has reached *{stock_quantity}* units in stock.", "tg-default-msg", $this->td);
-        break;
+          break;
 
         default:
           $msg = "";
@@ -654,14 +717,14 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
         case 'wc_payment_complete':
         case 'wc_order_status_to_completed':
           $btns = _x("View Order | {view_url}\nEdit Order | {edit_url}", "tg-default-btn", $this->td);
-        break;
+          break;
         case 'wp_user_registered':
           $btns = _x("Edit User | {edit_url}", "tg-default-btn", $this->td);
-        break;
+          break;
         case 'wc_product_stock_outofstock':
         case 'wc_product_stock_low_stock':
           $btns = _x("Restock Now | {edit_url}", "tg-default-btn", $this->td);
-        break;
+          break;
 
         default:
           $btns = "";
@@ -669,7 +732,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
       }
       return $btns;
     }
-    public function print_notif_setting($slug, $category, $items) {
+    public function print_notif_setting($slug = "", $category = "", $items = [], $class = "hide") {
       ob_start();
       do_action("ultimate-integration-for-telegram/notif-panel/before-notif-setting", $slug, $category, $items);
       $btn_placeholder = "Button label | Button URL";
@@ -678,16 +741,15 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
       $default_message = apply_filters("ultimate-integration-for-telegram/notif-panel/notif-default-message", $msg, $slug, $category, $items);
       $default_parser = apply_filters("ultimate-integration-for-telegram/notif-panel/notif-default-parser", false, $slug, $category, $items);
       $default_buttons = apply_filters("ultimate-integration-for-telegram/notif-panel/notif-default-buttons", $btn, $slug, $category, $items);
-    ?>
-      <table class="sub-setting form-table wp-list-table widefat striped table-view-list fixed hide">
+      ?>
+      <table class="sub-setting form-table wp-list-table widefat striped table-view-list fixed <?php echo esc_attr($class); ?> ">
         <tbody>
           <tr class="tg-message">
             <th><?php esc_html_e("Message", "ultimate-integration-for-telegram"); ?></th>
             <td>
               <textarea rows="5"
                 placeholder="<?php esc_attr_e("Write your message here ...", "ultimate-integration-for-telegram"); ?>"
-                data-slug="message"><?php
-                                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                data-slug="message"><?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                     echo $default_message; ?></textarea>
               <p class="description">
                 <?php
@@ -788,7 +850,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
           ?>
         </tbody>
       </table>
-<?php
+      <?php
       $htmloutput = ob_get_contents();
       ob_end_clean();
       return apply_filters("ultimate-integration-for-telegram/notif-panel/notif-setting-html", $htmloutput, $slug);
@@ -796,11 +858,11 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
     protected function update_footer_info() {
       add_filter("update_footer", function () {
         /* translators: 1: plugin name, 2: version ID */
-        return sprintf(_x('%1$s — Version %2$s', "footer-copyright", "ultimate-integration-for-telegram"), $this->title, $this->version);
+        return sprintf(_x('%1$s — Version %2$s. / db.ver ' . $this->read("v2_setting") . ($this->read("v2_setting") != $this->version ? " (needs update)" : " (updated)"), "footer-copyright", "ultimate-integration-for-telegram"), $this->title, $this->version);
       }, 999999999);
     }
     #region settings-option functions >>>>>>>>>>>>>
-    protected function print_setting_input($data) {
+    public function print_setting_input($data) {
       extract(wp_parse_args($data, array(
         "slug"        => "",
         "caption"     => "",
@@ -809,22 +871,19 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
         "extra_html"  => "",
         "extra_class" => "",
       )));
-      echo "<tr class='type-" . esc_attr($type) . " " . esc_attr($extra_class) . " " . esc_attr(sanitize_title($slug)) . "'>
-              <th scope='row'><label for='" . esc_attr($slug) . "'>" . esc_attr($caption) . "</label></th>
-              <td><input name='" . esc_attr("{$this->db_slug}__{$slug}") . "'
+      echo "<tr class='type-" . esc_attr($type) . " $extra_class " . sanitize_title($slug) . "'>
+              <th scope='row'><label for='$slug'>$caption</label></th>
+              <td><input
+                      name='{$this->setting_key}[$slug]'
                       id='" . esc_attr($slug) . "'
                       type='" . esc_attr($type) . "'
                       placeholder='" . esc_attr($caption) . "'
-                      data-tippy-content='" .
-        /* translators: 1: field name */
-        esc_attr(sprintf(_x("Enter %s", "setting-page", "ultimate-integration-for-telegram"), $caption))
-        . "' value='" . esc_attr((get_option("{$this->db_slug}__{$slug}", "") ?: "")) . "'
+                      title='" . esc_attr(sprintf(_x("Enter %s", "setting-page", $this->td), $caption)) . "'
+                      value='" . esc_attr($this->read($slug)) . "'
                       class='regular-text " . esc_attr($extra_class) . "' " . esc_attr($extra_html) . " />
-                      <p class='description'>" . wp_kses_post($desc) . "</p>
-                </td>
-            </tr>";
+              <p class='description'>" . ($desc) . "</p></td></tr>";
     }
-    protected function print_setting_checkbox($data) {
+    public function print_setting_checkbox($data) {
       extract(wp_parse_args($data, array(
         "slug"        => "",
         "caption"     => "",
@@ -833,23 +892,17 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
         "extra_html"  => "",
         "extra_class" => "",
       )));
-      echo "<tr class='type-checkbox " . esc_attr($extra_class) . " " . esc_attr(sanitize_title($slug)) . "'>
-              <th scope='row'><label for='" . esc_attr($slug) . "'>" . esc_attr($caption) . "</label></th>
-              <td><input name='" . esc_attr("{$this->db_slug}__{$slug}") . "' id='" . esc_attr($slug) . "' type='checkbox' data-tippy-content='" .
-        esc_attr(
-          sprintf(
-            /* translators: 1: field name */
-            _x("Toggle: %s", "setting-page", "ultimate-integration-for-telegram"),
-            $caption
-          )
-        ) .
-        "' value='" . esc_attr($value) . "' " . checked($value, get_option("{$this->db_slug}__{$slug}", ""), false) .
-        " class='regular-text " . esc_attr($extra_class) . "' " . esc_attr($extra_html) . " />
-          <p class='description'>" . wp_kses_post($desc) . "</p>
-          </td>
-        </tr>";
+      echo "<tr class='type-checkbox $extra_class " . sanitize_title($slug) . "'>
+              <th scope='row'><label for='$slug'>$caption</label></th>
+              <td><input name='{$this->setting_key}[$slug]'
+                      id='" . esc_attr($slug) . "'
+                      type='checkbox'
+                      title='" . esc_attr(sprintf(_x("Enter %s", "setting-page", $this->td), $caption)) . "'
+                      value='" . esc_attr($value) . "' " . checked($this->read($slug, NULL), $value, false) . "
+                      class='regular-text " . esc_attr($extra_class) . "' " . esc_attr($extra_html) . " />
+              <p class='description'>" . ($desc) . "</p></td></tr>";
     }
-    protected function print_setting_select($data) {
+    public function print_setting_select($data) {
       extract(wp_parse_args($data, array(
         "slug"        => "",
         "caption"     => "",
@@ -858,44 +911,54 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
         "extra_html"  => "",
         "extra_class" => "",
       )));
-      echo "<tr class='type-select " . esc_attr($extra_class) . " " . esc_attr(sanitize_title($slug)) . "'>
-              <th scope='row'><label for='" . esc_attr($slug) . "'>" . esc_attr($caption) . "</label></th>
-              <td><select name='" . esc_attr("{$this->db_slug}__{$slug}") . "'
-                      id='" . esc_attr($slug) . "' data-tippy-content='" . esc_attr(
-        /* translators: 1: field name */
-        sprintf(_x("Choose %s", "setting-page", "ultimate-integration-for-telegram"), $caption)
-      ) . "' class='regular-text " . esc_attr($extra_class) . "' " . esc_attr($extra_html) . ">";
+      echo "<tr class='type-select $extra_class " . sanitize_title($slug) . "'>
+              <th scope='row'><label for='$slug'>$caption</label></th>
+              <td><select name='{$this->setting_key}[$slug]' id='" . esc_attr($slug) . "' title='" . esc_attr(sprintf(_x("Choose %s", "setting-page", $this->td), $caption)) . "' class='regular-text " . esc_attr($extra_class) . "' " . esc_attr($extra_html) . ">";
       foreach ($options as $key => $value) {
-        if ($key == "EMPTY") $key = "";
-        echo "<option value='" . esc_attr($key) . "' " . selected(get_option("{$this->db_slug}__{$slug}", ""), $key, false) . ">" . esc_html($value) . "</option>";
+        if ($key == "EMPTY") {
+          $key = "";
+        }
+        echo "<option value='" . esc_attr($key) . "' " . selected($this->read($slug), $key, false) . ">" . esc_html($value) . "</option>";
       }
-      echo "</select><p class='description'>" . wp_kses_post($desc) . "</p></td></tr>";
+      echo "</select>
+      <p class='description'>" . ($desc) . "</p></td></tr>";
     }
-    protected function print_setting_textarea($data) {
+    public function print_setting_tr($title = "") {
+    ?>
+      <tr style="color: #2c3338;vertical-align: middle !important;font-weight: 400;line-height: 1.4em;border: 1px solid #c3c4c7;background: #fff;">
+        <th colspan="2">
+          <h2 style="margin: 0;font-weight: 800;"><?= $title; ?></h2>
+        </th>
+      </tr>
+      <?php
+    }
+    public function print_setting_textarea($data) {
       extract(wp_parse_args($data, array(
-        "slug" => "",
-        "caption" => "",
-        "style" => "",
-        "desc" => "",
-        "rows" => "4",
+        "slug"        => "",
+        "caption"     => "",
+        "style"       => "",
+        "desc"        => "",
+        "default"     => "",
+        "rows"        => "5",
         "extra_html"  => "",
         "extra_class" => "",
       )));
-      echo "<tr class='type-textarea " . esc_attr($extra_class) . "" . esc_attr(sanitize_title($slug)) . "'>
-              <th scope='row'><label for='" . esc_attr($slug) . "'>" . esc_attr($caption) . "</label></th>
-              <td><textarea
-                      name='" . esc_attr("{$this->db_slug}__{$slug}") . "'
-                      id='" . esc_attr($slug) . "'
-                      placeholder='" . esc_attr($caption) . "'
-                      data-tippy-content='" . esc_attr(
-        /* translators: 1: field name */
-        sprintf(_x("Enter %s", "setting-page", "ultimate-integration-for-telegram"), $caption)
-      ) . "' rows='" . esc_attr($rows) . "'
+      echo "<tr class='type-textarea $extra_class" . sanitize_title($slug) . "'>";
+      if (is_null($caption)) {
+        echo "<td colspan='2'>";
+      } else {
+        echo "<th scope='row'><label for='" . esc_attr($slug) . "'>" . esc_html($caption) . "</label></th><td>";
+      }
+
+      echo "<textarea name='" . esc_attr($this->setting_key . "[{$slug}]") . "' id='" . esc_attr($slug) . "' placeholder='" . esc_attr($caption) . "'
+                      title='" . esc_attr(sprintf(_x("Enter %s", "setting-page", $this->td), $caption)) . "'
+                      rows='" . esc_attr($rows) . "'
                       style='" . esc_attr($style) . "'
-                      class='regular-text " . esc_attr($extra_class) . "' " . esc_attr($extra_html) . " >" . esc_textarea(get_option("{$this->db_slug}__{$slug}", "") ?: "") . "</textarea>
-              <p class='description'>" . wp_kses_post($desc) . "</p></td></tr>";
+                      class='regular-text " . esc_attr($extra_class) . "' " . esc_attr($extra_html) . " >" . ($this->read($slug, $default) ?: $default) . "</textarea>
+              <p class='description'>" . ($desc) . "</p></td>
+            </tr>";
     }
-    protected function print_setting_editor($data) {
+    public function print_setting_editor($data) {
       extract(wp_parse_args($data, array(
         "slug"        => "",
         "caption"     => "",
@@ -910,15 +973,13 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
         'tinymce'       => true,   // (bool|array) Whether to load TinyMCE. Can be used to pass settings directly to TinyMCE using an array. Default true.
         'quicktags'     => false,  // (bool|array) Whether to load Quicktags. Can be used to pass settings directly to Quicktags using an array. Default true.
         'editor_class'  => "",     // (string) Extra classes to add to the editor textarea element. Default empty.
-        'textarea_name' => "{$this->db_slug}__{$slug}",
+        'textarea_name' => "{$this->setting_key}[$slug]",
       ));
-
       $editor_id = strtolower(str_replace(array('-', '_', ' ', '*'), '', $slug));
-      echo "<tr class='type-editor " . esc_attr($extra_class) . " " . esc_attr(sanitize_title($slug)) . "'>
-      <th scope='row'><label for='" . esc_attr($slug) . "'>" . esc_attr($caption) . "</label></th><td>";
-      wp_editor((get_option("{$this->db_slug}__{$slug}", "") ?: ""), $editor_id, $editor_settings);
-
-      echo "<p class='description'>" . wp_kses_post($desc) . "</p></td></tr>";
+      echo "<tr class='type-editor $extra_class " . sanitize_title($slug) . "'>
+      <th scope='row'><label for='$slug'>$caption</label></th><td>";
+      wp_editor($this->read($slug), $editor_id, $editor_settings);
+      echo "<p class='description'>" . ($desc) . "</p></td></tr>";
     }
     #endregion
   }
