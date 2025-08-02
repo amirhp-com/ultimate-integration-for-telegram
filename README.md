@@ -194,6 +194,9 @@ This plugin is licensed under the **GPL v2.0 or later**. You are free to use, mo
 
 ## Changelog
 ```md
+= v1.5.1 | 2025-08-02 | 1404-05-11 =
+* Fixed: `{order_items_quantity_list}` macro now correctly prints product names.
+
 = v1.5.0 | 2025-08-02 | 1404-05-11 =
 * New UI and improved user experience throughout the plugin.
 * Added import/export feature for notifications and settings.

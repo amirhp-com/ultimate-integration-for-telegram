@@ -217,50 +217,35 @@ if (!class_exists("Ultimate_Integration_Telegram_Orders")) {
           "shipping_method"         => implode(', ', wp_list_pluck($order->get_shipping_methods(), 'name')), // Shipping Method
           // Order Items
           "order_items_count"                   => $order->get_item_count(), // Number of Items in Order
-          "order_items_list"                    => implode("\n", array_map(function ($item) {
-            return $item->get_name();
-          }, $order->get_items())), // List of Items in Order
-          "order_items_sku_list"                => implode("\n", array_map(function ($item) {
-            return $item->get_name() . ($item->get_product() ? " (" . $item->get_product()->get_sku() . ")" : "");
-          }, $order->get_items())), // List of Items SKU
-          "order_items_price_list"              => implode("\n", array_map(function ($item) {
-            return $item->get_name() . " - " . number_format($item->get_subtotal());
-          }, $order->get_items())), // List of Items with Prices
-          "order_items_quantity_list"           => implode("\n", array_map(function ($item) {
-            return $item->get_quantity();
-          }, $order->get_items())), // List of Items with Quantity
-          "order_items_price_quantity_list"     => implode("\n", array_map(function ($item) {
-            return $item->get_name() . " - " . number_format($item->get_subtotal()) . ' x ' . $item->get_quantity();
-          }, $order->get_items())), // List of Items with Prices & Quantity
-          "order_items_sku_price_list"          => implode("\n", array_map(function ($item) {
-            return $item->get_name() . ($item->get_product() ? " (" . $item->get_product()->get_sku() . ")" : "") . ' - ' . number_format($item->get_subtotal());
-          }, $order->get_items())), // List of Items with SKU & Price
-          "order_items_sku_quantity_list"       => implode("\n", array_map(function ($item) {
-            return $item->get_name() . ($item->get_product() ? " (" . $item->get_product()->get_sku() . ")" : "") . ' x ' . $item->get_quantity();
-          }, $order->get_items())), // List of Items with SKU & Quantity
-          "order_items_sku_price_quantity_list" => implode("\n", array_map(function ($item) {
-            return $item->get_name() . ($item->get_product() ? " (" . $item->get_product()->get_sku() . ")" : "") . ' x ' . $item->get_quantity() . ' = ' . number_format($item->get_subtotal());
-          }, $order->get_items())), // List of Items with SKU, Price & Quantity
-          "order_items_total_qty"               => array_sum(wp_list_pluck($order->get_items(), 'quantity')), // Total Quantity of Items
+          // List of Items in Order
+          "order_items_list"                    => implode("\n", array_map(function ($item) { return $item->get_name(); }, $order->get_items())),
+          // List of Items SKU
+          "order_items_sku_list"                => implode("\n", array_map(function ($item) { return $item->get_name() . ($item->get_product() ? " (" . $item->get_product()->get_sku() . ")" : ""); }, $order->get_items())),
+          // List of Items with Prices
+          "order_items_price_list"              => implode("\n", array_map(function ($item) { return $item->get_name() . " - " . number_format($item->get_subtotal()); }, $order->get_items())),
+          // List of Items with Quantity
+          "order_items_quantity_list"           => implode("\n", array_map(function ($item) { return $item->get_name() . " - " . $item->get_quantity(); }, $order->get_items())),
+          // List of Items with Prices & Quantity
+          "order_items_price_quantity_list"     => implode("\n", array_map(function ($item) { return $item->get_name() . " - " . number_format($item->get_subtotal()) . ' x ' . $item->get_quantity(); }, $order->get_items())),
+          // List of Items with SKU & Price
+          "order_items_sku_price_list"          => implode("\n", array_map(function ($item) { return $item->get_name() . ($item->get_product() ? " (" . $item->get_product()->get_sku() . ")" : "") . ' - ' . number_format($item->get_subtotal()); }, $order->get_items())),
+          // List of Items with SKU & Quantity
+          "order_items_sku_quantity_list"       => implode("\n", array_map(function ($item) { return $item->get_name() . ($item->get_product() ? " (" . $item->get_product()->get_sku() . ")" : "") . ' x ' . $item->get_quantity(); }, $order->get_items())),
+          // List of Items with SKU, Price & Quantity
+          "order_items_sku_price_quantity_list" => implode("\n", array_map(function ($item) { return $item->get_name() . ($item->get_product() ? " (" . $item->get_product()->get_sku() . ")" : "") . ' x ' . $item->get_quantity() . ' = ' . number_format($item->get_subtotal()); }, $order->get_items())),
+          // Total Quantity of Items
+          "order_items_total_qty"               => array_sum(wp_list_pluck($order->get_items(), 'quantity')),
           // Taxes, Discounts, Fees, and Refunds
-          "tax_lines"               => implode(', ', array_map(function ($tax) {
-            return $tax->get_label() . ': ' . $tax->get_tax_total();
-          }, $order->get_tax_totals())), // Tax Lines Breakdown
+          "tax_lines"               => implode(', ', array_map(function ($tax) { return $tax->get_label() . ': ' . $tax->get_tax_total(); }, $order->get_tax_totals())), // Tax Lines Breakdown
           "tax_total"               => $order->get_total_tax(), // Total Tax Amount
           "order_discount_total"    => $order->get_total_discount(), // Order Discount Amount
-          "order_fees_total"        => implode(', ', array_map(function ($fee) {
-            return $fee->get_name() . ': ' . wc_price($fee->get_total());
-          }, $order->get_items('fee'))), // Order Fees Total
+          "order_fees_total"        => implode(', ', array_map(function ($fee) { return $fee->get_name() . ': ' . wc_price($fee->get_total()); }, $order->get_items('fee'))), // Order Fees Total
           "refund_total"            => $order->get_total_refunded(), // Total Refund Amount
-          "refund_reason"           => implode(', ', array_map(function ($refund) {
-            return $refund->get_reason();
-          }, $order->get_refunds())), // Reason for Refund
+          "refund_reason"           => implode(', ', array_map(function ($refund) { return $refund->get_reason(); }, $order->get_refunds())), // Reason for Refund
           // Coupons
           "coupons_applied"         => count($order->get_items('coupon')), // Coupons Applied
           "coupon_codes"            => implode(', ', wp_list_pluck($order->get_items('coupon'), 'code')), // List of Coupon Codes
-          "coupon_discounts"        => implode(', ', array_map(function ($coupon) {
-            return $coupon->get_code() . ': ' . wc_price($coupon->get_discount());
-          }, $order->get_items('coupon'))), // List of Coupon Discounts
+          "coupon_discounts"        => implode(', ', array_map(function ($coupon) { return $coupon->get_code() . ': ' . wc_price($coupon->get_discount()); }, $order->get_items('coupon'))), // List of Coupon Discounts
         );
         $pairs = array_merge($pairs, $new_macros);
 

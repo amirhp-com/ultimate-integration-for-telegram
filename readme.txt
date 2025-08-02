@@ -1,6 +1,6 @@
 === Ultimate Integration for Telegram ===
-Version: 1.5.0
-Stable tag: 1.5.0
+Version: 1.5.1
+Stable tag: 1.5.1
 Author: pigmentdev
 Donate link: https://pigment.dev/contact/
 Author URI: https://pigment.dev/
@@ -240,6 +240,9 @@ Yes, it supports major WooCommerce add-ons like WooCommerce Subscription, WooCom
 == Upgrade Notice ==
 Upgrade to enjoy the latest features and stability improvements.
 
+= v1.5.1 | 2025-08-02 | 1404-05-11 =
+* Fixed: `{order_items_quantity_list}` macro now correctly prints product names.
+
 = v1.5.0 | 2025-08-02 | 1404-05-11 =
 * New UI and improved user experience throughout the plugin.
 * Added import/export feature for notifications and settings.
@@ -260,6 +263,9 @@ For the full changelog, please view the [Github Repository](https://github.com/p
 
 
 == Changelog ==
+
+= v1.5.1 | 2025-08-02 | 1404-05-11 =
+* Fixed: `{order_items_quantity_list}` macro now correctly prints product names.
 
 = v1.5.0 | 2025-08-02 | 1404-05-11 =
 * New UI and improved user experience throughout the plugin.
