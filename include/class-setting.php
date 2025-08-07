@@ -344,6 +344,10 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
           </div>
           <div class="tab-content" data-tab="tab_translate">
             <br>
+            <div class="notice notice-info inline is-dismissible" style="margin-bottom: 12px;">
+              <p><?php echo esc_html__( 'Here you can change the wording of any text that appears in WordPress, plugins, or themes. Just enter the original text and what you want it changed to. You can also choose to limit the change to a specific plugin or theme by setting the text domain. For example, to change "Submit" to "Send Now", enter "Submit" as the original and "Send Now" as the translation.', 'ultimate-integration-for-telegram' ); ?> </p>
+            </div>
+            <p class="description"> <?php printf(__("Current plugin textdomain: %s", "ultimate-integration-for-telegram"), "<i class=\"highlighted\">ultimate-integration-for-telegram</i>"); ?></p>
             <div class="desc repeater notif-panel-side translation-panel">
               <table class="wp-list-table widefat striped table-view-list posts">
                 <thead>

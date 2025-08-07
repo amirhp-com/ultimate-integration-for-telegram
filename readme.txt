@@ -1,6 +1,6 @@
 === Ultimate Integration for Telegram ===
-Version: 1.5.1
-Stable tag: 1.5.1
+Version: 1.5.2
+Stable tag: 1.5.2
 Author: pigmentdev
 Donate link: https://pigment.dev/contact/
 Author URI: https://pigment.dev/
@@ -228,6 +228,10 @@ This plugin utilizes the following third-party libraries to enhance functionalit
 3. Go to **Settings > Telegram** to configure the plugin.
 
 == Frequently Asked Questions ==
+= Where do I report security bugs found in this plugin? =
+
+Please report security bugs found in the source code of the Ultimate Integration for Telegram plugin through the [Patchstack Vulnerability Disclosure  Program](https://patchstack.com/database/vdp/791bad55-1ddf-4063-8791-1a7aced1b5cc). The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this plugin.
+
 = What is required to use this plugin? =
 You need a Telegram bot. Follow the instructions in the plugin to set it up via BotFather.
 

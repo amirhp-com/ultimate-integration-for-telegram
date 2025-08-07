@@ -3,14 +3,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Ultimate Integration for Telegram\n"
-"POT-Creation-Date: 2025-08-03 12:57+0330\n"
-"PO-Revision-Date: 2025-01-20 11:56\n"
+"POT-Creation-Date: 2025-08-03 19:49+0330\n"
+"PO-Revision-Date: 2025-08-03 19:49+0330\n"
 "Last-Translator: Amirhossein Hosseinpour <its@amirhp.com>\n"
 "Language-Team: Amirhossein Hosseinpour <its@amirhp.com>\n"
+"Language: fa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "X-Generator: Poedit 3.6\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-Flags-xgettext: --add-comments=translators:\n"
@@ -26,22 +26,26 @@ msgid ""
 "Are you sure you want to reset the notifications list to default? This will "
 "overwrite your current notifications. You cannot undo this action."
 msgstr ""
+"آیا مطمئن هستید که می‌خواهید لیست نوتیف‌ها را به حالت پیش‌فرض بازنشانی کنید؟ این "
+"کار نوتیف‌های فعلی شما را بازنویسی می‌کند و قابل بازگشت نیست."
 
 #: include/class-setting.php:98
 msgid ""
 "Default notifications list has been applied (but not saved yet). To apply "
 "changes, please save settings."
 msgstr ""
+"لیست نوتیف‌های پیش‌فرض اعمال شد (اما هنوز ذخیره نشده است). برای اعمال تغییرات، "
+"لطفاً تنظیمات را ذخیره کنید."
 
 #: include/class-setting.php:99
 msgctxt "front-js"
 msgid "Please wait ..."
-msgstr ""
+msgstr "لطفاً منتظر بمانید ..."
 
 #: include/class-setting.php:100
 msgctxt "front-js"
 msgid "Turn On (green) to Enable this Notif"
-msgstr ""
+msgstr "تاگل را روشن کنید (سبز) تا نوتیف فعال شود"
 
 #: include/class-setting.php:101
 msgctxt "front-js"
@@ -49,559 +53,590 @@ msgid ""
 "Are you sure you want to delete this notifications? If you do and Save this "
 "page, YOU CANNOT UNDO WHAT YOU DID."
 msgstr ""
+"آیا مطمئن هستید که می‌خواهید این نوتیف را حذف کنید؟ اگر این کار را انجام دهید و "
+"صفحه را ذخیره کنید، قابل بازگشت نخواهد بود."
 
 #: include/class-setting.php:102
 msgctxt "front-js"
 msgid ""
-"Are you sure you want to delete all notifications? If you do and Save this "
-"page, YOU CANNOT UNDO WHAT YOU DID."
+"Are you sure you want to delete all notifications? If you do and Save this page, "
+"YOU CANNOT UNDO WHAT YOU DID."
 msgstr ""
+"آیا مطمئن هستید که می‌خواهید همه نوتیف‌ها را حذف کنید؟ اگر این کار را انجام دهید و "
+"صفحه را ذخیره کنید، قابل بازگشت نخواهد بود."
 
 #. translators: 1: copied text
 #: include/class-setting.php:104
 #, php-format
 msgctxt "front-js"
 msgid "Copied %s to clipboard."
-msgstr ""
+msgstr "به کلیپ‌برد کپی شد: %s."
 
 #: include/class-setting.php:105
 msgctxt "front-js"
 msgid "JSON Data Copied to clipboard."
-msgstr ""
+msgstr "داده JSON در کلیپ‌بورد کپی شد."
 
 #: include/class-setting.php:106
 msgctxt "front-js"
 msgid "first select a notif type"
-msgstr ""
+msgstr "ابتدا یک نوع نوتیف انتخاب کنید"
 
 #: include/class-setting.php:107
 msgctxt "front-js"
 msgid "no option found for selected notif"
-msgstr ""
+msgstr "هیچ گزینه‌ای برای نوتیف انتخاب‌شده پیدا نشد"
 
 #: include/class-setting.php:108
 msgctxt "front-js"
 msgid "An Unknown Error Occured. Check console for more information."
-msgstr ""
+msgstr "خطای ناشناخته‌ای رخ داد. برای جزئیات بیشتر کنسول را بررسی کنید."
 
 #: include/class-setting.php:110
 msgctxt "front-js"
 msgid "Unmatched asterisk (*) found."
-msgstr ""
+msgstr "ستاره (*) بدون جفت یافت شد."
 
 #: include/class-setting.php:111
 msgctxt "front-js"
 msgid "Unmatched underscore (_) found."
-msgstr ""
+msgstr "زیرخط (_) بدون جفت یافت شد."
 
 #: include/class-setting.php:112
 msgctxt "front-js"
 msgid "Unmatched backtick (`) found."
-msgstr ""
+msgstr "بک‌تیک (`) بدون جفت یافت شد."
 
 #: include/class-setting.php:113
 msgctxt "front-js"
 msgid "Unmatched triple backticks (```) found."
-msgstr ""
+msgstr "بک‌تیک سه‌تایی (```) بدون جفت یافت شد."
 
 #: include/class-setting.php:114
 msgctxt "front-js"
 msgid "Sorry! Your Markdown formatting is Invalid."
-msgstr ""
+msgstr "متأسفیم! فرمت Markdown شما نامعتبر است."
 
 #: include/class-setting.php:115
 msgctxt "front-js"
 msgid "Success! Your Markdown formatting is valid."
-msgstr ""
+msgstr "موفقیت‌آمیز! فرمت Markdown شما معتبر است."
 
 #: include/class-setting.php:130 include/class-setting.php:819
 msgid "General"
-msgstr ""
+msgstr "عمومی"
 
 #: include/class-setting.php:131
 msgid "Notifications"
-msgstr ""
+msgstr "نوتیفیکیشن‌ها"
 
 #: include/class-setting.php:132
 msgid "Channel Agent"
-msgstr ""
+msgstr "مدیر کانال"
 
 #: include/class-setting.php:133
 msgid "Translate Tool"
-msgstr ""
+msgstr "ابزار ترجمه"
 
 #: include/class-setting.php:134
 msgid "Migrate"
-msgstr ""
+msgstr "برون‌بری تنظیمات"
 
 #: include/class-setting.php:135
 msgid "Documentation"
-msgstr ""
+msgstr "مستندات"
 
 #: include/class-setting.php:146
 msgid "General Configuration"
-msgstr ""
+msgstr "تنظیمات کلی"
 
 #: include/class-setting.php:155
 msgid "Enable Debug Mode"
-msgstr ""
+msgstr "فعالسازی حالت دیباگ"
 
 #: include/class-setting.php:156
 msgid ""
 "Enable to log detailed information for troubleshooting. Recommended for "
 "development only."
-msgstr ""
+msgstr "برای اشکال زدایی توسط توسعه دهنده فقط فعال شود."
 
 #: include/class-setting.php:160
 msgid "Show Plugin Link in Admin Bar"
-msgstr ""
+msgstr "نمایش لینک افزونه در ادمین بار"
 
 #: include/class-setting.php:161
 msgid ""
-"Enable this option to display a link to the plugin in the WordPress admin "
-"bar for administrators."
+"Enable this option to display a link to the plugin in the WordPress admin bar "
+"for administrators."
 msgstr ""
+"با فعال‌سازی این گزینه، لینک افزونه برای مدیران در نوار مدیریت بالا (admin bar) "
+"وردپرس نمایش داده می‌شود."
 
 #: include/class-setting.php:165
 msgid "Enable Built-in Jalali Date"
-msgstr ""
+msgstr "فعال‌سازی تاریخ شمسی درون افزونه"
 
 #: include/class-setting.php:166
 msgid ""
-"Enable to use the Jalali (Shamsi) calendar format. Disable other Jalali "
-"plugins to avoid conflicts."
+"Enable to use the Jalali (Shamsi) calendar format. Disable other Jalali plugins "
+"to avoid conflicts."
 msgstr ""
+"برای استفاده از فرمت تقویم جلالی (شمسی) این گزینه را فعال کنید. برای جلوگیری از "
+"تداخل، سایر افزونه‌های جلالی را غیرفعال کنید."
 
 #: include/class-setting.php:178
 msgid "Telegram Bot Connection"
-msgstr ""
+msgstr "اتصال ربات تلگرام"
 
 #: include/class-setting.php:185
 msgid "Step 1: Create a Bot"
-msgstr ""
+msgstr "مرحله ۱: ساخت ربات"
 
 #. translators: 1: bot father link, 2: connect btn, 3: break
 #: include/class-setting.php:188
 #, php-format
 msgid ""
-"Open %1$s in Telegram and send the command /newbot. Follow the instructions "
-"to name your bot and choose a username (e.g., my_notifier_bot)."
+"Open %1$s in Telegram and send the command /newbot. Follow the instructions to "
+"name your bot and choose a username (e.g., my_notifier_bot)."
 msgstr ""
+"در تلگرام %1$s را باز کرده و دستور /newbot را ارسال کنید. سپس طبق دستورها، برای "
+"ربات خود نام و نام کاربری انتخاب کنید (مثلاً: my_notifier_bot)."
 
 #: include/class-setting.php:193
 msgid "Step 2: Get the Token"
-msgstr ""
+msgstr "مرحله ۲: دریافت توکن"
 
 #: include/class-setting.php:194
 #, php-format
 msgid ""
-"Once your bot is created, BotFather will send you a Token — a long string "
-"like this: %s. Tap to copy that token, You’ll need it in the next step."
+"Once your bot is created, BotFather will send you a Token — a long string like "
+"this: %s. Tap to copy that token, You’ll need it in the next step."
 msgstr ""
+"پس از ساخت ربات، BotFather یک توکن برای شما ارسال می‌کند — یک رشته طولانی مثل: "
+"%s. روی آن بزنید تا کپی شود. در مرحله بعد به آن نیاز دارید."
 
 #: include/class-setting.php:200
 msgid "Step 3: Paste the Token"
-msgstr ""
+msgstr "مرحله ۳: جای‌گذاری توکن"
 
 #: include/class-setting.php:201
 msgid "Paste the token you got from BotFather into the Token field above."
-msgstr ""
+msgstr "توکنی که از BotFather گرفتید را در فیلد توکن بالا جای‌گذاری کنید."
 
 #: include/class-setting.php:207
 msgid "Step 4: Enter the Bot Username"
-msgstr ""
+msgstr "مرحله ۴: وارد کردن نام کاربری ربات"
 
 #: include/class-setting.php:208
 msgid ""
-"Type the username of your bot (with @ at the start), exactly as you created "
-"it — for example: @my_notifier_bot."
+"Type the username of your bot (with @ at the start), exactly as you created it — "
+"for example: @my_notifier_bot."
 msgstr ""
+"نام کاربری ربات خود را دقیقاً همان‌طور که ساختید (با @ در ابتدا) وارد کنید — مثلاً: "
+"@my_notifier_bot."
 
 #: include/class-setting.php:212
 msgid "Step 5: Connect Your Bot"
-msgstr ""
+msgstr "مرحله ۵: اتصال ربات"
 
 #: include/class-setting.php:215
 msgid ""
-"Please make sure to save the settings on this page before connecting your "
-"bot."
-msgstr ""
+"Please make sure to save the settings on this page before connecting your bot."
+msgstr "لطفاً پیش از اتصال ربات، تنظیمات این صفحه را ذخیره کنید."
 
 #: include/class-setting.php:216
 msgid "Changes won't take effect unless saved."
-msgstr ""
+msgstr "تغییرات بدون ذخیره‌سازی اعمال نخواهند شد."
 
 #: include/class-setting.php:217
 msgid "Click “Connect WordPress & Telegram” to link your bot to this site."
-msgstr ""
+msgstr "برای اتصال ربات به این سایت، روی «اتصال وردپرس و تلگرام» کلیک کنید."
 
 #: include/class-setting.php:218
 msgid ""
 "Start your bot, then click “Send Test Message to Telegram” to make sure "
 "everything is working!"
 msgstr ""
+"ربات خود را راه‌اندازی کنید، سپس روی «ارسال پیام تست به تلگرام» کلیک کنید تا از "
+"عملکرد صحیح آن مطمئن شوید!"
 
 #: include/class-setting.php:219
 msgid ""
 "If everything’s set up correctly, you’ll receive a test message in Telegram!"
-msgstr ""
+msgstr "اگر همه چیز درست تنظیم شده باشد، یک پیام تست در تلگرام دریافت خواهید کرد!"
 
 #: include/class-setting.php:222
 msgid "1. Connect WordPress & Telegram"
-msgstr ""
+msgstr "۱. اتصال وردپرس و تلگرام"
 
 #: include/class-setting.php:223
 msgid "2. Send Test Message to Telegram"
-msgstr ""
+msgstr "۲. ارسال پیام تست به تلگرام"
 
 #: include/class-setting.php:224
 msgid "Disconnect the Bot form WordPress"
-msgstr ""
+msgstr "قطع اتصال ربات از وردپرس"
 
 #: include/class-setting.php:231
 msgid "Step 6: Add Default Recipients"
-msgstr ""
+msgstr "مرحله ۶: افزودن گیرندگان پیش‌فرض"
 
 #: include/class-setting.php:232
 msgid ""
 "Paste the Chat ID or, if it's a public channel/group, the username with @ — "
 "e.g., @mychannel.<br>➡️ One Chat ID or username per line."
 msgstr ""
+"شناسه چت را جای‌گذاری کنید یا اگر کانال/گروه عمومی است، نام کاربری را با @ وارد "
+"کنید — مثلاً: @mychannel.<br>⬅️ هر شناسه یا نام کاربری در یک خط جداگانه وارد شود."
 
 #: include/class-setting.php:236
 msgid "Advanced: Custom API Base URI"
-msgstr ""
+msgstr "پیشرفته: ادرس سرور بات تلگرام"
 
 #: include/class-setting.php:237
 #, php-format
 msgid ""
-"Paste the API Base URI you want to use for Telegram API requests (e.g. when "
-"you are using a self-hosted Telegram server or Cloudflare Worker). Default: "
+"Paste the API Base URI you want to use for Telegram API requests (e.g. when you "
+"are using a self-hosted Telegram server or Cloudflare Worker). Default: "
 "<code>https://api.telegram.org</code><br>%s"
 msgstr ""
+"ادرس سرور برای ارسال درخواست‌های تلگرام را وارد کنید (مثلاً زمانی که از سرور "
+"تلگرام شخصی یا Cloudflare Worker استفاده می‌کنید). مقدار پیش‌فرض: <code>https://"
+"api.telegram.org</code><br>‏‫%s"
 
 #: include/class-setting.php:261
 msgid "Hook Entry"
-msgstr ""
+msgstr "هوک"
 
 #: include/class-setting.php:262
 msgid "Description"
-msgstr ""
+msgstr "توضیحات"
 
 #: include/class-setting.php:351 include/class-setting.php:382
 msgid "Original"
-msgstr ""
+msgstr "اورجینال"
 
 #: include/class-setting.php:352
 msgid "Translate"
-msgstr ""
+msgstr "ترجمه"
 
 #: include/class-setting.php:353
 msgid "TextDomain"
-msgstr ""
+msgstr "تکست دامین"
 
 #: include/class-setting.php:354 include/class-setting.php:384
 msgid "Options"
-msgstr ""
+msgstr "فیلدهای رادیویی"
 
 #: include/class-setting.php:355 include/class-setting.php:385
 msgid "Action"
-msgstr ""
+msgstr "عملیات"
 
 #: include/class-setting.php:360 include/class-setting.php:390
 msgid "Original text ..."
-msgstr ""
+msgstr "متن اصلی …"
 
 #: include/class-setting.php:361 include/class-setting.php:391
 msgid "Translate to ..."
-msgstr ""
+msgstr "ترجمه به …"
 
 #: include/class-setting.php:362
 msgid "Text Domain (Optional)"
-msgstr ""
+msgstr "تکست دامین (اختیاری)"
 
 #: include/class-setting.php:364
 msgid "Partial Replace?"
-msgstr ""
+msgstr "شامل بخشی از متن؟"
 
 #: include/class-setting.php:365
 msgid "Use RegEx?"
-msgstr ""
+msgstr "استفاده از ریجکس؟"
 
 #: include/class-setting.php:366
 msgid "Translated Origin?"
-msgstr ""
+msgstr "متن ترجمه است؟"
 
 #: include/class-setting.php:369 include/class-setting.php:397
 msgid "Delete Row"
-msgstr ""
+msgstr "حذف ردیف"
 
 #: include/class-setting.php:375 include/class-setting.php:403
 msgid "Add New Row"
-msgstr ""
+msgstr "افزودن ردیف جدید"
 
 #: include/class-setting.php:383
 msgid "Replace"
-msgstr ""
+msgstr "جایگزین به"
 
 #: include/class-setting.php:393
 msgid "Green: Replace in Output Buffer | Red: Replace in Content Only"
-msgstr ""
+msgstr "قرمز: جایگزین در محتوا / سبز: جایگزین در تمامی قسمت ها"
 
 #: include/class-setting.php:394
 msgid "Active"
-msgstr ""
+msgstr "فعال"
 
 #: include/class-setting.php:412
 msgid "Export / Import Notifications List and Settings"
-msgstr ""
+msgstr "برون بری / درون ریزی لیست نوتیف‌ها و تنظیمات"
 
 #: include/class-setting.php:420
 msgid "Copy to Clipboard"
-msgstr ""
+msgstr "کپی به کلیپ‌بورد"
 
 #: include/class-setting.php:421
 msgid "Reset to Default Notifications List"
-msgstr ""
+msgstr "بازنشانی به لیست پیش‌فرض نوتیف‌ها"
 
 #: include/class-setting.php:424
 msgid ""
-"you can use the json data to migrate settings across multiple sites. Enter "
-"JSON Data and Save page to reload Workspace."
+"you can use the json data to migrate settings across multiple sites. Enter JSON "
+"Data and Save page to reload Workspace."
 msgstr ""
+"می‌توانید از داده JSON برای انتقال تنظیمات بین چند سایت استفاده کنید. داده JSON "
+"را وارد کرده و صفحه را ذخیره کنید تا محیط کاری دوباره بارگذاری شود."
 
 #: include/class-setting.php:434
 msgid "Export / Import Translation Data"
-msgstr ""
+msgstr "برون بری و درون ریزی داده ترجمه"
 
 #: include/class-setting.php:448
 msgid "Export / Import String Replace Data"
-msgstr ""
+msgstr "برون بری و درون ریزی داده جایگزین متن"
 
 #: include/class-setting.php:464
 msgid "Channel Agent / Sent Message to Channel"
-msgstr ""
+msgstr "مدیر کانال - ارسال پیام"
 
 #: include/class-setting.php:471
 msgid ""
-"This feature allows you to send messages to a Telegram channel or group "
-"using your bot. You can use this to post updates, announcements, or any "
-"other content directly to your channel."
+"This feature allows you to send messages to a Telegram channel or group using "
+"your bot. You can use this to post updates, announcements, or any other content "
+"directly to your channel."
 msgstr ""
+"با استفاده از این قابلیت می‌توانید از طریق ربات خود پیام‌هایی را به یک کانال یا "
+"گروه تلگرام ارسال کنید. این امکان برای ارسال اعلان‌ها، به‌روزرسانی‌ها یا هر محتوای "
+"دیگری به‌صورت مستقیم به کانال کاربرد دارد."
 
 #: include/class-setting.php:473
 msgid ""
-"Currently, only text messages are supported. Sending images, videos, files, "
-"or other types of messages is not available."
+"Currently, only text messages are supported. Sending images, videos, files, or "
+"other types of messages is not available."
 msgstr ""
+"در حال حاضر فقط ارسال پیام‌های متنی پشتیبانی می‌شود. ارسال تصاویر، ویدیوها، فایل‌ها "
+"یا انواع دیگر پیام‌ها امکان‌پذیر نیست."
 
 #: include/class-setting.php:476
 msgid ""
-"To use this feature, simply enter the channel username (with @) or chat ID "
-"in the field below, then type your message in the textarea and click 'Send "
-"Message'."
+"To use this feature, simply enter the channel username (with @) or chat ID in "
+"the field below, then type your message in the textarea and click 'Send Message'."
 msgstr ""
+"برای استفاده از این قابلیت، کافیست نام کاربری کانال (با @) یا شناسه چت را در "
+"فیلد زیر وارد کنید، سپس پیام خود را در بخش متنی بنویسید و روی «ارسال پیام» کلیک "
+"کنید."
 
 #: include/class-setting.php:487
 msgid "Send Message to Channel"
-msgstr ""
+msgstr "ارسال پیام به کانال"
 
 #: include/class-setting.php:495
 msgid "Save setting"
-msgstr ""
+msgstr "ذخیره تنظیمات"
 
 #: include/class-setting.php:516
 msgctxt "front-js"
 msgid "Toggle On (GREEN) to Enable this Event Notification"
-msgstr ""
+msgstr "تاگل را روشن کنید (سبز) تا نوتیف فعال شود"
 
 #: include/class-setting.php:517
 msgid "Delete this Event Notification"
-msgstr ""
+msgstr "حذف این نوتیف"
 
 #: include/class-setting.php:518
 msgid "Open Event Notification Setting"
-msgstr ""
+msgstr "باز کردن تنظیمات نوتیف"
 
 #: include/class-setting.php:555
 msgid "Available Events"
-msgstr ""
+msgstr "رویدادهای در دسترس"
 
 #: include/class-setting.php:565
 msgid "Notifications List"
-msgstr ""
+msgstr "لیست نوتیف‌ها"
 
 #: include/class-setting.php:565
 msgid "Clear All"
-msgstr ""
+msgstr "پاک کردن همه"
 
 #: include/class-setting.php:566
 msgid "No notif added to panel, you toolbar above to add your first notif."
 msgstr ""
+"هیچ نوتیفی به پنل اضافه نشده است. از نوار ابزار بالا برای افزودن اولین نوتیف "
+"استفاده کنید."
 
 #: include/class-setting.php:575
 msgid "WordPress Users"
-msgstr ""
+msgstr "کاربران وردپرس"
 
 #: include/class-setting.php:576
 msgid ""
 "This notif will be triggered when a WordPress User is registered or updated."
-msgstr ""
+msgstr "این نوتیف هنگام ثبت‌نام یا به‌روزرسانی یک کاربر وردپرس فعال می‌شود."
 
 #: include/class-setting.php:579
 msgid "New User Registered"
-msgstr ""
+msgstr "ثبت‌نام کاربر جدید"
 
 #: include/class-setting.php:582
 msgid "User Profile Updated"
-msgstr ""
+msgstr "به‌روزرسانی پروفایل کاربر"
 
 #: include/class-setting.php:586
 msgid "WordPress / Comment"
-msgstr ""
+msgstr "وردپرس / دیدگاه"
 
 #: include/class-setting.php:587
 msgid ""
-"This notif will be triggered when a WordPress Comment is created, updated, "
-"or deleted."
-msgstr ""
+"This notif will be triggered when a WordPress Comment is created, updated, or "
+"deleted."
+msgstr "این نوتیف هنگام ایجاد، به‌روزرسانی یا حذف یک دیدگاه وردپرس فعال می‌شود."
 
 #: include/class-setting.php:589
 msgid "New Comment Created"
-msgstr ""
+msgstr "ثبت دیدگاه جدید"
 
 #: include/class-setting.php:590
 msgid "Comment Updated"
-msgstr ""
+msgstr "به‌روزرسانی دیدگاه"
 
 #: include/class-setting.php:591
 msgid "Comment Deleted"
-msgstr ""
+msgstr "حذف دیدگاه"
 
 #: include/class-setting.php:592
 msgid "Comment Approved"
-msgstr ""
+msgstr "تایید شدن دیدگاه"
 
 #: include/class-setting.php:593
 msgid "Comment Unapproved"
-msgstr ""
+msgstr "تایید نشدن دیدگاه"
 
 #: include/class-setting.php:598
 msgid "WooCommerce / Order"
-msgstr ""
+msgstr "ووکامرس / سفارش"
 
 #: include/class-setting.php:599
 msgid ""
 "This notif will be triggered when a WooCommerce Order is created, updated, "
 "deleted, or refunded."
 msgstr ""
+"این نوتیف هنگام ایجاد، به‌روزرسانی، حذف یا بازپرداخت یک سفارش ووکامرس فعال می‌شود."
 
 #: include/class-setting.php:601
 msgid "New Order Created"
-msgstr ""
+msgstr "ثبت سفارش جدید"
 
 #: include/class-setting.php:602
 msgid "Order Updated / Saved"
-msgstr ""
+msgstr "به‌روزرسانی / ذخیره سفارش"
 
 #: include/class-setting.php:603
 msgid "Trash Order"
-msgstr ""
+msgstr "انتقال سفارش به زباله‌دان"
 
 #: include/class-setting.php:604
 msgid "Delete Order"
-msgstr ""
+msgstr "حذف سفارش"
 
 #: include/class-setting.php:605
 msgid "Refunded Order"
-msgstr ""
+msgstr "بازپرداخت سفارش"
 
 #: include/class-setting.php:606
 msgid "Order Payment Complete"
-msgstr ""
+msgstr "تکمیل پرداخت سفارش"
 
 #: include/class-setting.php:607
 msgid "Checkout Order Processed"
-msgstr ""
+msgstr "پردازش سفارش در تسویه‌حساب"
 
 #: include/class-setting.php:608
 msgid "Checkout Order Processed via API"
-msgstr ""
+msgstr "پردازش سفارش در تسویه‌حساب از طریق API"
 
 #: include/class-setting.php:614
 msgid "Changed to anything"
-msgstr ""
+msgstr "تغییر به هر مقدار"
 
 #. translators: 1: status name
 #: include/class-setting.php:618
 #, php-format
 msgid "Changed to %s"
-msgstr ""
+msgstr "تغییر به %s"
 
 #: include/class-setting.php:621
 msgid "WooCommerce / Order / Status"
-msgstr ""
+msgstr "ووکامرس / سفارش / وضعیت"
 
 #: include/class-setting.php:622
-msgid ""
-"This notif will be triggered when a WooCommerce Order status is changed."
-msgstr ""
+msgid "This notif will be triggered when a WooCommerce Order status is changed."
+msgstr "این نوتیف هنگام تغییر وضعیت یک سفارش ووکامرس فعال می‌شود."
 
 #: include/class-setting.php:626
 msgid "WooCommerce / Product"
-msgstr ""
+msgstr "ووکامرس / محصول"
 
 #: include/class-setting.php:627
 msgid ""
-"This notif will be triggered when a WooCommerce Product is created, "
-"updated, or deleted."
-msgstr ""
+"This notif will be triggered when a WooCommerce Product is created, updated, or "
+"deleted."
+msgstr "این نوتیف هنگام ایجاد، به‌روزرسانی یا حذف یک محصول ووکامرس فعال می‌شود."
 
 #: include/class-setting.php:629
 msgid "Product Updated or Saved"
-msgstr ""
+msgstr "به‌روزرسانی یا ذخیره محصول"
 
 #: include/class-setting.php:630
 msgid "Product Purchased on New Order"
-msgstr ""
+msgstr "خرید محصول در سفارش جدید"
 
 #: include/class-setting.php:631
 msgid "Stock Quantity Increased"
-msgstr ""
+msgstr "افزایش موجودی انبار"
 
 #: include/class-setting.php:632
 msgid "Stock Quantity Decreased"
-msgstr ""
+msgstr "کاهش موجودی انبار"
 
 #: include/class-setting.php:633
 msgid "Stock Quantity Reached Zero (Outofstock)"
-msgstr ""
+msgstr "صفر شدن موجودی انبار"
 
 #: include/class-setting.php:634
 msgid "Stock Quantity Reached Low Stock Level"
-msgstr ""
+msgstr "رسیدن موجودی انبار به سطح کم"
 
 #: include/class-setting.php:637
 msgid "Mail Sent: All Emails"
-msgstr ""
+msgstr "ارسال ایمیل: همه ایمیل‌ها"
 
 #. translators: 1: email name
 #: include/class-setting.php:640
 #, php-format
 msgid "Mail Sent: %s"
-msgstr ""
+msgstr "ارسال ایمیل: %s"
 
 #: include/class-setting.php:643
 msgid "WooCommerce / E-Mail"
-msgstr ""
+msgstr "ووکامرس / ایمیل"
 
 #: include/class-setting.php:644
 msgid "This notif will be triggered when a WooCommerce E-Mail is sent."
-msgstr ""
+msgstr "این نوتیف هنگام ارسال ایمیل ووکامرس فعال می‌شود."
 
 #: include/class-setting.php:679
 msgid "Add Notification for this event"
-msgstr ""
+msgstr "افزودن نوتیف برای این رویداد"
 
 #: include/class-setting.php:689
 msgctxt "tg-default-msg"
@@ -613,6 +648,16 @@ msgid ""
 "Items: {order_items_count}\n"
 "{order_items_quantity_list}"
 msgstr ""
+"🎉 *سفارش جدید دریافت شد* در {site_name}!\n"
+"‬\n"
+"‫سفارش #{order_number} به مبلغ {order_total} {order_currency} توسط "
+"{customer_first_name} {customer_last_name} ({customer_email})\n"
+"‬\n"
+"‫وضعیت: {order_status} | تاریخ: {order_date}\n"
+"‬\n"
+"‫تعداد آیتم‌ها: {order_items_count}\n"
+"‬\n"
+"‏‫{order_items_quantity_list}"
 
 #: include/class-setting.php:692
 msgctxt "tg-default-msg"
@@ -623,6 +668,15 @@ msgid ""
 "Transaction ID: {transaction_id}\n"
 "Paid on: {order_date_paid}"
 msgstr ""
+"💰 *پرداخت تایید شد* برای سفارش #{order_number}!\n"
+"‬\n"
+"‫مبلغ کل: {order_total} {order_currency} از طریق {order_payment_method_title}\n"
+"‬\n"
+"‫مشتری: {customer_first_name} {customer_last_name} ({customer_email})\n"
+"‬\n"
+"‫شناسه تراکنش: {transaction_id}\n"
+"‬\n"
+"‫تاریخ پرداخت: {order_date_paid}"
 
 #: include/class-setting.php:695
 msgctxt "tg-default-msg"
@@ -634,6 +688,16 @@ msgid ""
 "Items: {order_items_count}\n"
 "{order_items_quantity_list}"
 msgstr ""
+"✅ سفارش #{order_number} اکنون *تکمیل شده* است!\n"
+"‬\n"
+"‫مبلغ کل: {order_total} {order_currency} برای {customer_first_name} "
+"{customer_last_name}\n"
+"‬\n"
+"‫تاریخ تکمیل: {order_date_completed}\n"
+"‬\n"
+"‫تعداد آیتم‌ها: {order_items_count}\n"
+"‬\n"
+"‏‫{order_items_quantity_list}"
 
 #: include/class-setting.php:698
 msgctxt "tg-default-msg"
@@ -642,6 +706,11 @@ msgid ""
 "Name: {first_name} {last_name} ({user_email})\n"
 "Username: {user_login} | Registered on: {user_registered}"
 msgstr ""
+"👤 *کاربر جدیدی به {site_name} پیوست!*\n"
+"‬\n"
+"‫نام: {first_name} {last_name} ({user_email})\n"
+"‬\n"
+"‫نام کاربری: {user_login} | تاریخ ثبت‌نام: {user_registered}"
 
 #: include/class-setting.php:701
 msgctxt "tg-default-msg"
@@ -649,6 +718,9 @@ msgid ""
 "🚨 *Out of Stock Alert!*\n"
 "Product *{name}* is now *out of stock* (0 units)."
 msgstr ""
+"🚨 *هشدار اتمام موجودی!*\n"
+"‬\n"
+"‫محصول *{name}* اکنون *ناموجود* است (۰ عدد)."
 
 #: include/class-setting.php:704
 msgctxt "tg-default-msg"
@@ -656,6 +728,9 @@ msgid ""
 "📊 *Low Stock Alert!*\n"
 "Product *{name}* has reached *{stock_quantity}* units in stock."
 msgstr ""
+"📊 *هشدار موجودی کم!*\n"
+"‬\n"
+"‫محصول *{name}* به موجودی *{stock_quantity}* عدد رسیده است."
 
 #: include/class-setting.php:719
 msgctxt "tg-default-btn"
@@ -663,981 +738,1001 @@ msgid ""
 "View Order | {view_url}\n"
 "Edit Order | {edit_url}"
 msgstr ""
+"مشاهده سفارش | {view_url}\n"
+"‬\n"
+"‫ویرایش سفارش | {edit_url}"
 
 #: include/class-setting.php:722
 msgctxt "tg-default-btn"
 msgid "Edit User | {edit_url}"
-msgstr ""
+msgstr "ویرایش کاربر | {edit_url}"
 
 #: include/class-setting.php:726
 msgctxt "tg-default-btn"
 msgid "Restock Now | {edit_url}"
-msgstr ""
+msgstr "تامین موجودی | {edit_url}"
 
 #: include/class-setting.php:748
 msgid "Message"
-msgstr ""
+msgstr "پیام"
 
 #: include/class-setting.php:751
 msgid "Write your message here ..."
-msgstr ""
+msgstr "پیام خود را اینجا بنویسید..."
 
 #. translators: 1: help link, 2: markdown validator
 #: include/class-setting.php:759
 #, php-format
 msgid ""
-"You can use <b>HTML</b>, <b>Markdown</b>, and <b>Macros</b> in your "
-"message. %1$s"
+"You can use <b>HTML</b>, <b>Markdown</b>, and <b>Macros</b> in your message. %1$s"
 msgstr ""
+"می‌توانید در پیام خود از <b>HTML</b>، <b>Markdown</b> و <b>ماکروها</b> استفاده "
+"کنید. %1$s"
 
 #: include/class-setting.php:760
 msgid "Formatting Guide"
-msgstr ""
+msgstr "راهنمای قالب‌بندی"
 
 #: include/class-setting.php:767
 msgid "HTML Formatting"
-msgstr ""
+msgstr "قالب‌بندی HTML"
 
 #: include/class-setting.php:768
 msgid ""
 "Enable (green) to use HTML formatting, or disable (red) to use Markdown "
-"formatting. Choose the appropriate option based on your message "
-"requirements."
+"formatting. Choose the appropriate option based on your message requirements."
 msgstr ""
+"برای استفاده از قالب‌بندی HTML آن را روشن کنید (سبز) یا برای استفاده از قالب‌بندی "
+"Markdown آن را خاموش کنید (قرمز). گزینه مناسب را بر اساس نیاز پیام خود انتخاب "
+"کنید."
 
 #: include/class-setting.php:776
 msgid "Markdown Validator"
-msgstr ""
+msgstr "اعتبارسنج Markdown"
 
 #: include/class-setting.php:777
 msgid ""
-"Tip: Telegram requires your message to be valid, especially when using "
-"Markdown formatting. Invalid syntax can cause your message to fail. Use the "
-"validator tool above to quickly check your text before saving."
+"Tip: Telegram requires your message to be valid, especially when using Markdown "
+"formatting. Invalid syntax can cause your message to fail. Use the validator "
+"tool above to quickly check your text before saving."
 msgstr ""
+"نکته: تلگرام نیاز دارد پیام شما معتبر باشد، به‌ویژه هنگام استفاده از قالب‌بندی "
+"Markdown. نحو نامعتبر ممکن است باعث عدم ارسال پیام شود. برای بررسی سریع متن خود "
+"قبل از ذخیره، از ابزار اعتبارسنج بالا استفاده کنید."
 
 #: include/class-setting.php:780
 msgid "Validate Markdown"
-msgstr ""
+msgstr "اعتبارسنجی Markdown"
 
 #: include/class-setting.php:785
 msgid "Buttons"
-msgstr ""
+msgstr "دکمه‌ها"
 
 #: include/class-setting.php:786
 msgid ""
 "You can add up to four buttons. Both labels and URLs can use plain text or "
-"macros, and labels can also include emojis. You can use @page_slug, "
-"#page_id or {special_pages} supported by PeproDev Ultimate Profile "
-"Solutions as button URL too."
+"macros, and labels can also include emojis. You can use @page_slug, #page_id or "
+"{special_pages} supported by PeproDev Ultimate Profile Solutions as button URL "
+"too."
 msgstr ""
+"می‌توانید تا چهار دکمه اضافه کنید. برچسب‌ها و آدرس‌ها می‌توانند متن ساده یا ماکرو "
+"باشند و برچسب‌ها می‌توانند شامل ایموجی هم باشند. همچنین می‌توانید از @page_slug، "
+"#page_id یا {special_pages} که توسط PeproDev Ultimate Profile Solutions پشتیبانی "
+"می‌شوند به عنوان آدرس دکمه استفاده کنید."
 
 #. translators: 1: example
 #: include/class-setting.php:794
 #, php-format
 msgid "e.g. %s"
-msgstr ""
+msgstr "مثلا %s"
 
 #: include/class-setting.php:802
 msgid "Recipients"
-msgstr ""
+msgstr "گیرندگان"
 
 #: include/class-setting.php:803
 msgid ""
-"Paste the Chat ID or, if it's a public channel/group, the username with at-"
-"sign, e.g. @mychannel. \n"
+"Paste the Chat ID or, if it's a public channel/group, the username with at-sign, "
+"e.g. @mychannel. \n"
 "Enter One Chat ID or username per line."
 msgstr ""
+"شناسه چت را وارد کنید یا اگر کانال/گروه عمومی است، نام کاربری را با علامت @ وارد "
+"کنید، مثلاً @mychannel.\n"
+"‬\n"
+"‫‫هر شناسه یا نام کاربری را در یک خط جداگانه وارد کنید."
 
 #: include/class-setting.php:807
 msgid "Leave Empty to use Default Recipients."
-msgstr ""
+msgstr "برای استفاده از گیرندگان پیش‌فرض خالی بگذارید."
 
 #: include/class-setting.php:813
 msgid "Available Event Macros for this Notification"
-msgstr ""
+msgstr "ماکروهای رویداد موجود برای این نوتیف"
 
 #: include/class-setting.php:821
 msgctxt "macro"
 msgid "Current Time"
-msgstr ""
+msgstr "زمان فعلی"
 
 #: include/class-setting.php:822
 msgctxt "macro"
 msgid "Current Date"
-msgstr ""
+msgstr "تاریخ فعلی"
 
 #: include/class-setting.php:823
 msgctxt "macro"
 msgid "Current Date-time"
-msgstr ""
+msgstr "تاریخ-زمان فعلی"
 
 #: include/class-setting.php:824
 msgctxt "macro"
 msgid "Current Jalali Date"
-msgstr ""
+msgstr "تاریخ شمسی فعلی"
 
 #: include/class-setting.php:825
 msgctxt "macro"
 msgid "Current Jalali Date-time"
-msgstr ""
+msgstr "تاریخ-زمان شمسی فعلی"
 
 #: include/class-setting.php:826
 msgctxt "macro"
 msgid "Current User id"
-msgstr ""
+msgstr "شناسه کاربر فعلی"
 
 #: include/class-setting.php:827
 msgctxt "macro"
 msgid "Current User name"
-msgstr ""
+msgstr "نام کاربر فعلی"
 
 #: include/class-setting.php:828
 msgctxt "macro"
 msgid "Site name"
-msgstr ""
+msgstr "نام وبسایت"
 
 #: include/class-setting.php:829
 msgctxt "macro"
 msgid "Site URL"
-msgstr ""
+msgstr "آدرس سایت"
 
 #: include/class-setting.php:830
 msgctxt "macro"
 msgid "Admin URL"
-msgstr ""
+msgstr "آدرس مدیریت"
 
 #. translators: 1: plugin name, 2: version ID
 #: include/class-setting.php:861
 #, php-format
 msgctxt "footer-copyright"
 msgid "%1$s — Version %2$s. / db.ver "
-msgstr ""
+msgstr "‫%s — نسخه %s / نسخه دیتابیس "
 
 #: include/class-setting.php:881 include/class-setting.php:900
 #: include/class-setting.php:954
 #, php-format
 msgctxt "setting-page"
 msgid "Enter %s"
-msgstr ""
+msgstr "%s را وارد کنید"
 
 #: include/class-setting.php:916
 #, php-format
 msgctxt "setting-page"
 msgid "Choose %s"
-msgstr ""
+msgstr "%s را انتخاب کنید"
 
 #: include/hooks/class-wc-order.php:355
 msgid "WooCommerce Emails"
-msgstr ""
+msgstr "ایمیل‌های ووکامرس"
 
 #: include/hooks/class-wc-order.php:357
 msgctxt "macro"
 msgid "Email ID"
-msgstr ""
+msgstr "شناسه ایمیل"
 
 #: include/hooks/class-wc-order.php:358
 msgctxt "macro"
 msgid "Email Title"
-msgstr ""
+msgstr "عنوان ایمیل"
 
 #: include/hooks/class-wc-order.php:359
 msgctxt "macro"
 msgid "Email Recipient"
-msgstr ""
+msgstr "گیرنده ایمیل"
 
 #: include/hooks/class-wc-order.php:360
 msgctxt "macro"
 msgid "Email Subject"
-msgstr ""
+msgstr "موضوع ایمیل"
 
 #: include/hooks/class-wc-order.php:361
 msgctxt "macro"
 msgid "Email Attachments"
-msgstr ""
+msgstr "اتچمنت ایمیل"
 
 #: include/hooks/class-wc-order.php:362
 msgctxt "macro"
 msgid "Email From name"
-msgstr ""
+msgstr "نام فرستنده ایمیل"
 
 #: include/hooks/class-wc-order.php:363
 msgctxt "macro"
 msgid "Email From address"
-msgstr ""
+msgstr "آدرس فرستنده ایمیل"
 
 #. translators: 1: notice
 #: include/hooks/class-wc-order.php:365
 #, php-format
 msgctxt "macro"
 msgid "Email Body TEXT %s"
-msgstr ""
+msgstr "متن ساده ایمیل %s"
 
 #: include/hooks/class-wc-order.php:365 include/hooks/class-wc-order.php:367
 #: include/hooks/class-wc-order.php:369
 msgid ""
-"Only use when HTML Formatting is set to 'ENABLED' or within preformatted "
-"blocks (`code`, ```code```, &amp;lt;pre&amp;gt;code&amp;lt;/pre&amp;gt;) "
-"for proper rendering."
+"Only use when HTML Formatting is set to 'ENABLED' or within preformatted blocks "
+"(`code`, ```code```, &amp;lt;pre&amp;gt;code&amp;lt;/pre&amp;gt;) for proper "
+"rendering."
 msgstr ""
+"فقط زمانی استفاده شود که قالب‌بندی HTML روی «فعال» باشد یا داخل بلاک‌های پیش‌فرمت "
+"شده (`code`، ```code``` و &amp;lt;pre&amp;gt;code&amp;lt;/pre&amp;gt;) برای "
+"نمایش صحیح."
 
 #. translators: 1: notice
 #: include/hooks/class-wc-order.php:367
 #, php-format
 msgctxt "macro"
 msgid "Email Body HTML %s"
-msgstr ""
+msgstr "محتوای HTML ایمیل %s"
 
 #. translators: 1: notice
 #: include/hooks/class-wc-order.php:369
 #, php-format
 msgctxt "macro"
 msgid "Email Body HTML (tags stripped) %s"
-msgstr ""
+msgstr "محتوای HTML ایمیل (تگ‌ها حذف شده) %s"
 
 #: include/hooks/class-wc-order.php:384
 msgid "Order General Details"
-msgstr ""
+msgstr "جزئیات عمومی سفارش"
 
 #: include/hooks/class-wc-order.php:387
 msgctxt "macro"
 msgid "Order ID"
-msgstr ""
+msgstr "شناسه سفارش"
 
 #: include/hooks/class-wc-order.php:388
 msgctxt "macro"
 msgid "Order Number"
-msgstr ""
+msgstr "شماره سفارش"
 
 #: include/hooks/class-wc-order.php:389
 msgctxt "macro"
 msgid "Order Key"
-msgstr ""
+msgstr "کلید سفارش"
 
 #: include/hooks/class-wc-order.php:390
 msgctxt "macro"
 msgid "Order Status"
-msgstr ""
+msgstr "وضعیت سفارش"
 
 #: include/hooks/class-wc-order.php:391
 msgctxt "macro"
 msgid "Order Status RAW"
-msgstr ""
+msgstr "وضعیت سفارش (خام)"
 
 #: include/hooks/class-wc-order.php:392
 msgctxt "macro"
 msgid "Prev. Order Status"
-msgstr ""
+msgstr "وضعیت سفارش (قبلی)"
 
 #: include/hooks/class-wc-order.php:393
 msgctxt "macro"
 msgid "New Order Status"
-msgstr ""
+msgstr "وضعیت سفارش (جدید)"
 
 #: include/hooks/class-wc-order.php:394
 msgctxt "macro"
 msgid "Order Total Amount"
-msgstr ""
+msgstr "جمع کل سفارش"
 
 #: include/hooks/class-wc-order.php:395
 msgctxt "macro"
 msgid "Order Subtotal Amount"
-msgstr ""
+msgstr "جمع جزء سفارش"
 
 #: include/hooks/class-wc-order.php:396 include/hooks/class-wc-order.php:495
 msgctxt "macro"
 msgid "Order Discount Amount"
-msgstr ""
+msgstr "جمع تخفیف سفارش"
 
 #: include/hooks/class-wc-order.php:397
 msgctxt "macro"
 msgid "Order Tax Amount"
-msgstr ""
+msgstr "جمع مالیات سفارش"
 
 #: include/hooks/class-wc-order.php:398
 msgctxt "macro"
 msgid "Order Shipping Amount"
-msgstr ""
+msgstr "هزینه ارسال سفارش"
 
 #: include/hooks/class-wc-order.php:399 include/hooks/class-wc-order.php:496
 msgctxt "macro"
 msgid "Order Fees Total"
-msgstr ""
+msgstr "هزینه‌های سفارش"
 
 #: include/hooks/class-wc-order.php:400
 msgctxt "macro"
 msgid "Order Currency"
-msgstr ""
+msgstr "واحد پولی سفارش"
 
 #: include/hooks/class-wc-order.php:401
 msgctxt "macro"
 msgid "Order Payment Method"
-msgstr ""
+msgstr "روش پرداخت"
 
 #: include/hooks/class-wc-order.php:402
 msgctxt "macro"
 msgid "Payment Method Title"
-msgstr ""
+msgstr "عنوان روش پرداخت"
 
 #: include/hooks/class-wc-order.php:403
 msgctxt "macro"
 msgid "Transaction ID"
-msgstr ""
+msgstr "شناسه تراکنش"
 
 #: include/hooks/class-wc-order.php:404
 msgctxt "macro"
 msgid "Order Creation Date"
-msgstr ""
+msgstr "تاریخ ایجاد سفارش"
 
 #: include/hooks/class-wc-order.php:405
 msgctxt "macro"
 msgid "Order Creation Date (Jalali)"
-msgstr ""
+msgstr "تاریخ شمسی ایجاد سفارش"
 
 #: include/hooks/class-wc-order.php:406
 msgctxt "macro"
 msgid "Order Last Modified Date"
-msgstr ""
+msgstr "تاریخ ویرایش سفارش"
 
 #: include/hooks/class-wc-order.php:407
 msgctxt "macro"
 msgid "Order Last Modified Date (Jalali)"
-msgstr ""
+msgstr "تاریخ شمسی ویرایش سفارش"
 
 #: include/hooks/class-wc-order.php:408
 msgctxt "macro"
 msgid "Order Completed Date"
-msgstr ""
+msgstr "تاریخ تکمیل سفارش"
 
 #: include/hooks/class-wc-order.php:409
 msgctxt "macro"
 msgid "Order Completed Date (Jalali)"
-msgstr ""
+msgstr "تاریخ شمسی تکمیل سفارش"
 
 #: include/hooks/class-wc-order.php:410
 msgctxt "macro"
 msgid "Order Paid Date"
-msgstr ""
+msgstr "تاریخ پرداخت سفارش"
 
 #: include/hooks/class-wc-order.php:411
 msgctxt "macro"
 msgid "Order Paid Date (Jalali)"
-msgstr ""
+msgstr "تاریخ شمسی پرداخت سفارش"
 
 #: include/hooks/class-wc-order.php:412
 msgctxt "macro"
 msgid "Customer IP Address"
-msgstr ""
+msgstr "آدرس IP مشتری"
 
 #: include/hooks/class-wc-order.php:413
 msgctxt "macro"
 msgid "Customer User Agent"
-msgstr ""
+msgstr "‫User Agent مشتری"
 
 #: include/hooks/class-wc-order.php:414
 msgctxt "macro"
 msgid "Order Meta Data"
-msgstr ""
+msgstr "متا دیتا سفارش"
 
 #: include/hooks/class-wc-order.php:418
 msgid "Order URLs"
-msgstr ""
+msgstr "لینک‌های سفارش"
 
 #: include/hooks/class-wc-order.php:421
 msgctxt "macro"
 msgid "Order Edit URL (Admin)"
-msgstr ""
+msgstr "لینک ویرایش سفارش (سمت ادمین)"
 
 #: include/hooks/class-wc-order.php:422
 msgctxt "macro"
 msgid "Order View URL (Customer)"
-msgstr ""
+msgstr "لینک مشاهده سفارش (سمت مشتری)"
 
 #: include/hooks/class-wc-order.php:423
 msgctxt "macro"
 msgid "Order Payment URL"
-msgstr ""
+msgstr "لینک پرداخت سفارش"
 
 #: include/hooks/class-wc-order.php:424
 msgctxt "macro"
 msgid "Order Cancel URL"
-msgstr ""
+msgstr "لینک لغو سفارش"
 
 #: include/hooks/class-wc-order.php:425
 msgctxt "macro"
 msgid "Order Thank You Page URL"
-msgstr ""
+msgstr "صفحه تشکر خرید سفارش"
 
 #: include/hooks/class-wc-order.php:429
 msgid "Order Customer Details"
-msgstr ""
+msgstr "جزئیات مشتری سفارش"
 
 #: include/hooks/class-wc-order.php:432
 msgctxt "macro"
 msgid "Customer ID"
-msgstr ""
+msgstr "شناسه مشتری"
 
 #: include/hooks/class-wc-order.php:433
 msgctxt "macro"
 msgid "Customer Username"
-msgstr ""
+msgstr "نام کاربری مشتری"
 
 #: include/hooks/class-wc-order.php:434
 msgctxt "macro"
 msgid "Customer Email"
-msgstr ""
+msgstr "مشخصات مشتری"
 
 #: include/hooks/class-wc-order.php:435
 msgctxt "macro"
 msgid "Customer Phone Number"
-msgstr ""
+msgstr "شماره تماس مشتری"
 
 #: include/hooks/class-wc-order.php:436
 msgctxt "macro"
 msgid "Customer First Name"
-msgstr ""
+msgstr "نام کوچک مشتری"
 
 #: include/hooks/class-wc-order.php:437
 msgctxt "macro"
 msgid "Customer Last Name"
-msgstr ""
+msgstr "نام خانوادگی مشتری"
 
 #: include/hooks/class-wc-order.php:438
 msgctxt "macro"
 msgid "Customer Display Name"
-msgstr ""
+msgstr "نام نمایشی مشتری"
 
 #: include/hooks/class-wc-order.php:439
 msgctxt "macro"
 msgid "Customer Note"
-msgstr ""
+msgstr "یادداشت مشتری"
 
 #: include/hooks/class-wc-order.php:443
 msgid "Order Billing Details"
-msgstr ""
+msgstr "جزئیات صورتحساب سفارش"
 
 #: include/hooks/class-wc-order.php:446
 msgctxt "macro"
 msgid "Billing First Name"
-msgstr ""
+msgstr "نام صورتحساب"
 
 #: include/hooks/class-wc-order.php:447
 msgctxt "macro"
 msgid "Billing Last Name"
-msgstr ""
+msgstr "نام خانوادگی صورتحساب"
 
 #: include/hooks/class-wc-order.php:448
 msgctxt "macro"
 msgid "Billing Company"
-msgstr ""
+msgstr "شرکت صورتحساب"
 
 #: include/hooks/class-wc-order.php:449
 msgctxt "macro"
 msgid "Billing Full Address"
-msgstr ""
+msgstr "آدرس کامل صورتحساب"
 
 #: include/hooks/class-wc-order.php:450
 msgctxt "macro"
 msgid "Billing City"
-msgstr ""
+msgstr "شهر صورتحساب"
 
 #: include/hooks/class-wc-order.php:451
 msgctxt "macro"
 msgid "Billing State"
-msgstr ""
+msgstr "استان صورتحساب"
 
 #: include/hooks/class-wc-order.php:452
 msgctxt "macro"
 msgid "Billing Postcode"
-msgstr ""
+msgstr "کد پستی صورتحساب"
 
 #: include/hooks/class-wc-order.php:453
 msgctxt "macro"
 msgid "Billing Country"
-msgstr ""
+msgstr "کشور صورتحساب"
 
 #: include/hooks/class-wc-order.php:454
 msgctxt "macro"
 msgid "Billing Phone Number"
-msgstr ""
+msgstr "شماره تماس صورتحساب"
 
 #: include/hooks/class-wc-order.php:455
 msgctxt "macro"
 msgid "Billing Email Address"
-msgstr ""
+msgstr "ایمیل صورتحساب"
 
 #: include/hooks/class-wc-order.php:459
 msgid "Order Shipping Details"
-msgstr ""
+msgstr "جزئیات حمل و نقل سفارش"
 
 #: include/hooks/class-wc-order.php:462
 msgctxt "macro"
 msgid "Shipping First Name"
-msgstr ""
+msgstr "نام حمل و نقل"
 
 #: include/hooks/class-wc-order.php:463
 msgctxt "macro"
 msgid "Shipping Last Name"
-msgstr ""
+msgstr "نام خانوادگی حمل و نقل"
 
 #: include/hooks/class-wc-order.php:464
 msgctxt "macro"
 msgid "Shipping Company"
-msgstr ""
+msgstr "شرکت حمل و نقل"
 
 #: include/hooks/class-wc-order.php:465
 msgctxt "macro"
 msgid "Shipping Full Address"
-msgstr ""
+msgstr "آدرس کامل حمل و نقل"
 
 #: include/hooks/class-wc-order.php:466
 msgctxt "macro"
 msgid "Shipping City"
-msgstr ""
+msgstr "شهر حمل و نقل"
 
 #: include/hooks/class-wc-order.php:467
 msgctxt "macro"
 msgid "Shipping State"
-msgstr ""
+msgstr "استان حمل و نقل"
 
 #: include/hooks/class-wc-order.php:468
 msgctxt "macro"
 msgid "Shipping Postcode"
-msgstr ""
+msgstr "کد پستی حمل و نقل"
 
 #: include/hooks/class-wc-order.php:469
 msgctxt "macro"
 msgid "Shipping Country"
-msgstr ""
+msgstr "کشور حمل و نقل"
 
 #: include/hooks/class-wc-order.php:470
 msgctxt "macro"
 msgid "Shipping Method"
-msgstr ""
+msgstr "روش ارسال"
 
 #: include/hooks/class-wc-order.php:474
 msgid "Order Items"
-msgstr ""
+msgstr "آیتم‌های سفارش"
 
 #: include/hooks/class-wc-order.php:477
 msgctxt "macro"
 msgid "Number of Items in Order"
-msgstr ""
+msgstr "تعداد آیتم‌ها در سفارش"
 
 #: include/hooks/class-wc-order.php:478
 msgctxt "macro"
 msgid "List of Items in Order"
-msgstr ""
+msgstr "لیست آیتم‌های سفارش"
 
 #: include/hooks/class-wc-order.php:479
 msgctxt "macro"
 msgid "List of Items SKU"
-msgstr ""
+msgstr "لیست SKU آیتم‌ها"
 
 #: include/hooks/class-wc-order.php:480
 msgctxt "macro"
 msgid "List of Items with Prices"
-msgstr ""
+msgstr "لیست آیتم‌ها با قیمت"
 
 #: include/hooks/class-wc-order.php:481
 msgctxt "macro"
 msgid "List of Items with Quantity"
-msgstr ""
+msgstr "لیست آیتم‌ها با تعداد"
 
 #: include/hooks/class-wc-order.php:482
 msgctxt "macro"
 msgid "List of Items with Prices & Quantity"
-msgstr ""
+msgstr "لیست آیتم‌ها با قیمت و تعداد"
 
 #: include/hooks/class-wc-order.php:483
 msgctxt "macro"
 msgid "List of Items with SKU & Price"
-msgstr ""
+msgstr "لیست آیتم‌ها با SKU و قیمت"
 
 #: include/hooks/class-wc-order.php:484
 msgctxt "macro"
 msgid "List of Items with SKU & Quantity"
-msgstr ""
+msgstr "لیست آیتم‌ها با SKU و تعداد"
 
 #: include/hooks/class-wc-order.php:485
 msgctxt "macro"
 msgid "List of Items with SKU, Price & Quantity"
-msgstr ""
+msgstr "لیست آیتم‌ها با SKU، قیمت و تعداد"
 
 #: include/hooks/class-wc-order.php:486
 msgctxt "macro"
 msgid "Total Quantity of Items"
-msgstr ""
+msgstr "تعداد کل اقلام سفارش"
 
 #: include/hooks/class-wc-order.php:490
 msgid "Order Taxes, Discounts, Fees, and Refunds"
-msgstr ""
+msgstr "مالیات‌ها، تخفیف‌ها، هزینه‌ها و بازپرداخت‌های سفارش"
 
 #: include/hooks/class-wc-order.php:493
 msgctxt "macro"
 msgid "Tax Lines Breakdown"
-msgstr ""
+msgstr "جزئیات مالیات"
 
 #: include/hooks/class-wc-order.php:494
 msgctxt "macro"
 msgid "Total Tax Amount"
-msgstr ""
+msgstr "مبلغ کل مالیات"
 
 #: include/hooks/class-wc-order.php:497
 msgctxt "macro"
 msgid "Total Refund Amount"
-msgstr ""
+msgstr "مبلغ بازگشت وجه"
 
 #: include/hooks/class-wc-order.php:498
 msgctxt "macro"
 msgid "Reason for Refund"
-msgstr ""
+msgstr "علت بازگشت وجه"
 
 #: include/hooks/class-wc-order.php:502
 msgid "Order Coupons"
-msgstr ""
+msgstr "کوپن‌های سفارش"
 
 #: include/hooks/class-wc-order.php:505
 msgctxt "macro"
 msgid "Coupons Applied"
-msgstr ""
+msgstr "کدهای تخفیف اعمال‌شده"
 
 #: include/hooks/class-wc-order.php:506
 msgctxt "macro"
 msgid "List of Coupon Codes"
-msgstr ""
+msgstr "لیست کدهای تخفیف"
 
 #: include/hooks/class-wc-order.php:507
 msgctxt "macro"
 msgid "List of Coupon Discounts"
-msgstr ""
+msgstr "لیست تخفیف‌های کدها"
 
 #: include/hooks/class-wc-order.php:515
 msgid "Add-on: WooCommerce Subscription"
-msgstr ""
+msgstr "افزونه: اشتراک ووکامرس"
 
 #: include/hooks/class-wc-order.php:517
 msgctxt "macro"
 msgid "Subscription ID"
-msgstr ""
+msgstr "شناسه اشتراک"
 
 #: include/hooks/class-wc-order.php:518
 msgctxt "macro"
 msgid "Subscription Status"
-msgstr ""
+msgstr "وضعیت اشتراک"
 
 #: include/hooks/class-wc-order.php:519
 msgctxt "macro"
 msgid "Subscription Total Amount"
-msgstr ""
+msgstr "مبلغ کل اشتراک"
 
 #: include/hooks/class-wc-order.php:520
 msgctxt "macro"
 msgid "Subscription Start Date"
-msgstr ""
+msgstr "تاریخ شروع اشتراک"
 
 #: include/hooks/class-wc-order.php:521
 msgctxt "macro"
 msgid "Subscription End Date"
-msgstr ""
+msgstr "تاریخ پایان اشتراک"
 
 #: include/hooks/class-wc-order.php:522
 msgctxt "macro"
 msgid "Next Payment Date"
-msgstr ""
+msgstr "تاریخ پرداخت بعدی"
 
 #: include/hooks/class-wc-order.php:528
 msgid "Add-on: WooCommerce Membership"
-msgstr ""
+msgstr "افزونه: عضویت ووکامرس"
 
 #: include/hooks/class-wc-order.php:530
 msgctxt "macro"
 msgid "Membership Plan Name"
-msgstr ""
+msgstr "نام پلن عضویت"
 
 #: include/hooks/class-wc-order.php:531
 msgctxt "macro"
 msgid "Membership Status"
-msgstr ""
+msgstr "وضعیت عضویت"
 
 #: include/hooks/class-wc-order.php:532
 msgctxt "macro"
 msgid "Membership Start Date"
-msgstr ""
+msgstr "تاریخ شروع عضویت"
 
 #: include/hooks/class-wc-order.php:533
 msgctxt "macro"
 msgid "Membership Expiration Date"
-msgstr ""
+msgstr "تاریخ انقضای عضویت"
 
 #: include/hooks/class-wc-order.php:539
 msgid "Add-on: WooCommerce Booking"
-msgstr ""
+msgstr "افزونه: رزرو ووکامرس"
 
 #: include/hooks/class-wc-order.php:541
 msgctxt "macro"
 msgid "Booking ID"
-msgstr ""
+msgstr "آیدی رزرو"
 
 #: include/hooks/class-wc-order.php:542
 msgctxt "macro"
 msgid "Booking Status"
-msgstr ""
+msgstr "وضعیت رزرو"
 
 #: include/hooks/class-wc-order.php:543
 msgctxt "macro"
 msgid "Booking Date"
-msgstr ""
+msgstr "تاریخ رزرو"
 
 #: include/hooks/class-wc-order.php:544
 msgctxt "macro"
 msgid "Booking Start Time"
-msgstr ""
+msgstr "تاریخ شروع رزرو"
 
 #: include/hooks/class-wc-order.php:545
 msgctxt "macro"
 msgid "Booking End Time"
-msgstr ""
+msgstr "تاریخ پایان رزرو"
 
 #: include/hooks/class-wc-order.php:551
 msgid "Add-on: WooCommerce Points and Rewards"
-msgstr ""
+msgstr "افزونه: امتیازها و جوایز ووکامرس"
 
 #: include/hooks/class-wc-order.php:553
 msgctxt "macro"
 msgid "Points Earned"
-msgstr ""
+msgstr "امتیازهای کسب‌شده"
 
 #: include/hooks/class-wc-order.php:554
 msgctxt "macro"
 msgid "Customer Points Balance"
-msgstr ""
+msgstr "موجودی امتیازهای مشتری"
 
 #: include/hooks/class-wc-order.php:555
 msgctxt "macro"
 msgid "Points Redeemed"
-msgstr ""
+msgstr "امتیازهای استفاده‌شده"
 
 #: include/hooks/class-wc-order.php:561
 msgid "Add-on: WooCommerce Multi-Currency"
-msgstr ""
+msgstr "افزونه: چندارزی ووکامرس"
 
 #: include/hooks/class-wc-order.php:563
 msgctxt "macro"
 msgid "Currency Conversion Rate"
-msgstr ""
+msgstr "نرخ تبدیل ارز"
 
 #: include/hooks/class-wc-order.php:564
 msgctxt "macro"
 msgid "Order Total (Converted)"
-msgstr ""
+msgstr "مبلغ کل سفارش (تبدیل‌شده)"
 
 #: include/hooks/class-wc-product.php:68
 msgctxt "macro"
 msgid "Product ID"
-msgstr ""
+msgstr "آیدی محصول"
 
 #: include/hooks/class-wc-product.php:69
 msgctxt "macro"
 msgid "Product name"
-msgstr ""
+msgstr "نام محصول"
 
 #: include/hooks/class-wc-product.php:70
 msgctxt "macro"
 msgid "Product permalink URL"
-msgstr ""
+msgstr "لینک محصول"
 
 #: include/hooks/class-wc-product.php:71
 msgctxt "macro"
 msgid "Product name with SKU or ID"
-msgstr ""
+msgstr "نام محصول با SKU یا شناسه"
 
 #: include/hooks/class-wc-product.php:72
 msgctxt "macro"
 msgid "Product Thumbnail URL"
-msgstr ""
+msgstr "لینک تصویر بندانگشتی محصول"
 
 #: include/hooks/class-wc-product.php:73
 msgctxt "macro"
 msgid "Product SKU"
-msgstr ""
+msgstr "بارکد محصول"
 
 #: include/hooks/class-wc-product.php:74
 msgctxt "macro"
 msgid "Product Price"
-msgstr ""
+msgstr "قیمت محصول"
 
 #: include/hooks/class-wc-product.php:75
 msgctxt "macro"
 msgid "Product Sale Price"
-msgstr ""
+msgstr "قیمت حراج محصول"
 
 #: include/hooks/class-wc-product.php:76
 msgctxt "macro"
 msgid "Product Regular Price"
-msgstr ""
+msgstr "قیمت عادی محصول"
 
 #: include/hooks/class-wc-product.php:77
 msgctxt "macro"
 msgid "Product Type"
-msgstr ""
+msgstr "نوع محصول"
 
 #: include/hooks/class-wc-product.php:78
 msgctxt "macro"
 msgid "Product short description"
-msgstr ""
+msgstr "توضیحات کوتاه محصول"
 
 #: include/hooks/class-wc-product.php:79
 msgctxt "macro"
 msgid "Product published date"
-msgstr ""
+msgstr "تاریخ انتشار محصول"
 
 #: include/hooks/class-wc-product.php:80
 msgctxt "macro"
 msgid "Product modified date"
-msgstr ""
+msgstr "تاریخ ویرایش محصول"
 
 #: include/hooks/class-wc-product.php:81
 msgctxt "macro"
 msgid "Product published date in Jalali"
-msgstr ""
+msgstr "تاریخ شمسی انتشار محصول"
 
 #: include/hooks/class-wc-product.php:82
 msgctxt "macro"
 msgid "Product modified date in Jalali"
-msgstr ""
+msgstr "تاریخ شمسی ویرایش محصول"
 
 #: include/hooks/class-wc-product.php:83
 msgctxt "macro"
 msgid "Product stock status"
-msgstr ""
+msgstr "وضعیت موجودی محصول"
 
 #: include/hooks/class-wc-product.php:84
 msgctxt "macro"
 msgid "Product stock quantity"
-msgstr ""
+msgstr "تعداد موجودی محصول"
 
 #: include/hooks/class-wc-product.php:85
 msgctxt "macro"
 msgid "Product meta Array"
-msgstr ""
+msgstr "آرایه متادیتای محصول"
 
 #: include/hooks/class-wc-product.php:86
 msgctxt "macro"
 msgid "Product View URL"
-msgstr ""
+msgstr "لینک مشاهده محصول"
 
 #: include/hooks/class-wc-product.php:87
 msgctxt "macro"
 msgid "Product Edit URL"
-msgstr ""
+msgstr "لینک ویرایش محصول (سمت ادمین)"
 
 #: include/hooks/class-wc-product.php:91
 msgid "Product Information"
-msgstr ""
+msgstr "اطلاعات محصول"
 
 #: include/hooks/class-wp-hook.php:29
 msgid "User Information"
-msgstr ""
+msgstr "اطلاعات کاربر"
 
 #: include/hooks/class-wp-hook.php:31
 msgctxt "macro"
 msgid "User ID"
-msgstr ""
+msgstr "شناسه کاربر"
 
 #: include/hooks/class-wp-hook.php:32
 msgctxt "macro"
 msgid "User Login (username)"
-msgstr ""
+msgstr "نام کاربری"
 
 #: include/hooks/class-wp-hook.php:33
 msgctxt "macro"
 msgid "User Role"
-msgstr ""
+msgstr "نقش کاربر"
 
 #: include/hooks/class-wp-hook.php:34
 msgctxt "macro"
 msgid "User Email"
-msgstr ""
+msgstr "ایمیل کاربر"
 
 #: include/hooks/class-wp-hook.php:35
 msgctxt "macro"
 msgid "User Mobile"
-msgstr ""
+msgstr "موبایل کاربر"
 
 #: include/hooks/class-wp-hook.php:36
 msgctxt "macro"
 msgid "User First name"
-msgstr ""
+msgstr "نام کوچک کاربر"
 
 #: include/hooks/class-wp-hook.php:37
 msgctxt "macro"
 msgid "User Last name"
-msgstr ""
+msgstr "فیلد نام خانوادگی"
 
 #: include/hooks/class-wp-hook.php:38
 msgctxt "macro"
 msgid "User Nickname"
-msgstr ""
+msgstr "نام مستعار کاربر"
 
 #: include/hooks/class-wp-hook.php:39
 msgctxt "macro"
 msgid "Author posts Archive"
-msgstr ""
+msgstr "بایگانی نوشته‌های نویسنده"
 
 #: include/hooks/class-wp-hook.php:40
 msgctxt "macro"
 msgid "User Website"
-msgstr ""
+msgstr "وبسایت کاربر"
 
 #: include/hooks/class-wp-hook.php:41
 msgctxt "macro"
 msgid "User Registered Date"
-msgstr ""
+msgstr "تاریخ ثبت‌نام کاربر"
 
 #: include/hooks/class-wp-hook.php:42
 msgctxt "macro"
 msgid "User Registered Jalali Date"
-msgstr ""
+msgstr "تاریخ شمسی ثبت‌نام کاربر"
 
 #: include/hooks/class-wp-hook.php:43
 msgctxt "macro"
 msgid "User Meta Array"
-msgstr ""
+msgstr "آرایه متادیتای کاربر"
 
 #: include/hooks/class-wp-hook.php:44
 msgctxt "macro"
 msgid "User Edit Profile URL"
-msgstr ""
+msgstr "لینک ویرایش کاربر (سمت ادمین)"
 
 #. Plugin Name of the plugin/theme
 #: ultimate-integration-for-telegram.php:145
 msgid "Ultimate Integration for Telegram"
-msgstr ""
+msgstr "Ultimate Integration for Telegram"
 
 #: ultimate-integration-for-telegram.php:146
 msgid "Telegram"
-msgstr ""
+msgstr "Telegram"
 
 #: ultimate-integration-for-telegram.php:184
 msgctxt "action-row"
 msgid "Settings"
-msgstr ""
+msgstr "تنظیمات"
 
 #: ultimate-integration-for-telegram.php:190
 msgctxt "plugin-meta"
 msgid "Docs"
-msgstr ""
+msgstr "مستندات"
 
 #: ultimate-integration-for-telegram.php:191
 msgctxt "plugin-meta"
 msgid "Community Support"
-msgstr ""
+msgstr "پشتیبانی جامعه وردپرس"
 
 #: ultimate-integration-for-telegram.php:220
 #: ultimate-integration-for-telegram.php:224
 msgid "Unauthorized Access!"
-msgstr ""
+msgstr "دسترسی غیرمجاز!"
 
 #: ultimate-integration-for-telegram.php:281
 #: ultimate-integration-for-telegram.php:290
@@ -1646,7 +1741,7 @@ msgstr ""
 #: ultimate-integration-for-telegram.php:572
 #: ultimate-integration-for-telegram.php:580
 msgid "No Chat ID found. Please add a Chat ID to send a test message."
-msgstr ""
+msgstr "شناسه چت یافت نشد. لطفاً برای ارسال پیام تست، یک شناسه چت اضافه کنید."
 
 #. translators: 1: Chat ID
 #: ultimate-integration-for-telegram.php:323
@@ -1654,49 +1749,51 @@ msgstr ""
 #: ultimate-integration-for-telegram.php:640
 #, php-format
 msgid "Test Message sent successfully to ChatID: %s"
-msgstr ""
+msgstr "پیام تست با موفقیت به شناسه چت %s ارسال شد"
 
 #. translators: 1: Chat ID
 #: ultimate-integration-for-telegram.php:335
 #: ultimate-integration-for-telegram.php:656
 #, php-format
 msgid "Error sending test message to ChatID: %s"
-msgstr ""
+msgstr "خطا در ارسال پیام تست به شناسه چت: %s"
 
 #. translators: 1: Error message
 #: ultimate-integration-for-telegram.php:346
 #: ultimate-integration-for-telegram.php:667
 #, php-format
 msgid "Error Occured: %s"
-msgstr ""
+msgstr "خطا رخ داد: %s"
 
 #: ultimate-integration-for-telegram.php:381
 #: ultimate-integration-for-telegram.php:385
 msgid "An unknown error occured."
-msgstr ""
+msgstr "خطای ناشناخته رخ داد."
 
 #. translators: 1: User ID
 #: ultimate-integration-for-telegram.php:513
 #, php-format
 msgid "ID #%s [deleted-user]"
-msgstr ""
+msgstr "کاربر حذف شده شناسه #%s"
 
 #. Plugin URI of the plugin/theme
 msgid "https://wordpress.org/plugins/ultimate-integration-for-telegram/"
-msgstr ""
+msgstr "https://wordpress.org/plugins/ultimate-integration-for-telegram/"
 
 #. Description of the plugin/theme
 msgid ""
-"Integrate Telegram with WordPress, WooCommerce, and a wide range of "
-"plugins. Send customized notifications to channels, groups, bots, or "
-"private chats with built-in advanced translation and string replacement "
-"tools."
+"Integrate Telegram with WordPress, WooCommerce, and a wide range of plugins. "
+"Send customized notifications to channels, groups, bots, or private chats with "
+"built-in advanced translation and string replacement tools."
 msgstr ""
+"تلگرام را با وردپرس، ووکامرس و انواع افزونه‌ها یکپارچه کنید. نوتیف‌های سفارشی‌شده "
+"را به کانال‌ها، گروه‌ها، ربات‌ها یا چت‌های خصوصی ارسال کنید، همراه با ابزارهای "
+"پیشرفته ترجمه و جایگزینی رشته‌ها."
 
 #. Author of the plugin/theme
 msgid "pigmentdev"
-msgstr ""
+msgstr "pigmentdev"
 
 #. Author URI of the plugin/theme
 msgid "https://pigment.dev/"
-msgstr ""
+msgstr "https://pigment.dev/"

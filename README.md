@@ -1,5 +1,11 @@
 # Ultimate Integration for Telegram
-**Ultimate Integration for Telegram** is the ultimate solution for connecting WordPress and WooCommerce to Telegram. With this plugin, you can send customized notifications to Telegram channels, groups, bots, or private chats. Packed with features like a Markdown Validator, extensive macros, and a notifications manager, this plugin ensures your Telegram automation is seamless and efficient.
+![WordPress Plugin](https://img.shields.io/wordpress/plugin/v/ultimate-integration-for-telegram)
+![Gravity Forms](https://img.shields.io/badge/Compatible%20with-WooCommerce-blue)
+![License](https://img.shields.io/badge/license-GPL--2.0-blue.svg)
+
+The ultimate solution for connecting WordPress and WooCommerce to Telegram. With this plugin, you can send customized notifications to Telegram channels, groups, bots, or private chats. Packed with features like a Markdown Validator, extensive macros, and a notifications manager, this plugin ensures your Telegram automation is seamless and efficient.
+
+---
 
 ## About the Plugin
 **Ultimate Integration for Telegram** is the most versatile plugin for connecting WordPress and WooCommerce to Telegram. Easily send personalized notifications to Telegram channels, groups, bots, or private chats. The plugin offers powerful features like dynamic translation management, gettext replacement, and string customization to tailor messages for your audience. Designed for flexibility, it fully supports WooCommerce core and popular add-ons such as WooCommerce Subscription, WooCommerce Membership, WooCommerce Booking, WooCommerce Points and Reward, and WooCommerce Multi-Currency. With extensive developer hooks and filters, it’s open for seamless customization and new integrations. Whether for business, e-commerce, or automation, this plugin is the ultimate solution for managing Telegram notifications directly from your WordPress site.
@@ -189,6 +195,12 @@ For support, contact us at **[support (@) pigment (.) dev](mailto:support@pigmen
 
 ## License
 This plugin is licensed under the **GPL v2.0 or later**. You are free to use, modify, and distribute the plugin under these terms.
+
+---
+
+## Where do I report security bugs found in this plugin?
+
+Please report security bugs found in the source code of the Ultimate Integration for Telegram plugin through the [Patchstack Vulnerability Disclosure  Program](https://patchstack.com/database/vdp/791bad55-1ddf-4063-8791-1a7aced1b5cc). The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this plugin.
 
 ---
 
