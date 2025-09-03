@@ -79,13 +79,15 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
       wp_enqueue_script('jquery-ui-sortable');
       wp_enqueue_script('jquery-ui-datepicker');
 
-      // Font Awesome is used to provide icons ONLY on the plugin's settings page for a better user experience.
       wp_enqueue_style($this->db_slug . "-setting", "{$this->assets_url}css/backend.css", [], time());
+      wp_enqueue_style("chosen.js", "{$this->assets_url}css/chosen.min.css", [], "1.8.7");
+      wp_enqueue_script("chosen.js", "{$this->assets_url}js/chosen.jquery.min.js", ["jquery"], "1.8.7");
+      // Font Awesome is used to provide icons ONLY on the plugin's settings page for a better user experience.
       wp_enqueue_style($this->db_slug . "-fas", "{$this->assets_url}/fa/css/all.min.css", [], "1.2.1");
       wp_enqueue_script($this->db_slug . "-popper", "{$this->assets_url}js/popper.min.js", ["jquery"], "1.2.1", true);
       wp_enqueue_script($this->db_slug . "-tippy", "{$this->assets_url}js/tippy-bundle.umd.min.js", ["jquery"], "1.2.1", true);
       wp_enqueue_script($this->db_slug . "-setting", "{$this->assets_url}js/jquery.repeater.min.js", ["jquery"], "1.2.1", true);
-      wp_enqueue_script($this->db_slug . "-panel", "{$this->assets_url}js/panel.js", ["jquery"], time(), true);
+      wp_enqueue_script($this->db_slug . "-panel", "{$this->assets_url}js/panel.js", ["jquery", "chosen.js"], time(), true);
 
       $data = $this->read("notifications");
       $localized = apply_filters("ultimate-integration-for-telegram/notif-panel/localize-front-script", array(
@@ -212,29 +214,32 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
                   <th><?php echo esc_html__("Step 5: Connect Your Bot", "ultimate-integration-for-telegram"); ?></th>
                   <td>
                     <?php
-                    echo "<strong>💾 " . esc_html__("Please make sure to save the settings on this page before connecting your bot.", "ultimate-integration-for-telegram") . "</strong>";
-                    echo "<br><div class='notice notice-alt notice-warning inline' style='display: inline-block;margin: 0.5rem 0rem -0.5rem 0 !important;'>" . esc_html__("Changes won't take effect unless saved.", "ultimate-integration-for-telegram") . "</div>";
-                    echo "<ul><li>🔗 " . esc_html__("Click “Connect WordPress & Telegram” to link your bot to this site.", "ultimate-integration-for-telegram") . "</li>";
-                    echo "<li>🚀 " . esc_html__("Start your bot, then click “Send Test Message to Telegram” to make sure everything is working!", "ultimate-integration-for-telegram") . "</li>";
-                    echo "<li>✅ " . esc_html__("If everything’s set up correctly, you’ll receive a test message in Telegram!", "ultimate-integration-for-telegram") . "</li></ul>";
+                    echo "<div class='notice notice-alt notice-warning inline'><p><strong>" . esc_html__("Please make sure to save the settings at this point (before connecting your bot).", "ultimate-integration-for-telegram") . "</strong></p></div>";
+                    echo "<ul style='list-style: inside decimal;'><li>💾 " . esc_html__("Click “Save settings” before proceeding any further.", "ultimate-integration-for-telegram") . "</li>";
+                    echo "<li>🔗 " . esc_html__("Click “Connect WordPress & Telegram” to link your bot to this site.", "ultimate-integration-for-telegram") . "</li>";
+                    echo "<li>🚀 " . esc_html__("Run Telegram, Open your bot and Hit “Start”.", "ultimate-integration-for-telegram") . "</li>";
+                    echo "<li>✅ " . esc_html__("If everything’s set up correctly, you’ll receive a welcome message!", "ultimate-integration-for-telegram") . "</li></ul>";
                     ?>
                     <p class="button-wrapper">
-                      <a href='#' class="button button-secondary connect"><?php esc_html_e("1. Connect WordPress & Telegram", "ultimate-integration-for-telegram"); ?></a>
-                      <a href='#' class="button button-secondary send_test"><?php esc_html_e("2. Send Test Message to Telegram", "ultimate-integration-for-telegram"); ?></a>
-                      <a href='#' class="button button-secondary disconnect" style="border-color: #d63638; color: #d63638;"><?php esc_html_e("Disconnect the Bot form WordPress", "ultimate-integration-for-telegram"); ?></a>
+                      <a href='#' class="button button-primary connect"><i class="fas fa-handshake fa-fw"></i>&nbsp;<?php esc_html_e("Connect WordPress & Telegram", "ultimate-integration-for-telegram"); ?></a>
+                      <a href='#' class="button button-secondary send_test"><i class="fas fa-message fa-fw"></i>&nbsp;<?php esc_html_e("Send Test Message via Bot", "ultimate-integration-for-telegram"); ?></a>
+                      <a href='#' class="button button-secondary disconnect" style="border-color: #d63638; color: #d63638;"><i class="fas fa-times-circle fa-fw"></i>&nbsp;<?php esc_html_e("Disconnect the Bot", "ultimate-integration-for-telegram"); ?></a>
                     </p>
                   </td>
                 </tr>
                 <?php
                 $this->print_setting_textarea([
                   "slug" => "chat_ids",
+                  "rows" => 3,
+                  "class" => "monospace",
                   "caption" => esc_html__("Step 6: Add Default Recipients", "ultimate-integration-for-telegram"),
                   "desc" => __("Paste the Chat ID or, if it's a public channel/group, the username with @ — e.g., @mychannel.<br>➡️ One Chat ID or username per line.", "ultimate-integration-for-telegram"),
                 ]);
                 $this->print_setting_input([
                   "slug" => "api_base_uri",
-                  "caption" => esc_html__("Advanced: Custom API Base URI", "ultimate-integration-for-telegram"),
-                  "desc" => sprintf(__('Paste the API Base URI you want to use for Telegram API requests (e.g. when you are using a self-hosted Telegram server or Cloudflare Worker). Default: <code>https://api.telegram.org</code><br>%s', "ultimate-integration-for-telegram"), "<a href='https://github.com/pigment-dev/ultimate-integration-for-telegram/wiki/Bypass-Telegram-API-Restrictions' target='_blank'>Learn how to Bypass Telegram API Restrictions/Censorship via Cloudflare Worker</a>"),
+                  "caption" => "🔐 " . esc_html__("Advanced: Custom API Base URI", "ultimate-integration-for-telegram"),
+                  "desc" => sprintf(__('Paste the API Base URI you want to use for Telegram API requests (e.g. when you are using a self-hosted Telegram server or Cloudflare Worker). Default: <code>https://api.telegram.org</code><br>%s', "ultimate-integration-for-telegram"),
+                    "<a style='font-weight: bold;margin-top: 0.5rem;display: block;' href='https://github.com/pigment-dev/ultimate-integration-for-telegram/wiki/Bypass-Telegram-API-Restrictions' target='_blank'>".__("Learn how to Bypass Telegram API Restrictions/Censorship via Cloudflare Worker", "ultimate-integration-for-telegram")."</a>"),
                 ]);
                 ?>
               </tbody>
@@ -349,6 +354,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
             </div>
             <p class="description"> <?php printf(__("Current plugin textdomain: %s", "ultimate-integration-for-telegram"), "<i class=\"highlighted\">ultimate-integration-for-telegram</i>"); ?></p>
             <div class="desc repeater notif-panel-side translation-panel">
+              <h3><?php esc_html_e("Translation Override", "ultimate-integration-for-telegram"); ?></h3>
               <table class="wp-list-table widefat striped table-view-list posts">
                 <thead>
                   <tr>
@@ -380,6 +386,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
             </div>
             <br>
             <div class="desc repeater notif-panel-side str_replace-panel">
+              <h3><?php esc_html_e("String Replacement", "ultimate-integration-for-telegram"); ?></h3>
               <table class="wp-list-table widefat striped table-view-list posts">
                 <thead>
                   <tr>
@@ -420,12 +427,14 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
               <tbody>
                 <tr class="type-textarea notifications data-textarea toggle-export-import">
                   <th scope="row" colspan="2">
-                    <p style="margin-top: 0;">
-                      <a href="#" class="button button-secondary copy-code"><?php esc_html_e("Copy to Clipboard", "ultimate-integration-for-telegram"); ?></a>
-                      <a href="#" class="button button-secondary reset-default-list"><?php esc_html_e("Reset to Default Notifications List", "ultimate-integration-for-telegram"); ?></a>
-                    </p>
-                    <textarea rows="20" name="ultimate_integrations_telegram__settings[notifications]" id="notifications" rows="4" style="width: 100%; direction: ltr; font-family: monospace; font-size: smaller;" class="regular-text"><?php echo esc_textarea($this->read("notifications")); ?></textarea>
+                    <textarea name="ultimate_integrations_telegram__settings[notifications]" id="notifications" style="min-height: 90px; width: 100%; direction: ltr; font-size: smaller;" class="regular-text monospace"><?php echo esc_textarea($this->read("notifications")); ?></textarea>
                     <p class="description"><?php esc_html_e("you can use the json data to migrate settings across multiple sites. Enter JSON Data and Save page to reload Workspace.", "ultimate-integration-for-telegram"); ?></p>
+                    <div class="reset-applied"></div>
+                    <div style="margin-top: 4px;">
+                      <a href="#" class="button button-secondary copy-code" data-ref="textarea#notifications"><i class="fas fa-copy fa-fw"></i>&nbsp;<?php esc_html_e("Copy to Clipboard", "ultimate-integration-for-telegram"); ?></a>
+                      <a href="#" class="button button-secondary save-json" data-ref="textarea#notifications"><i class="fas fa-file fa-fw"></i>&nbsp;<?php esc_html_e("Save as JSON File", "ultimate-integration-for-telegram"); ?></a>
+                      <a href="#" class="button button-secondary reset-default-list"><i class="fas fa-arrow-rotate-backward fa-fw"></i>&nbsp;<?php esc_html_e("Reset to Default Notifications List", "ultimate-integration-for-telegram"); ?></a>
+                    </div>
                   </th>
                 </tr>
               </tbody>
@@ -441,7 +450,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
               </thead>
               <tbody>
                 <?php
-                $this->print_setting_textarea(["slug" => "gettext_replace", "caption" => null, "style" => "width: 100%; direction: ltr; min-height: 300px; font-family: monospace; font-size: 0.8rem;",]);
+                $this->print_setting_textarea(["slug" => "gettext_replace", "copy_btn" => "yes",  "class" => "monospace", "caption" => null, "style" => "width: 100%; direction: ltr; min-height: 90px; font-family: monospace; font-size: smaller;",]);
                 ?>
               </tbody>
             </table>
@@ -454,7 +463,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
               </thead>
               <tbody>
                 <?php
-                $this->print_setting_textarea(["slug" => "str_replace", "caption" => null, "style" => "width: 100%; direction: ltr; min-height: 300px; font-family: monospace; font-size: 0.8rem;",]);
+                $this->print_setting_textarea(["slug" => "str_replace", "copy_btn" => "yes",  "class" => "monospace", "caption" => null, "style" => "width: 100%; direction: ltr; min-height: 90px; font-family: monospace; font-size: smaller;",]);
                 ?>
               </tbody>
             </table>
@@ -488,7 +497,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
                 </tr>
                 <tr>
                   <td colspan="2">
-                    <button class="button button-primary button-hero send-channel-message"><?php esc_html_e("Send Message to Channel", "ultimate-integration-for-telegram"); ?></button>
+                    <a class="button button-primary button-hero send-channel-message"><?php esc_html_e("Send Message to Channel", "ultimate-integration-for-telegram"); ?></a>
                   </td>
                 </tr>
               </tbody>
@@ -530,7 +539,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
       return apply_filters("ultimate-integration-for-telegram/notif-panel/sample_setting_row_wrapper", $htmloutput);
     }
     public function render_workspace_tools() {
-    ?>
+      ?>
       <div class="render_workspace_tools">
         <div class="template-wrapper">
           <?php
@@ -571,7 +580,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
           </div>
         </div>
       </div>
-    <?php
+      <?php
     }
     public function print_notif_types($return_array = false, $stdout_type = "category") {
       $options = array();
@@ -590,11 +599,11 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
         "title"   => __("WordPress / Comment", "ultimate-integration-for-telegram"),
         "desc"    => __("This notif will be triggered when a WordPress Comment is created, updated, or deleted.", "ultimate-integration-for-telegram"),
         "options" => array(
-          "wp_comment_created"    => __("New Comment Created", "ultimate-integration-for-telegram"),
-          "wp_comment_updated"    => __("Comment Updated", "ultimate-integration-for-telegram"),
-          "wp_comment_deleted"    => __("Comment Deleted", "ultimate-integration-for-telegram"),
-          "wp_comment_approved"   => __("Comment Approved", "ultimate-integration-for-telegram"),
-          "wp_comment_unapproved" => __("Comment Unapproved", "ultimate-integration-for-telegram"),
+          "wp_comment_created"  => __("New Comment Added", "ultimate-integration-for-telegram"),
+          "wp_comment_updated"  => __("Comment Updated", "ultimate-integration-for-telegram"),
+          "wp_comment_approved" => __("Comment Approved", "ultimate-integration-for-telegram"),
+          "wp_comment_spammed"  => __("Comment Spammed", "ultimate-integration-for-telegram"),
+          "wp_comment_trashed"  => __("Comment Trashed", "ultimate-integration-for-telegram"),
         ),
       );
       if (class_exists("WooCommerce")) {
@@ -631,11 +640,11 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
           "desc" => __("This notif will be triggered when a WooCommerce Product is created, updated, or deleted.", "ultimate-integration-for-telegram"),
           "options" => array(
             "wc_product_updated"          => __("Product Updated or Saved", "ultimate-integration-for-telegram"),
-            "wc_product_purchased"        => __("Product Purchased on New Order", "ultimate-integration-for-telegram"),
+            "wc_product_stock_changed"    => __("Product Stock Changed", "ultimate-integration-for-telegram"),
             "wc_product_stock_increased"  => __("Stock Quantity Increased", "ultimate-integration-for-telegram"),
             "wc_product_stock_decreased"  => __("Stock Quantity Decreased", "ultimate-integration-for-telegram"),
             "wc_product_stock_outofstock" => __("Stock Quantity Reached Zero (Outofstock)", "ultimate-integration-for-telegram"),
-            "wc_product_stock_low_stock"   => __("Stock Quantity Reached Low Stock Level", "ultimate-integration-for-telegram"),
+            "wc_product_stock_low_stock"  => __("Stock Quantity Reached Low Stock Level", "ultimate-integration-for-telegram"),
           ),
         );
         $mail_options["wc_mail_sent"] = sprintf(__("Mail Sent: All Emails", "ultimate-integration-for-telegram"), $name);
@@ -690,13 +699,13 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
       $msg = "";
       switch ($slug) {
         case 'wc_new_order':
-          $msg = _x("🎉 *New Order Received* on {site_name}!\nOrder #{order_number} for {order_total} {order_currency} by {customer_first_name} {customer_last_name} ({customer_email})\nStatus: {order_status} | Date: {order_date}\nItems: {order_items_count}\n{order_items_quantity_list}", "tg-default-msg", "ultimate-integration-for-telegram");
+          $msg = _x("🎉 *New Order Received* on {site_name}!\nOrder #{order_number} for {order_total} {order_currency} by {customer_first_name} {customer_last_name} ({customer_email})\nStatus: {order_status} | Date: {order_date}\nItems: {order_items_count}\n```{order_items_sku_quantity_list}```", "tg-default-msg", "ultimate-integration-for-telegram");
           break;
         case 'wc_payment_complete':
           $msg = _x("💰 *Payment Confirmed* for Order #{order_number}!\nTotal: {order_total} {order_currency} via {order_payment_method_title}\nCustomer: {customer_first_name} {customer_last_name} ({customer_email})\nTransaction ID: {transaction_id}\nPaid on: {order_date_paid}", "tg-default-msg", "ultimate-integration-for-telegram");
           break;
         case 'wc_order_status_to_completed':
-          $msg = _x("✅ Order #{order_number} is now *Completed*!\nTotal: {order_total} {order_currency} for {customer_first_name} {customer_last_name}\nCompleted on: {order_date_completed}\nItems: {order_items_count}\n{order_items_quantity_list}", "tg-default-msg", "ultimate-integration-for-telegram");
+          $msg = _x("✅ Order #{order_number} is now *Completed*!\nTotal: {order_total} {order_currency} for {customer_first_name} {customer_last_name}\nCompleted on: {order_date_completed}\nItems: {order_items_count}\n```{order_items_sku_quantity_list}```", "tg-default-msg", "ultimate-integration-for-telegram");
           break;
         case 'wp_user_registered':
           $msg = _x("👤 *New user joined* {site_name}!\nName: {first_name} {last_name} ({user_email})\nUsername: {user_login} | Registered on: {user_registered}", "tg-default-msg", "ultimate-integration-for-telegram");
@@ -746,12 +755,12 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
       $default_parser = apply_filters("ultimate-integration-for-telegram/notif-panel/notif-default-parser", false, $slug, $category, $items);
       $default_buttons = apply_filters("ultimate-integration-for-telegram/notif-panel/notif-default-buttons", $btn, $slug, $category, $items);
       ?>
-      <table class="sub-setting form-table wp-list-table widefat striped table-view-list fixed <?php echo esc_attr($class); ?> ">
+      <table class="sub-setting form-table wp-list-table widefat striped table-view-list <?php echo esc_attr($class); ?> ">
         <tbody>
           <tr class="tg-message">
-            <th><?php esc_html_e("Message", "ultimate-integration-for-telegram"); ?></th>
-            <td>
-              <textarea rows="5"
+            <td colspan="2">
+              <p class="title-notif" style="margin-bottom: 0.5rem;"><?php esc_html_e("Notification Message", "ultimate-integration-for-telegram"); ?></p>
+              <textarea rows="4" class="monospace"
                 placeholder="<?php esc_attr_e("Write your message here ...", "ultimate-integration-for-telegram"); ?>"
                 data-slug="message"><?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                                     echo $default_message; ?></textarea>
@@ -764,33 +773,25 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
                   '<a href="https://core.telegram.org/bots/api#markdown-style" target="_blank">' . esc_html__("Formatting Guide", "ultimate-integration-for-telegram") . '</a>'
                 )); ?>
               </p>
+              <div class="validation-result notice inline notice-error notice-alt" data-title="<?=esc_attr__("Markdown Validation:", "ultimate-integration-for-telegram");?>"></div>
+              <label class='toggle-advanced-trs'><i class="fas fa-fw fa-chevron-down"></i>&nbsp;<?php esc_html_e("Advanced Options", "ultimate-integration-for-telegram"); ?></label>
             </td>
           </tr>
-          <tr class="tg-formatting">
+          <tr class="toggle-advanced hide tg-formatting">
             <th>
               <?php esc_html_e("HTML Formatting", "ultimate-integration-for-telegram"); ?>
               <i class="fas fa-question-circle" data-tippy-content="<?php esc_html_e("Enable (green) to use HTML formatting, or disable (red) to use Markdown formatting. Choose the appropriate option based on your message requirements.", "ultimate-integration-for-telegram"); ?>"></i>
             </th>
             <td>
-              <input type="checkbox" <?php echo checked($default_parser, true, false); ?> data-slug="html_parser" value="html" />
+              <label><input type="checkbox" <?php echo checked($default_parser, true, false); ?> data-slug="html_parser" value="html" /> <?php esc_html_e("Enable HTML Formatting instead of Markdown", "ultimate-integration-for-telegram"); ?></label>
             </td>
           </tr>
-          <tr class="tg-validator">
-            <th>
-              <?php esc_html_e("Markdown Validator", "ultimate-integration-for-telegram"); ?>
-              <i class="fas fa-question-circle" data-tippy-content="<?php esc_html_e("Tip: Telegram requires your message to be valid, especially when using Markdown formatting. Invalid syntax can cause your message to fail. Use the validator tool above to quickly check your text before saving.", "ultimate-integration-for-telegram"); ?>"></i>
-            </th>
-            <td>
-              <a href='#' class='button button-primary validate_markdown'><?php echo esc_html__("Validate Markdown", "ultimate-integration-for-telegram"); ?></a>
-              <div class="validation-result notice inline notice-error notice-alt"></div>
-            </td>
-          </tr>
-          <tr class="tg-buttons">
+          <tr class="toggle-advanced hide tg-buttons">
             <th><?php esc_html_e("Buttons", "ultimate-integration-for-telegram"); ?>
               <i class="fas fa-question-circle" data-tippy-content="<?php esc_html_e("You can add up to four buttons. Both labels and URLs can use plain text or macros, and labels can also include emojis. You can use @page_slug, #page_id or {special_pages} supported by PeproDev Ultimate Profile Solutions as button URL too.", "ultimate-integration-for-telegram"); ?>"></i>
             </th>
             <td>
-              <textarea rows="3" data-slug="buttons" placeholder="<?php echo esc_attr($btn_placeholder); ?>"><?php echo esc_textarea($default_buttons); ?></textarea>
+              <textarea rows="3" class="monospace" data-slug="buttons" placeholder="<?php echo esc_attr($btn_placeholder); ?>"><?php echo esc_textarea($default_buttons); ?></textarea>
               <p class="description">
                 <?php
                 echo sprintf(
@@ -801,17 +802,20 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
               </p>
             </td>
           </tr>
-          <tr class="tg-buttons">
+          <tr class="toggle-advanced hide tg-recipients">
             <th>
               <?php esc_html_e("Recipients", "ultimate-integration-for-telegram"); ?>
               <i class="fas fa-question-circle" data-tippy-content="<?php esc_html_e("Paste the Chat ID or, if it's a public channel/group, the username with at-sign, e.g. @mychannel. \nEnter One Chat ID or username per line.", "ultimate-integration-for-telegram"); ?>"></i>
             </th>
             <td>
-              <textarea rows="3" data-slug="recipients"
+              <textarea rows="3" data-slug="recipients" class="monospace"
                 placeholder="<?php esc_attr_e("Leave Empty to use Default Recipients.", "ultimate-integration-for-telegram"); ?>"></textarea>
             </td>
           </tr>
-          <tr class="description">
+          <?php
+          do_action("ultimate-integration-for-telegram/notif-panel/after-notif-setting", $slug);
+          ?>
+          <tr class="description macros-list-wrapper slug-<?php echo esc_attr($slug); ?> category-<?php echo esc_attr($category); ?>">
             <td colspan="2" class="macro-list">
               <?php
               echo "<h4 style='color: #1d2327;margin: 0;font-weight: normal;'>" . esc_html__("Available Event Macros for this Notification", "ultimate-integration-for-telegram") . "</h4>";
@@ -849,9 +853,6 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
               </div>
             </td>
           </tr>
-          <?php
-          do_action("ultimate-integration-for-telegram/notif-panel/after-notif-setting", $slug);
-          ?>
         </tbody>
       </table>
       <?php
@@ -928,7 +929,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
       <p class='description'>" . ($desc) . "</p></td></tr>";
     }
     public function print_setting_tr($title = "") {
-    ?>
+      ?>
       <tr style="color: #2c3338;vertical-align: middle !important;font-weight: 400;line-height: 1.4em;border: 1px solid #c3c4c7;background: #fff;">
         <th colspan="2">
           <h2 style="margin: 0;font-weight: 800;"><?= $title; ?></h2>
@@ -943,24 +944,29 @@ if (!class_exists("Ultimate_Integration_Telegram_Setting")) {
         "style"       => "",
         "desc"        => "",
         "default"     => "",
+        "copy_btn"    => "",
         "rows"        => "5",
         "extra_html"  => "",
+        "class"       => "",
         "extra_class" => "",
       )));
+      $extra_class = trim($extra_class . " " . $class);
       echo "<tr class='type-textarea $extra_class" . sanitize_title($slug) . "'>";
       if (is_null($caption)) {
         echo "<td colspan='2'>";
       } else {
         echo "<th scope='row'><label for='" . esc_attr($slug) . "'>" . esc_html($caption) . "</label></th><td>";
       }
-
       echo "<textarea name='" . esc_attr($this->setting_key . "[{$slug}]") . "' id='" . esc_attr($slug) . "' placeholder='" . esc_attr($caption) . "'
                       title='" . esc_attr(sprintf(_x("Enter %s", "setting-page", "ultimate-integration-for-telegram"), $caption)) . "'
                       rows='" . esc_attr($rows) . "'
                       style='" . esc_attr($style) . "'
                       class='regular-text " . esc_attr($extra_class) . "' " . esc_attr($extra_html) . " >" . ($this->read($slug, $default) ?: $default) . "</textarea>
-              <p class='description'>" . ($desc) . "</p></td>
-            </tr>";
+              <p class='description'>" . ($desc) . "</p>";
+              if (!empty($copy_btn)) {
+                echo "<div style='margin-top: 4px;'><a href='#' class='button button-secondary copy-code' data-ref='textarea#".esc_attr($slug)."'><i class='fas fa-copy fa-fw'></i>&nbsp;".esc_html__("Copy to Clipboard", "ultimate-integration-for-telegram")."</a></div>";
+              }
+              echo "</td></tr>";
     }
     public function print_setting_editor($data) {
       extract(wp_parse_args($data, array(

@@ -1,7 +1,7 @@
 <?php
 /*
-* @Last modified by: amirhp-com <its@amirhp.com>
-* @Last modified time: 2024/09/11 23:05:24
+ * @Last modified by: amirhp-com <its@amirhp.com>
+ * @Last modified time: 2025/08/24 17:58:10
 */
 
 # Generic command Gets executed for generic commands, when no other appropriate one is found.
@@ -17,20 +17,16 @@ class GenericCommand extends SystemCommand {
   protected $version = '4.9.0';
   public function execute(): ServerResponse {
     $message = $this->getMessage();
-    $command = is_object($message) ? (property_exists($message, "getCommand") ? $message->getCommand() : "") : "";
-    $chat_id = $message->getChat()->getId();
-    $msg = "*Command not recognized.*
-This bot is not meant for chatting or support.
-To get started, use:
-/about – Learn what this bot does
-/setup – Connect your Telegram to WordPress
-Need help? Tap the button below ⬇️";
+    $command = is_object($message) ? (method_exists($message, "getCommand") ? $message->getCommand() : "") : "";
+    $msg = "*Command `{$command}` not recognized.*\n\nThis bot is not meant for chatting or support. To get started, use:\n".
+    "/about – Learn what this bot does\n/setup – Connect your Telegram to WordPress\n\nNeed help? Tap the button below ⬇️";
+
     return $this->replyToChat($msg, array(
       "parse_mode"               => "markdown",
-      "reply_to_message_id"      => $message->getMessageId(),
+      "reply_to_message_id"      => $message->getMessageId() ?? null,
       "protect_content"          => true,
       "disable_web_page_preview" => true,
       "reply_markup" => ["inline_keyboard" => [[["text"=>"🛟 Need Help? Get Instant Support", "url"=>"https://t.me/pigment_dev"]]]],
-      ));
+    ));
   }
 }

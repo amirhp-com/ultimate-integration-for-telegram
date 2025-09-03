@@ -1,6 +1,6 @@
 /*
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/08/02 02:20:39
+ * @Last modified time: 2025/09/04 00:57:02
  */
 @font-face {
   font-family: bodyfont;
@@ -279,6 +279,8 @@ copy:hover {
   color: #666;
   float: inline-end;
   cursor: help;
+  position: relative;
+  top: 2px;
 }
 
 .form-input input,
@@ -393,6 +395,10 @@ input[type="checkbox"] {
   background: #ec4f4f !important;
 }
 
+.sub-setting input[type="checkbox"] {
+  top: -2px;
+}
+
 input[type="checkbox"]:after {
   content: "" !important;
   position: absolute !important;
@@ -483,6 +489,7 @@ div#wpfooter {
 
 .sub-setting.form-table.wp-list-table tr :is(input, textarea, select) {
   width: 100%;
+  max-width: 100%;
   margin: 0 !important;
 }
 
@@ -662,8 +669,8 @@ tr[data-type^="wc_"] .macro-list copy:hover::after {
   color: #ccc;
 }
 
-#wpbody-content .nav-tab:is(:active,:focus),
-#wpbody-content .tab-content a:is(:active,:focus) {
+#wpbody-content .nav-tab:is(:active, :focus),
+#wpbody-content .tab-content a:is(:active, :focus) {
   box-shadow: none !important;
 }
 
@@ -756,7 +763,7 @@ tr[data-type^="wc_"] .macro-list copy:hover::after {
 a[target="_blank"]::after {
   content: "\f08e";
   font-weight: 900;
-  font-family: "Font Awesome 6 Free";
+  font-family: "Font Awesome 7 Free";
   padding: 3px;
   font-size: smaller;
   font-variant-position: super;
@@ -772,4 +779,70 @@ a[target="_blank"]::after {
 
 .validation-result {
   list-style: none;
+}
+
+textarea.monospace,
+input.monospace {
+  font-family: Consolas, monospace;
+  letter-spacing: 1px;
+}
+
+.repeater>h3 {
+  margin-top: 0 !important;
+}
+
+.toggle-advanced-trs {
+  display: block;
+  font-weight: 600;
+  background: #eee;
+  padding: 1rem;
+  margin: 0.5rem -1rem 0 -1rem;
+}
+
+.toggle-advanced-trs.active {
+  margin-bottom: 0.5rem;
+}
+
+.validation-result::before {
+  content: attr(data-title);
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.validation-result {
+  padding-top: 6px;
+  padding-bottom: 0;
+}
+
+.validation-result li {
+  list-style: disc inside;
+}
+
+.notif-entry .add-current-item {
+  width: 3rem;
+}
+
+@media only screen and (max-width: 768px) {
+
+  .workspace-notifications-list {
+    flex-direction: column;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 100% !important;
+  }
+
+  .workspace-notifications-list>div {
+    flex: 1 1 100%;
+    max-width: 100% !important;
+    min-width: 100% !important;
+  }
+
+  .workspace-wrapper-parent>thead>tr>th {
+    width: calc(100% - 2rem) !important;
+  }
+
+  .workspace-wrapper-parent .list-notif-types {
+    max-width: 100% !important;
+  }
 }

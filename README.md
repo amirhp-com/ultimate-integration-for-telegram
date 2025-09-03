@@ -205,11 +205,44 @@ Please report security bugs found in the source code of the Ultimate Integration
 ---
 
 ## Changelog
-```md
-= v1.5.1 | 2025-08-02 | 1404-05-11 =
+#### v1.5.4 | 2025-09-04 | 1404-06-13
+* Two New Integration Added; **Gravity Forms** and **Contact Form 7** 🔥🎉
+* Improved stability and minor bug fixes.
+* Added Gravity Forms support for notifications.
+* Added Gravity Form selection in Notification settings via Chosen.js dropdown.
+* Added Contact form 7 support for notifications.
+* Added Contact form 7 selection in Notification settings via Chosen.js dropdown.
+* Added Description on Translation panel for better user understanding.
+* Added Patchstack Vulnerability Disclosure Program link for reporting security issues.
+* Fixed Sending test message sometimes fails due to parse entities issue.
+* Fixed Forwarding message to bot from public group/channel now shows original sender's Chat ID.
+* Fixed Comments Notifications and Hooks and Also added new macros for comments.
+* Enhanced Notification panel UX by collapsing advanced options.
+* Fixed Order Refund notification not sending proper messages.
+* Fixed formatting order totals and prices according to woocommerce settings.
+* Fixed not sending notifications when product stock is restored by order cancellation.
+
+#### v1.5.4 | 2025-09-04 | 1404-06-13
+* Two New Integration Added; **Gravity Forms** and **Contact Form 7** 🔥🎉
+* Improved stability and minor bug fixes.
+* Added Gravity Forms support for notifications.
+* Added Gravity Form selection in Notification settings via Chosen.js dropdown.
+* Added Contact form 7 support for notifications.
+* Added Contact form 7 selection in Notification settings via Chosen.js dropdown.
+* Added Description on Translation panel for better user understanding.
+* Added Patchstack Vulnerability Disclosure Program link for reporting security issues.
+* Fixed Sending test message sometimes fails due to parse entities issue.
+* Fixed Forwarding message to bot from public group/channel now shows original sender's Chat ID.
+* Fixed Comments Notifications and Hooks and Also added new macros for comments.
+* Enhanced Notification panel UX by collapsing advanced options.
+* Fixed Order Refund notification not sending proper messages.
+* Fixed formatting order totals and prices according to woocommerce settings.
+* Fixed not sending notifications when product stock is restored by order cancellation.
+
+#### v1.5.1 | 2025-08-02 | 1404-05-11
 * Fixed: `{order_items_quantity_list}` macro now correctly prints product names.
 
-= v1.5.0 | 2025-08-02 | 1404-05-11 =
+#### v1.5.0 | 2025-08-02 | 1404-05-11
 * New UI and improved user experience throughout the plugin.
 * Added import/export feature for notifications and settings.
 * Added default message content and a list of default messages.
@@ -225,20 +258,19 @@ Please report security bugs found in the source code of the Ultimate Integration
 * Improved stability and minor bug fixes.
 * Enhanced security checks for safer operation.
 
-= v1.2.0 | 2025-06-07 | 1404-03-17 =
+#### v1.2.0 | 2025-06-07 | 1404-03-17
 * Added New Integration: WordPress Comments
 * Added New Integration: WooCommerce Comments
 * Added Pre-defined Notification Text
 * Added Pre-defined Notifications List on first setup
 * Added Setup Wizard & Enhanced Setup UIX
 
-= v1.1.0 | 2025-03-17 | 1403-12-27 =
+#### v1.1.0 | 2025-03-17 | 1403-12-27
 * Set minimum PHP required to 7.4
 * Fixed Markdown Validator
 
-= v1.0.0 | 2025-01-20 | 1403-11-01 =
+#### v1.0.0 | 2025-01-20 | 1403-11-01
 * Initial release of Ultimate Integration for Telegram.
 * Telegram bot integration with webhook support.
 * Notification macros and string replacement features.
 * Full WooCommerce integration.
-```

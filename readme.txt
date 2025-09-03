@@ -1,15 +1,15 @@
 === Ultimate Integration for Telegram ===
-Version: 1.5.2
-Stable tag: 1.5.2
-Author: pigmentdev
+Version: 1.5.4
+Stable tag: 1.5.4
+Author: Pigment.Dev
 Donate link: https://pigment.dev/contact/
 Author URI: https://pigment.dev/
-Plugin URI: https://wordpress.org/plugins/ultimate-integration-for-telegram/
+Plugin URI: https://pigment.dev/ultimate-integration-for-telegram/
 Contributors: amirhpcom, pigmentdev
 Tags: woocommerce, telegram, notification, automation
 Tested up to: 6.8
 WC requires at least: 5.0
-WC tested up to: 10.0
+WC tested up to: 10.1
 Text Domain: ultimate-integration-for-telegram
 Domain Path: /languages
 Copyright: (c) Pigment.Dev, All rights reserved.
@@ -137,14 +137,14 @@ End Time: {booking_end_time}
 
 
 === Supported Add-ons and Plugins ===
-In addition to WordPress and WooCommerce core, the plugin supports:
+In addition to WordPress Core and WooCommerce, the plugin also supports:
+- Gravity Forms
+- Contact Form 7
 - WooCommerce Subscription
 - WooCommerce Membership
 - WooCommerce Booking
 - WooCommerce Points and Reward
 - WooCommerce Multi-Currency
-- Contact Form 7 (coming soon)
-- Gravity Form (coming soon)
 
 The plugin is also open to integration with other plugins via hooks and filters.
 
@@ -214,6 +214,12 @@ This plugin utilizes the following third-party libraries to enhance functionalit
   - **License**: [Font Awesome Free License](https://fontawesome.com/license/free).
   - **No Account Required**: No additional setup or account is needed.
 
+4. Chosen.js v1.8.7
+  - **Description**: Chosen is a library for making long, unwieldy select boxes more user-friendly. It is used in this plugin to enhance the user experience when selecting options.
+  - **Source**: [https://harvesthq.github.io/chosen/](https://harvesthq.github.io/chosen/)
+  - **License**: [MIT License](https://opensource.org/licenses/MIT).
+  - **No Account Required**: No additional setup or account is needed.
+
 == Screenshots ==
 
 1. Setting > General
@@ -244,47 +250,44 @@ Yes, it supports major WooCommerce add-ons like WooCommerce Subscription, WooCom
 == Upgrade Notice ==
 Upgrade to enjoy the latest features and stability improvements.
 
-= v1.5.1 | 2025-08-02 | 1404-05-11 =
-* Fixed: `{order_items_quantity_list}` macro now correctly prints product names.
-
-= v1.5.0 | 2025-08-02 | 1404-05-11 =
-* New UI and improved user experience throughout the plugin.
-* Added import/export feature for notifications and settings.
-* Added default message content and a list of default messages.
-* Changed the method for saving settings in the database for better reliability.
-* Added support for custom Telegram bot servers.
-* Added channel agent feature for advanced channel management.
-* Introduced a step-by-step setup wizard on the plugin settings page.
-* Added support for notification and notification categories to have descriptions.
-* Added ability to customize recipients per message.
-* Enhanced Markdown validator for more robust message formatting.
-* Merged translations and string replacement panels into a single translation tool.
-* Switched to offloaded Font Awesome v7 for improved performance and up-to-date icon support.
+= v1.5.4 | 2025-09-04 | 1404-06-13 =
+* Two New Integration Added; **Gravity Forms** and **Contact Form 7** 🔥🎉
 * Improved stability and minor bug fixes.
-* Enhanced security checks for safer operation.
+* Added Gravity Forms support for notifications.
+* Added Gravity Form selection in Notification settings via Chosen.js dropdown.
+* Added Contact form 7 support for notifications.
+* Added Contact form 7 selection in Notification settings via Chosen.js dropdown.
+* Added Description on Translation panel for better user understanding.
+* Added Patchstack Vulnerability Disclosure Program link for reporting security issues.
+* Fixed Sending test message sometimes fails due to parse entities issue.
+* Fixed Forwarding message to bot from public group/channel now shows original sender's Chat ID.
+* Fixed Comments Notifications and Hooks and Also added new macros for comments.
+* Enhanced Notification panel UX by collapsing advanced options.
+* Fixed Order Refund notification not sending proper messages.
+* Fixed formatting order totals and prices according to woocommerce settings.
+* Fixed not sending notifications when product stock is restored by order cancellation.
+
 
 For the full changelog, please view the [Github Repository](https://github.com/pigment-dev/ultimate-integration-for-telegram?tab=readme-ov-file#changelog)
 
 
 == Changelog ==
 
-= v1.5.1 | 2025-08-02 | 1404-05-11 =
-* Fixed: `{order_items_quantity_list}` macro now correctly prints product names.
-
-= v1.5.0 | 2025-08-02 | 1404-05-11 =
-* New UI and improved user experience throughout the plugin.
-* Added import/export feature for notifications and settings.
-* Added default message content and a list of default messages.
-* Changed the method for saving settings in the database for better reliability.
-* Added support for custom Telegram bot servers.
-* Added channel agent feature for advanced channel management.
-* Introduced a step-by-step setup wizard on the plugin settings page.
-* Added support for notification and notification categories to have descriptions.
-* Added ability to customize recipients per message.
-* Enhanced Markdown validator for more robust message formatting.
-* Merged translations and string replacement panels into a single translation tool.
-* Switched to offloaded Font Awesome v7 for improved performance and up-to-date icon support.
+= v1.5.4 | 2025-09-04 | 1404-06-13 =
+* Two New Integration Added; **Gravity Forms** and **Contact Form 7** 🔥🎉
 * Improved stability and minor bug fixes.
-* Enhanced security checks for safer operation.
+* Added Gravity Forms support for notifications.
+* Added Gravity Form selection in Notification settings via Chosen.js dropdown.
+* Added Contact form 7 support for notifications.
+* Added Contact form 7 selection in Notification settings via Chosen.js dropdown.
+* Added Description on Translation panel for better user understanding.
+* Added Patchstack Vulnerability Disclosure Program link for reporting security issues.
+* Fixed Sending test message sometimes fails due to parse entities issue.
+* Fixed Forwarding message to bot from public group/channel now shows original sender's Chat ID.
+* Fixed Comments Notifications and Hooks and Also added new macros for comments.
+* Enhanced Notification panel UX by collapsing advanced options.
+* Fixed Order Refund notification not sending proper messages.
+* Fixed formatting order totals and prices according to woocommerce settings.
+* Fixed not sending notifications when product stock is restored by order cancellation.
 
 For the full changelog, please view the [Github Repository](https://github.com/pigment-dev/ultimate-integration-for-telegram?tab=readme-ov-file#changelog)

@@ -1,7 +1,7 @@
 <?php
 /*
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/08/02 02:21:29
+ * @Last modified time: 2025/08/24 15:54:46
  */
 
 namespace Longman\TelegramBot\Commands\UserCommands;
@@ -35,7 +35,7 @@ _this chat id is unique and private, tap and copy it._
 
     return $this->replyToChat($msg, array(
       "parse_mode"               => "markdown",
-      "reply_to_message_id"      => $message->getMessageId(),
+      "reply_to_message_id"      => $message->getMessageId() ?? null,
       "protect_content"          => true,
       "disable_web_page_preview" => true,
       "reply_markup" => ["inline_keyboard" => [[["text"=>"🛟 Need Help? Get Instant Support", "url"=>"https://t.me/pigment_dev"]]]],

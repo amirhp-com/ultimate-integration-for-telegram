@@ -67,7 +67,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Orders")) {
             foreach ((array) $list_notif as $notif) {
               @$this->send_telegram_msg(
                 $notif->config->message,
-                $notif->config->btn_row1,
+                $notif->config->buttons,
                 __CLASS__,
                 [
                   "current_hook" => current_action(),
@@ -120,7 +120,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Orders")) {
       foreach ((array) $list_notif as $notif) {
         @$this->send_telegram_msg(
           $notif->config->message,
-          $notif->config->btn_row1,
+          $notif->config->buttons,
           __CLASS__,
           array(
             "current_hook" => current_action(),
@@ -158,12 +158,12 @@ if (!class_exists("Ultimate_Integration_Telegram_Orders")) {
           "order_status_prev"          => isset($ex["order_status_prev"]) ? wc_get_order_status_name($ex["order_status_prev"]) : "",
           "order_status_new"           => isset($ex["order_status_new"]) ? wc_get_order_status_name($ex["order_status_new"]) : "",
           "order_status"               => wc_get_order_status_name($order->get_status()), // Order Status
-          "order_total"                => $order->get_total(), // Order Total Amount
-          "order_subtotal"             => $order->get_subtotal(), // Order Subtotal Amount
-          "order_discount_total"       => $order->get_total_discount(), // Order Discount Amount
-          "order_tax_total"            => $order->get_total_tax(), // Order Tax Amount
-          "order_shipping_total"       => $order->get_shipping_total(), // Order Shipping Amount
-          "order_fees_total"           => $order->get_total_fees(), // Order Fees Total (if applicable, custom method needed)
+          "order_total"                => $this->number_format($order->get_total()), // Order Total Amount
+          "order_subtotal"             => $this->number_format($order->get_subtotal()), // Order Subtotal Amount
+          "order_discount_total"       => $this->number_format($order->get_total_discount()), // Order Discount Amount
+          "order_tax_total"            => $this->number_format($order->get_total_tax()), // Order Tax Amount
+          "order_shipping_total"       => $this->number_format($order->get_shipping_total()), // Order Shipping Amount
+          "order_fees_total"           => $this->number_format($order->get_total_fees()), // Order Fees Total (if applicable, custom method needed)
           "order_currency"             => $order->get_currency(), // Order Currency
           "order_payment_method"       => $order->get_payment_method(), // Order Payment Method
           "order_payment_method_title" => $order->get_payment_method_title(), // Payment Method Title
@@ -590,7 +590,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Orders")) {
       foreach ((array) $list_notif as $notif) {
         @$this->send_telegram_msg(
           $notif->config->message,
-          $notif->config->btn_row1,
+          $notif->config->buttons,
           __CLASS__,
           ["current_hook" => current_action(), "order_id" => $order_id],
           $notif->config->html_parser,
@@ -605,7 +605,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Orders")) {
       foreach ((array) $list_notif as $notif) {
         @$this->send_telegram_msg(
           $notif->config->message,
-          $notif->config->btn_row1,
+          $notif->config->buttons,
           __CLASS__,
           ["current_hook" => current_action(), "order_id" => $order_id],
           $notif->config->html_parser,
@@ -619,7 +619,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Orders")) {
       foreach ((array) $list_notif as $notif) {
         @$this->send_telegram_msg(
           $notif->config->message,
-          $notif->config->btn_row1,
+          $notif->config->buttons,
           __CLASS__,
           ["current_hook" => current_action(), "order_id" => $order_id],
           $notif->config->html_parser,
@@ -633,7 +633,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Orders")) {
       foreach ((array) $list_notif as $notif) {
         @$this->send_telegram_msg(
           $notif->config->message,
-          $notif->config->btn_row1,
+          $notif->config->buttons,
           __CLASS__,
           ["current_hook" => current_action(), "order_id" => $order_id],
           $notif->config->html_parser,
@@ -648,7 +648,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Orders")) {
       foreach ((array) $list_notif as $notif) {
         @$this->send_telegram_msg(
           $notif->config->message,
-          $notif->config->btn_row1,
+          $notif->config->buttons,
           __CLASS__,
           ["current_hook" => current_action(), "order_id" => $order->get_id()],
           $notif->config->html_parser,
@@ -662,7 +662,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Orders")) {
       foreach ((array) $list_notif as $notif) {
         @$this->send_telegram_msg(
           $notif->config->message,
-          $notif->config->btn_row1,
+          $notif->config->buttons,
           __CLASS__,
           [
             "current_hook" => current_action(),
@@ -677,11 +677,11 @@ if (!class_exists("Ultimate_Integration_Telegram_Orders")) {
       }
     }
     public function wc_order_refunded($order_id) {
-      $list_notif = $this->get_notifications_by_type("wc_delete_order");
+      $list_notif = $this->get_notifications_by_type("wc_order_refunded");
       foreach ((array) $list_notif as $notif) {
         @$this->send_telegram_msg(
           $notif->config->message,
-          $notif->config->btn_row1,
+          $notif->config->buttons,
           __CLASS__,
           ["current_hook" => current_action(), "order_id" => $order_id],
           $notif->config->html_parser,
@@ -695,7 +695,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Orders")) {
       foreach ((array) $list_notif as $notif) {
         @$this->send_telegram_msg(
           $notif->config->message,
-          $notif->config->btn_row1,
+          $notif->config->buttons,
           __CLASS__,
           ["current_hook" => current_action(), "order_id" => $order_id],
           $notif->config->html_parser,
@@ -709,7 +709,7 @@ if (!class_exists("Ultimate_Integration_Telegram_Orders")) {
       foreach ((array) $list_notif as $notif) {
         @$this->send_telegram_msg(
           $notif->config->message,
-          $notif->config->btn_row1,
+          $notif->config->buttons,
           __CLASS__,
           ["current_hook" => current_action(), "order_id" => $order_id],
           $notif->config->html_parser,

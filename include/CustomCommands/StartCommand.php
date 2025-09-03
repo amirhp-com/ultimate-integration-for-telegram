@@ -1,7 +1,7 @@
 <?php
 /*
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/08/02 02:21:29
+ * @Last modified time: 2025/08/24 17:58:19
 */
 
 namespace Longman\TelegramBot\Commands\SystemCommands;
@@ -17,7 +17,7 @@ class StartCommand extends SystemCommand {
   protected $private_only = true;
   public function execute(): ServerResponse {
     // If you use deep-linking, get the parameter like this: @see https://core.telegram.org/bots#deep-linking
-    $cmd_line = $this->getMessage()->getText(true);
+    // $cmd_line = $this->getMessage()->getText(true);
     $chat_id = $this->getMessage()->getChat()->getId();
     $msg = "👋 Hi there!
 
@@ -34,10 +34,8 @@ _this chat id is unique and private, tap and copy it._
 
 🚫 _Do not share *Chat ID* with anyone — it may receive sensitive site data and notifications._";
 
-    $id = "```\n".print_r($this->getMessage()->getChat()->getId(),1)."```";
-
     return $this->replyToChat($msg, array(
-      "reply_to_message_id" => $this->getMessage()->getMessageId(),
+      "reply_to_message_id" => $this->getMessage()->getMessageId() ?? null,
       "parse_mode" => "markdown",
       "protect_content" => true,
       "disable_web_page_preview" => true,

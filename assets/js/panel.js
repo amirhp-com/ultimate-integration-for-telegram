@@ -1,7 +1,7 @@
 /*
  * @Last modified by: amirhp-com <its@amirhp.com>
- * @Last modified time: 2025/08/02 02:20:49
- */
+ * @Last modified time: 2025/09/04 01:24:43
+*/
 
 (function ($) {
   var _request = null;
@@ -61,13 +61,8 @@
         show_toast(_panel.unknown, $error_color);
       }
     }
-    if (!window.tippy_initialized && typeof tippy !== 'undefined') {
-      tippy('[data-tippy-content]:not([data-tippy-content=""])', {
-        allowHTML: true,
-        theme: 'translucent',
-      });
-      window.tippy_initialized = true;
-    }
+
+    reInitTippy();
 
     // initiate repeater
     var $repeater = $(".repeater.translation-panel").repeater({ hide: function (deleteElement) { $(this).remove(); build_translation_data(".repeater.translation-panel", "#gettext_replace"); }, });
@@ -121,18 +116,13 @@
       });
     }
 
-    if (!window.tippy_initialized && typeof tippy !== 'undefined') {
-      tippy('[data-tippy-content]:not([data-tippy-content=""])', { allowHTML: true, });
-      window.tippy_initialized = true;
-    }
-
     $(document).on("click tap", ".edit--entry, h3.entry-name", function (e) {
       e.preventDefault(); var me = $(this);
       me.parents(".setting-row").find(".sub-setting").toggleClass("hide");
       me.parents(".setting-row").find(".chevron").toggleClass("fa-chevron-down");
       if (me.parents(".setting-row").find(".sub-setting").hasClass("hide")) {
         me.parents(".setting-row").removeClass("highlight");
-      }else{
+      } else {
         me.parents(".setting-row").addClass("highlight");
       }
     });
@@ -145,12 +135,12 @@
       $(`.tab-content[data-tab=${me.data("tab")}]`).addClass("tab-active");
       if ($(`.tab-content[data-tab=${me.data("tab")}]`).hasClass("no-save")) {
         $(".submit_wrapper").addClass("hide");
-      }else{
+      } else {
         $(".submit_wrapper").removeClass("hide");
       }
       window.location.hash = me.data("tab");
       localStorage.setItem("bsdev-tg", me.data("tab"));
-      tippy('[data-tippy-content]:not([data-tippy-content=""])', { allowHTML: true, });
+      reInitTippy();
     });
     $(document).on("click tap", ".validate_token", function (e) {
       e.preventDefault();
@@ -204,13 +194,13 @@
         dataType: "json",
         url: _panel.ajax,
         data: {
-          action     : _panel.action,
-          nonce      : _panel.nonce,
-          message    : $(".builtin_channel_agent textarea[data-slug='message']").val(),
-          html_parser: $(".builtin_channel_agent input[data-slug='html_parser']").prop("checked") ? "html": "markdown",
-          button     : $(".builtin_channel_agent textarea[data-slug='buttons']").val(),
-          recipients : $(".builtin_channel_agent textarea[data-slug='recipients']").val(),
-          wparam     : "send_channel_message",
+          action: _panel.action,
+          nonce: _panel.nonce,
+          message: $(".builtin_channel_agent textarea[data-slug='message']").val(),
+          html_parser: $(".builtin_channel_agent input[data-slug='html_parser']").prop("checked") ? "html" : "markdown",
+          button: $(".builtin_channel_agent textarea[data-slug='buttons']").val(),
+          recipients: $(".builtin_channel_agent textarea[data-slug='recipients']").val(),
+          wparam: "send_channel_message",
         },
         success: function (e) {
           if (e.success === true) { show_toast(e.data.msg, $success_color); }
@@ -342,8 +332,21 @@
     $(document).on("click tap", ".copy-code", function (e) {
       e.preventDefault();
       var me = $(this);
-      copy_clipboard($(".data-textarea textarea#notifications").val());
+      copy_clipboard($(me.data("ref")).val());
       show_toast(_panel.code_copied, $success_color);
+    });
+    $(document).on("click tap", ".save-json", function (e) {
+      e.preventDefault();
+      var me = $(this), data = $(me.data("ref")).val();
+      // save data as file.json
+      var blob = new Blob([data], { type: "application/json" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = "uti_backup_notification-" + Date.now() + ".json";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
     });
     $(document).on("click tap", ".reset-default-list", function (e) {
       e.preventDefault();
@@ -351,94 +354,75 @@
       if (confirm(_panel.reset_confirm)) {
         $(".data-textarea textarea#notifications").val(_panel.default_list);
         setTimeout(function () { load_panel(_panel.default_list); }, 200);
-        setTimeout(function () { show_toast(_panel.default_applied, $success_color); }, 400);
+        setTimeout(function () {
+          show_toast(_panel.default_applied, $success_color);
+          $(".reset-applied").html(`<p>${_panel.default_applied}</p>`).addClass("notice inline notice-success notice-alt");
+        }, 400);
       }
     });
 
-    $(document).on("keyup change", ".workplace>tr[data-type] input", build_notification_data);
-    $(document).on("keyup change", ".workplace>tr[data-type] select", build_notification_data);
-    $(document).on("keyup change", ".workplace>tr[data-type] textarea", build_notification_data);
+    $(document).on("click tap", ".toggle-advanced-trs", function (e) {
+      e.preventDefault();
+      var me = $(this);
+      me.toggleClass("active");
+      if (me.is(".active")) {
+        me.find(".fas").removeClass("fa-chevron-down").addClass("fa-chevron-up");
+        $(".toggle-advanced").removeClass("hide");
+      } else {
+        me.find(".fas").addClass("fa-chevron-down").removeClass("fa-chevron-up");
+        $(".toggle-advanced").addClass("hide");
+      }
+    });
 
-    function validateMarkdown(message) {
+    $(document).on("change", ".workplace table.sub-setting [data-slug='html_parser']", function (e) {
+      var me = $(this);
+      if (me.is(":checked")) {
+        $(me).parents("tr").find(".validation-result").empty();
+      } else {
+        validateMarkdown($(me).parents(".sub-setting").find("textarea[data-slug='message']"), true);
+      }
+    });
+
+    $(document).on("keyup change", ".workplace .setting-row input", build_notification_data);
+    $(document).on("keyup change", ".workplace table.sub-setting input", build_notification_data);
+    $(document).on("keyup change", ".workplace table.sub-setting select", build_notification_data);
+    $(document).on("keyup change", ".workplace table.sub-setting textarea", build_notification_data);
+    $(document).on("keyup change", ".workplace table.sub-setting textarea[data-slug='message']", live_validate_textarea);
+
+    function validateMarkdown(el, inline = false) {
       // Get the message input value
-      if (!message) { show_toast("Markdown is empty!", $error_color); return false; }
-      var message = message.val().trim();
+      if (!el && !inline) { show_toast("Markdown is empty!", $error_color); return false; }
+      var message = $(el).val().trim();
       // Remove content inside macros before validation
       var message = message.replace(/{[^}]+}/g, "");
 
-      // Define validation rules for Markdown
-      var rules = [
-        {
-          entity: "Bold",
-          regex: /\*\*.*?\*\*|__.*?__/g,
-          example: "**bold**, __bold__"
-        },
-        {
-          entity: "Italic",
-          regex: /\*.*?\*|_.*?_/g,
-          example: "*italic*, _italic_"
-        },
-        {
-          entity: "Monospace",
-          regex: /`[^`]+`/g,
-          example: "`monospace`"
-        },
-        {
-          entity: "Preformatted Block",
-          regex: /```[\s\S]*?```/g,
-          example: "```\ncode\n```"
-        },
-        {
-          entity: "Underline",
-          regex: /<u>.*?<\/u>/g,
-          example: "<u>underline</u>"
-        },
-        {
-          entity: "Strikethrough",
-          regex: /~~.*?~~|<s>.*?<\/s>|<strike>.*?<\/strike>|<del>.*?<\/del>/g,
-          example: "~~strikethrough~~"
-        },
-        {
-          entity: "Spoiler",
-          regex: /\|\|.*?\|\|/g,
-          example: "||spoiler||"
-        },
-        {
-          entity: "Quote",
-          regex: /^> .*$/gm,
-          example: "> quote"
-        },
-        {
-          entity: "Link",
-          regex: /\[.*?\]\(https?:\/\/.*?\)/g,
-          example: "[link text](https://example.com)"
-        }
-      ];
-      $(".validation-result").empty();
+      $(el).parents("tr").find(".validation-result").empty();
+      if (inline && $(el).parents(".sub-setting").find("[data-slug='html_parser']").prop("checked")) { return false; }
+
       var had_error = false;
 
       if ((message.match(/\*/g) || []).length % 2 !== 0) {
-        $(".validation-result").append("<li>" + _panel.md.asterisk + "</li>");
+        $(el).parents("tr").find(".validation-result").append("<li>" + _panel.md.asterisk + "</li>");
         had_error = true;
       }
       if ((message.match(/_/g) || []).length % 2 !== 0) {
-        $(".validation-result").append("<li>" + _panel.md.underscore + "</li>");
+        $(el).parents("tr").find(".validation-result").append("<li>" + _panel.md.underscore + "</li>");
         had_error = true;
       }
       if ((message.match(/`/g) || []).length % 2 !== 0) {
-        $(".validation-result").append("<li>" + _panel.md.backtick + "</li>");
+        $(el).parents("tr").find(".validation-result").append("<li>" + _panel.md.backtick + "</li>");
         had_error = true;
       }
       if ((message.match(/```/g) || []).length % 2 !== 0) {
-        $(".validation-result").append("<li>" + _panel.md.triple_backticks + "</li>");
+        $(el).parents("tr").find(".validation-result").append("<li>" + _panel.md.triple_backticks + "</li>");
         had_error = true;
       }
 
-
-      if (had_error) {
+      if (had_error && !inline) {
         show_toast(_panel.md.invalid, $error_color);
         return false;
       }
+      if (inline) { return; }
       show_toast(_panel.md.valid, $success_color);
     }
     // make json data
@@ -488,13 +472,28 @@
           });
           notif[i] = { "type": type, "config": config };
         });
-        console.log(notif);
+        // console.log(notif);
         var jsonData = JSON.stringify(notif, " ", 2);
         $(data_inp).val(jsonData).trigger("change");
       } catch (e) {
         console.error("could not generate notif data");
       }
-      tippy('[data-tippy-content]:not([data-tippy-content=""])', { allowHTML: true, });
+      reInitTippy();
+    }
+    function reInitTippy() {
+      if (typeof tippy !== 'undefined') {
+        $("[data-tippy-content]").each(function () {
+          if (!this._tippy) { tippy(this, { allowHTML: true }); }
+        });
+      }
+      // find all .chosen and if not initiated then init chosen
+      $("select.chosen").each(function () {
+        $(this).chosen({ rtl: $("body").hasClass("rtl"), width: "100%", multiple: $(this).prop("multiple")});
+      });
+    }
+    function live_validate_textarea(e) {
+      var txtArea = e.target;
+      validateMarkdown(txtArea, true);
     }
     function reload_last_active_tab() {
       if (window.location.hash && "" !== window.location.hash) {
@@ -504,7 +503,7 @@
         if (last && "" != last) { $(".nav-tab[data-tab=" + last.replace("#", "") + "]").trigger("click"); }
       }
     }
-    function show_toast(data = "Hi!", bg = "#158b02cc", delay = 8000) {
+    function show_toast(data = "Hi!", bg = "#158b02cc", delay = 20000) {
       if (!$("toast").length) { $(document.body).append($("<toast>")); }
       else { $("toast").removeClass("active"); }
       setTimeout(function () {
