@@ -205,22 +205,6 @@ Please report security bugs found in the source code of the Ultimate Integration
 ---
 
 ## Changelog
-#### v1.5.4 | 2025-09-04 | 1404-06-13
-* Two New Integration Added; **Gravity Forms** and **Contact Form 7** 🔥🎉
-* Improved stability and minor bug fixes.
-* Added Gravity Forms support for notifications.
-* Added Gravity Form selection in Notification settings via Chosen.js dropdown.
-* Added Contact form 7 support for notifications.
-* Added Contact form 7 selection in Notification settings via Chosen.js dropdown.
-* Added Description on Translation panel for better user understanding.
-* Added Patchstack Vulnerability Disclosure Program link for reporting security issues.
-* Fixed Sending test message sometimes fails due to parse entities issue.
-* Fixed Forwarding message to bot from public group/channel now shows original sender's Chat ID.
-* Fixed Comments Notifications and Hooks and Also added new macros for comments.
-* Enhanced Notification panel UX by collapsing advanced options.
-* Fixed Order Refund notification not sending proper messages.
-* Fixed formatting order totals and prices according to woocommerce settings.
-* Fixed not sending notifications when product stock is restored by order cancellation.
 
 #### v1.5.4 | 2025-09-04 | 1404-06-13
 * Two New Integration Added; **Gravity Forms** and **Contact Form 7** 🔥🎉
